@@ -9,7 +9,7 @@ namespace DeerManager.DB_AccessLayer
 {
     public class DB
     {
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["conn"].ConnectionString);
+        readonly SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["con"].ConnectionString);
         public DataSet Show_Data()
         {
             SqlCommand com = new SqlCommand("Select * from maintable",con);
