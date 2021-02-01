@@ -129,22 +129,53 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\bootstrap-responsive.css" />
+    <Content Include="Content\css\bootstrap-responsive.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\icon-service1.png" />
+    <Content Include="Content\img\icon-service2.png" />
+    <Content Include="Content\img\icon-service3.png" />
+    <Content Include="Content\img\icon-service4.png" />
+    <Content Include="Content\img\icon-service5.png" />
+    <Content Include="Content\img\icon-service6.png" />
+    <Content Include="Content\img\icon1.png" />
+    <Content Include="Content\img\icon2.png" />
+    <Content Include="Content\img\icon3.png" />
+    <Content Include="Content\img\icon4.png" />
+    <Content Include="Content\img\img-60x60.jpg" />
+    <Content Include="Content\img\img1-870x400.jpeg" />
+    <Content Include="Content\img\img2.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\responsive.png" />
+    <Content Include="Content\img\slide-bg.png" />
+    <Content Include="Content\img\slide\slide1.jpg" />
+    <Content Include="Content\img\slide\slide2.jpg" />
+    <Content Include="Content\img\social\dribbble.png" />
+    <Content Include="Content\img\social\googleplus.png" />
+    <Content Include="Content\img\social\rss.png" />
+    <Content Include="Content\img\social\twitter.png" />
+    <Content Include="Content\img\team1.jpg" />
+    <Content Include="Content\img\team2.jpg" />
+    <Content Include="Content\img\team3.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\css\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\img\social\.DS_Store" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -159,6 +190,9 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\ShowMyHome.cshtml" />
+    <Content Include="Views\Shared\_CustomerLayout.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
+    <Content Include="Views\Home\EditSheep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -168,10 +202,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
