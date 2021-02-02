@@ -1,19 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
 namespace DeerManager.Models
 {
-    public class maintable
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Data.Entity.Spatial;
+
+    [Table("maintable")]
+    public partial class maintable
     {
-        public int RowNum { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Number { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
+
         public int SheepNum { get; set; }
-        public string BloodType { get; set; }
+
+        [Required]
+        [StringLength(10)]
+        public string Blood { get; set; }
+
+        [Required]
+        [StringLength(10)]
         public string Gender { get; set; }
-        public DateTime Birthday { get; set; }
+
         public int Group { get; set; }
-        public Boolean IsAlive { set; get; }
+
+        [Required]
+        [StringLength(10)]
+        public string Birthday { get; set; }
+
     }
 }

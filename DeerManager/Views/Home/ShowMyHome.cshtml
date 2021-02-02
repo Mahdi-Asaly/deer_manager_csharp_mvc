@@ -1,219 +1,188 @@
-﻿@model DeerManager.Models.maintable
-
+﻿
 @{
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+@{
+    ViewBag.Title = "טבלת כבשים";
+}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Main Page</title>
-</head>
-<body>
-    <h2>טבלת הכבשים</h2>
+<h2>טבלה ראשית</h2>
 
-    <div class="table-wrapper">
-        <table class="fl-table" table id="tbldata2">
-            <thead>
-                <tr>
-                    <th>מספר סידורי</th>
-                    <th>מספר כבש</th>
-                    <th>ת"ז</th>
-                    <th>סוג דם</th>
-                    <th>מין</th>
-                    <th>קבוצה</th>
-                    <th>תאריך לידה</th>
-                    <th>מצב</th>
-                    <th>מידע כללי</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>123</td>
-                    <td>2429952</td>
-                    <td>B+</td>
-                    <td>נקבה</td>
-                    <th>01/02/2020</th>
-                    <th>1</th>
-                    <th>חיה</th>
-                    <th><button class="btn">בחר</button></th>
-                </tr>
-            <tbody>
-        </table>
-
-    </div>
-
-    <div class="container">
-
-        <!--Carousel
-        ==================================================-->
-
-        <div id="myCarousel" class="carousel slide">
-            <div class="carousel-inner">
-
-                <div class="active item">
-                    <div class="container">
-                        <div class="row">
-
-                            <div class="span6">
-
-                                <div class="carousel-caption">
-                                    <h1>Example headline</h1>
-                                    <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                                    <a class="btn btn-large btn-primary" href="#">Sign up today</a>
-                                </div>
-
-                            </div>
-
-                            <div class="span6"> <img src="~Content/img/slide/slide1.jpg"></div>
-
-                        </div>
-                    </div>
+@* Normal and ThemeRoller*@
+<table id="SheepTable" class="display">
+    @*Semantic UI*@
+    @*<table id="employeeTable" class="ui celled table">*@
+    @*Bootstrap*@
+    @*<table id="employeeTable" class="table table-striped table-bordered">*@
+    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
+    <thead>
+        <tr>
+            <th>מספר סידורי</th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+            <th>מידע נוסף</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>מספר סידורי</th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+            <th>מידע נוסף</th>
+        </tr>
+    </tfoot>
+</table>
 
 
+<!-- Normal -->
+<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<!-- jQuery ThemeRoller -->
+@*<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css" rel="stylesheet" />*@
+
+<!-- Semantic UI -->
+@*<link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.semanticui.min.css" rel="stylesheet" />*@
+
+<!-- Bootstrap 4 -->
+@*<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css" rel="stylesheet" />*@
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
 
 
-                </div>
+    @* Normal *@
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
-                <div class="item">
+    @* jQuery ThemeRoller*@
+    @*<script src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>*@
 
-                    <div class="container">
-                        <div class="row">
+    @* Semantic UI*@
+    @*<script src="https://cdn.datatables.net/1.10.15/js/dataTables.semanticui.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.js"></script>*@
 
-                            <div class="span6">
-
-                                <div class="carousel-caption">
-                                    <h1>Example headline</h1>
-                                    <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                                    <a class="btn btn-large btn-primary" href="#">Sign up today</a>
-                                </div>
-
-                            </div>
-
-                            <div class="span6"> <img src="~Content/img/slide/slide2.jpg"></div>
-
-                        </div>
-                    </div>
-
-                </div>
+    @* Bootstrap 4*@
+    @*<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet" />
+        <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>*@
 
 
+    @*For the add new sheep*@
+    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
-
-            </div>
-            <!-- Carousel nav -->
-            <a class="carousel-control left " href="#myCarousel" data-slide="prev"><i class="icon-chevron-left"></i></a>
-            <a class="carousel-control right" href="#myCarousel" data-slide="next"><i class="icon-chevron-right"></i></a>
-            <!-- /.Carousel nav -->
-
-        </div>
-        <!-- /Carousel -->
-        <!-- Feature
-          ==============================================-->
-
-
-        <div class="row feature-box">
-            <div class="span12 cnt-title">
-                <h1>At vero eos et accusamus et iusto odio dignissimos</h1>
-                <span>Contrary to popular belief, Lorem Ipsum is not simply random text.</span>
-            </div>
-
-            <div class="span4">
-                <img src="~/Content/img/icon3.png">
-                <h2>Feature A</h2>
-                <p>
-                    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                </p>
-
-                <a href="#">Read More &rarr;</a>
-
-            </div>
-
-            <div class="span4">
-                <img src="~/Content/img/icon2.png">
-                <h2>Feature B</h2>
-                <p>
-                    Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
-                </p>
-                <a href="#">Read More &rarr;</a>
-            </div>
-
-            <div class="span4">
-                <img src="~/Content/img/icon1.png">
-                <h2>Feature C</h2>
-                <p>
-                    Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
-                </p>
-                <a href="#">Read More &rarr;</a>
-            </div>
-        </div>
-
-
-        <!-- /.Feature -->
-
-        <div class="hr-divider"></div>
-
-        <!-- Row View -->
-
-
-        <div class="row">
-            <div class="span6"><img src="~/Content/img/responsive.png"></div>
-
-            <div class="span6">
-                <img class="hidden-phone" src="~/Content/img/icon4.png" alt="">
-                <h1>Fully Responsive</h1>
-                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-                <a href="#">Read More &rarr;</a>
-            </div>
-        </div>
-
-
-    </div>
     <script>
-        $(function () {
-            $.get("get_data", {}, function (data) {
-                var row;
-                $.each(data, function (i, v1) {
+        $(document).ready(function () {
 
-                    row += "<tr>" +
-                        "<td>" + v1.RowNum + "<td>" +
-                        "<td>" + v1.Id + "<td>" +
-                        "<td>" + v1.SheepNum + "</td>" +
-                        "<td>" + v1.BloodType + "</td>" +
-                        "<td>" + v1.Gender + "</td>" +
-                        "<td>" + v1.Birthday + "</td>" +
-                        "<td>" + v1.Group + "</td>" +
-                        "<td>" + v1.IsAlive + "</td>" +
-                        "</tr>"
+            $("#SheepTable").DataTable(
+                {
+                    "ajax": {
+                        "url": "/Home/GetList",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Number" },
+                        { "data": "Id" },
+                        { "data": "SheepNum" },
+                        { "data": "Blood" },
+                        { "data": "Gender" },
+                        { "data": "Group" },
+                        { "data": "Birthday" },
+
+                        {"data":"Id" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Employee")/" + data + "')><i class='fa fa-pencil'></i> הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i>מחק</a>";
+                        },
+                            "orderable": false,
+                            "searchable":false,
+                            "width":"150px"
+                        }
+                    ]
                 });
-                $("#tbldata2").append(row);
-            })
-        })
-    </script>
 
-    @*<script>
-            $(function () {
-                $.get("get_data", {}, function (data) {
-                    var row;
-                    $.each(data, function (i, v1) {
+        });
 
-                        row += "<tr><td>" + v1.Id + "</td><td>" +
-                            "<tr><td>" + v1.SheepNum + "</td><td>" +
-                            "<tr><td>" + v1.BloodType + "</td><td>" +
-                            "<tr><td>" + v1.Gender + "</td><td>" +
-                            "<tr><td>" + v1.Birthday + "</td><td>" +
-                            "<tr><td>" + v1.Group + "</td><td>" +
-                            "<tr><td>" + v1.IsAlive + "</td><td>"
+
+
+    //adding new sheep
+    function PopupForm(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'כבש חדש',
+                    height: 500,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+
+                });
+            });
+    }
+            function SubmitForm(form) {
+                $.validator.unobtrusive.parse(form);
+                if ($(form).valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.action,
+                        data: $(form).serialize(),
+                        success: function (data) {
+                            if (data.success) {
+                                Popup.dialog('close');
+                                dataTable.ajax.reload();
+
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+
+                            }
+                        }
                     });
-                    $("#tbldata").append(row);
-                })
+                }
+                return false;
+            }
+        function Delete(id) {
+            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Sheep")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
 
-            })
-        </script>*@
-</body>
-</html>
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+    </script>
+}

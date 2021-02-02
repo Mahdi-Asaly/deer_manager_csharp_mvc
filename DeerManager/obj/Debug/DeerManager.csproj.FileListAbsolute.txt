@@ -51,9 +51,12 @@ C:\Users\USER\source\repos\DeerManager\DeerManager\bin\roslyn\vbc.rsp
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\roslyn\VBCSCompiler.exe
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Antlr3.Runtime.dll
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\EntityFramework.dll
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\EntityFramework.SqlServer.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Newtonsoft.Json.dll
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\nunit.framework.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Helpers.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Mvc.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Optimization.dll
@@ -62,6 +65,9 @@ C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.WebPages.Deplo
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.WebPages.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.WebPages.Razor.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\WebGrease.dll
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\EntityFramework.xml
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\EntityFramework.SqlServer.xml
+C:\Users\USER\source\repos\DeerManager\DeerManager\bin\nunit.framework.xml
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Helpers.xml
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Mvc.xml
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.Optimization.xml

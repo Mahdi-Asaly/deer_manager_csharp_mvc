@@ -5,18 +5,49 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DeerManager.DB_AccessLayer;
+using Newtonsoft.Json;
+using System.Data.Entity;
 
 namespace DeerManager.Controllers
 {
     public class HomeController : Controller
     {
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
-
-  
         public ActionResult ShowMyHome()
         {
             return View("ShowMyHome");
         }
+
+
+        [HttpPost]
+        public ActionResult AddNewSheep(maintable shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                if (shp.Id == 0)
+                {
+                    db.maintables.Add(shp);
+                    db.SaveChanges();
+                    return View("ShowMyHome");
+                    //return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    db.Entry(shp).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return View("ShowMyHome");
+                    //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AddNewSheep(int id = 0)
+        {
+            return View(new maintable());
+        }
+
         public ActionResult EditSheep()
         {
             return View();
@@ -25,25 +56,13 @@ namespace DeerManager.Controllers
         {
             return View();
         }
-        public JsonResult get_data()
+        public ActionResult GetList()
         {
-            DataSet ds = dblayer.Show_Data();
-            List<maintable> listbl = new List<maintable>();
-            foreach(DataRow dr in ds.Tables[0].Rows)
+            using (DBModel db = new DBModel())
             {
-                listbl.Add(new maintable
-                {    
-                    RowNum = Convert.ToInt32(dr["Number"]),
-                    Id = Convert.ToInt32(dr["Id"]),
-                    SheepNum = Convert.ToInt32(dr["SheepNum"]),
-                    BloodType = dr["Blood"].ToString(),
-                    Gender = dr["Gender"].ToString(),
-                    Group = Convert.ToInt32(dr["Group"]),
-                    Birthday = (DateTime)dr["Birthday"],
-                    IsAlive = true 
-                }); 
+                var shpList = db.maintables.ToList<maintable>();
+                return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
             }
-            return Json(listbl, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -58,21 +58,21 @@
                             <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
                             <div class="nav-collapse collapse navbar-responsive-collapse">
                                 <ul class="nav">
-                                    <li class="active"><a href="index.html">Home</a></li>
+                                    <li class="active"><a href="index.html">דף ראשי</a></li>
 
                                     <li class="dropdown">
                                         <a href="about.html" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
-                                            <li><a href="about.html">Company</a></li>
-                                            <li><a href="about.html">History</a></li>
-                                            <li><a href="about.html">Team</a></li>
+                                            <li><a href="about.html">תיק חדש</a></li>
+                                            <li><a href="about.html">דוחות</a></li>
+                                            <li><a href="about.html">קבוצות</a></li>
                                         </ul>
 
                                     </li>
 
-                                    <li><a href="service.html">Services</a></li>
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="Home/ContactUs">Contact</a></li>
+                                    <li><a href="service.html">שירותים</a></li>
+                                    <li><a href="blog.html">מידע</a></li>
+                                    <li><a href="Home/ContactUs">צור קשר</a></li>
 
                                 </ul>
                             </div>
@@ -94,8 +94,8 @@
         <div class="container">
             <div class="row">
                 <div class="span6">
-                    Copyright &copy 2013 Shapebootstrap | All Rights Reserved  <br>
-                    <small>Aliquam tincidunt mauris eu risus.</small>
+                    Copyright 2021 | All Rights Reserved  <br>
+                    <small>Mahdi's Projects</small>
                 </div>
                 <div class="span6">
                     <div class="social pull-right">
@@ -112,5 +112,9 @@
 
     <!--/.Footer-->
     @Scripts.Render("~/template/js")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts",required:false)
+
 </body>
 </html>
