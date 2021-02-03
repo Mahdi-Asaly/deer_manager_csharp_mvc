@@ -138,7 +138,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DBModel.cs" />
-    <Compile Include="Models\Details.cs" />
     <Compile Include="Models\maintable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -206,7 +205,6 @@
     <Content Include="Views\Home\ShowMyHome.cshtml" />
     <Content Include="Views\Shared\_CustomerLayout.cshtml" />
     <Content Include="Views\Home\ContactUs.cshtml" />
-    <Content Include="Views\Home\EditSheep.cshtml" />
     <Content Include="Views\Home\AddNewSheep.cshtml" />
   </ItemGroup>
   <ItemGroup>

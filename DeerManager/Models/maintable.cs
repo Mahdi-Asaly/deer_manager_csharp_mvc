@@ -9,11 +9,11 @@ namespace DeerManager.Models
     [Table("maintable")]
     public partial class maintable
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Number { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string Id { get; set; }
 
         public int SheepNum { get; set; }
 

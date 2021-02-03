@@ -18,7 +18,6 @@
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
     <thead>
         <tr>
-            <th>מספר סידורי</th>
             <th>תעודת זהות</th>
             <th>מספר הכבש</th>
             <th>סוג הדם</th>
@@ -30,7 +29,6 @@
     </thead>
     <tfoot>
         <tr>
-            <th>מספר סידורי</th>
             <th>תעודת זהות</th>
             <th>מספר הכבש</th>
             <th>סוג הדם</th>
@@ -97,7 +95,6 @@
                         "datatype": "json"
                     },
                     "columns": [
-                        { "data": "Number" },
                         { "data": "Id" },
                         { "data": "SheepNum" },
                         { "data": "Blood" },
@@ -106,7 +103,7 @@
                         { "data": "Birthday" },
 
                         {"data":"Id" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Employee")/" + data + "')><i class='fa fa-pencil'></i> הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i>מחק</a>";
+                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i> הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i>מחק</a>";
                         },
                             "orderable": false,
                             "searchable":false,
@@ -163,11 +160,12 @@
                 return false;
             }
         function Delete(id) {
-            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            console.log('test');
+            if(confirm('האם אתה בטוח שברצונך למחוק כבש בעל ת"ז: '+id))
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","Sheep")/' + id,
+                    url: '@Url.Action("Delete","Home")/' + id,
                     success: function (data) {
                         if (data.success)
                         {

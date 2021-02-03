@@ -18,40 +18,40 @@ namespace DeerManager.Controllers
         {
             return View("ShowMyHome");
         }
-
-
+        public ActionResult Details()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Delete(string id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                maintable shp = db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>();
+                db.maintables.Remove(shp);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+            }
+        }
         [HttpPost]
         public ActionResult AddNewSheep(maintable shp)
         {
             using (DBModel db = new DBModel())
             {
-                if (shp.Id == 0)
-                {
                     db.maintables.Add(shp);
                     db.SaveChanges();
                     return View("ShowMyHome");
-                    //return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    db.Entry(shp).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return View("ShowMyHome");
-                    //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-                }
             }
         }
 
         [HttpGet]
-        public ActionResult AddNewSheep(int id = 0)
+        public ActionResult AddNewSheep()
+        
         {
             return View(new maintable());
         }
 
-        public ActionResult EditSheep()
-        {
-            return View();
-        }
+
         public ActionResult ContactUs()
         {
             return View();
