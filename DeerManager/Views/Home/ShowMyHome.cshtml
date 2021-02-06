@@ -146,7 +146,7 @@
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","Home")',
+                    url: '@Url.Action("Delete","Home")/'+id,
                     success: function (data) {
                         if (data.success)
                         {
