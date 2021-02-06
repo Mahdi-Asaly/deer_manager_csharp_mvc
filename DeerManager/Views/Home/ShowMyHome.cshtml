@@ -44,16 +44,7 @@
 <!-- Normal -->
 <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-<!-- jQuery ThemeRoller -->
-@*<link href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css" rel="stylesheet" />*@
 
-<!-- Semantic UI -->
-@*<link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css" rel="stylesheet" />
-    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.semanticui.min.css" rel="stylesheet" />*@
-
-<!-- Bootstrap 4 -->
-@*<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap4.min.css" rel="stylesheet" />*@
 
 @section scripts{
 
@@ -67,20 +58,11 @@
     @* Normal *@
     <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
-    @* jQuery ThemeRoller*@
-    @*<script src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>*@
 
-    @* Semantic UI*@
-    @*<script src="https://cdn.datatables.net/1.10.15/js/dataTables.semanticui.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.js"></script>*@
-
-    @* Bootstrap 4*@
-    @*<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet" />
-        <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>*@
-
+    <script src="~/Scripts/bootstrap.min.js"></script>
 
     @*For the add new sheep*@
-    <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
@@ -160,17 +142,16 @@
                 return false;
             }
         function Delete(id) {
-            console.log('test');
-            if(confirm('האם אתה בטוח שברצונך למחוק כבש בעל ת"ז: '+id))
+            if(confirm('Are You Sure to Delete this Employee Record ?'))
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","Home")/' + id,
+                    url: '@Url.Action("Delete","Home")',
                     success: function (data) {
                         if (data.success)
                         {
                             dataTable.ajax.reload();
-
+                            
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
@@ -178,7 +159,6 @@
 
                         }
                     }
-
                 });
             }
         }

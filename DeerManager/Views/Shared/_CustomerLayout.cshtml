@@ -2,12 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ShapeBootstrap Clean Template</title>
+    <title>מערכת ניהול כבשים 2021</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    @Styles.Render("~/template/js")
+
+
+
 
     <!--Font-->
     @*<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600' rel='stylesheet' type='text/css'>*@
@@ -32,11 +34,7 @@
     <link href="~/Content/css/bootstrap-responsive.css" rel="stylesheet">
     <link href="~/Content/css/style.css" rel="stylesheet">
 
-    <!-- SCRIPT
-    ============================================================-->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery.js"></script>
+
 
 </head>
 <body>
@@ -109,11 +107,7 @@
         </div>
     </footer>
 
-    <!--/.Footer-->
-    @Scripts.Render("~/template/js")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts",required:false)
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>
