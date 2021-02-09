@@ -69,7 +69,7 @@
 
     <script>
         $(document).ready(function () {
-            
+
             $("#SheepTable").DataTable(
                 {
                     "ajax": {
@@ -84,14 +84,21 @@
                         { "data": "Gender" },
                         { "data": "Group" },
                         { "data": "Birthday" },
-
-                        {"data":"Id" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i> הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i>מחק</a>";
+                        {
+                            "data": "Id", "render": function (id) {
+                                var html = '';
+                                html += '<button type="button" class="btn btn-primary search-btn" data-toggle="tooltip" title="עריכה"  onclick="PopupForm(' + '@Url.Action("Details","Home")/" + data + "' + ')">הצג</button>';
+                                html += '<button type="button" class="btn btn-primary search-btn" data-toggle="tooltip" title="מחיקה" onclick="Delete(' + id + ')">מחיקה</button>';
+                                return html;
+                            }
+                        }
+                        @*{"data":"Id" , "render" : function (data) {
+                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Employee")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
                         },
                             "orderable": false,
                             "searchable":false,
                             "width":"150px"
-                        }
+                        }*@
                     ],
                     "language": {
 
@@ -156,7 +163,7 @@
                         if (data.success)
                         {
                             dataTable.ajax.reload();
-                            
+
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
