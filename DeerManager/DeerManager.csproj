@@ -147,8 +147,15 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\style.css" />
+    <Content Include="Content\img\anthony.jpg" />
+    <Content Include="Content\img\cc-bg-1.jpg" />
+    <Content Include="Content\img\creative-cv.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\graphic-design-1.jpg" />
+    <Content Include="Content\img\graphic-design-2.jpg" />
+    <Content Include="Content\img\graphic-design-3.jpg" />
+    <Content Include="Content\img\graphic-design-4.jpg" />
     <Content Include="Content\img\icon-service1.png" />
     <Content Include="Content\img\icon-service2.png" />
     <Content Include="Content\img\icon-service3.png" />
@@ -163,6 +170,17 @@
     <Content Include="Content\img\img1-870x400.jpeg" />
     <Content Include="Content\img\img2.png" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\photography-1.jpg" />
+    <Content Include="Content\img\photography-2.jpg" />
+    <Content Include="Content\img\photography-3.jpg" />
+    <Content Include="Content\img\photography-4.jpg" />
+    <Content Include="Content\img\project-1.jpg" />
+    <Content Include="Content\img\project-2.jpg" />
+    <Content Include="Content\img\project-3.jpg" />
+    <Content Include="Content\img\project-4.jpg" />
+    <Content Include="Content\img\reference-image-1.jpg" />
+    <Content Include="Content\img\reference-image-2.jpg" />
+    <Content Include="Content\img\reference-image-3.jpg" />
     <Content Include="Content\img\responsive.png" />
     <Content Include="Content\img\slide-bg.png" />
     <Content Include="Content\img\slide\slide1.jpg" />
@@ -171,6 +189,7 @@
     <Content Include="Content\img\social\googleplus.png" />
     <Content Include="Content\img\social\rss.png" />
     <Content Include="Content\img\social\twitter.png" />
+    <Content Include="Content\img\staticmap.png" />
     <Content Include="Content\img\team1.jpg" />
     <Content Include="Content\img\team2.jpg" />
     <Content Include="Content\img\team3.jpg" />
@@ -178,6 +197,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\css\Site.css" />
+    <Content Include="js\aos.js" />
+    <Content Include="js\core\bootstrap.min.js" />
+    <Content Include="js\core\jquery.3.2.1.min.js" />
+    <Content Include="js\core\popper.min.js" />
+    <Content Include="js\now-ui-kit.js" />
+    <Content Include="js\plugins\bootstrap-datepicker.js" />
+    <Content Include="js\plugins\bootstrap-switch.js" />
+    <Content Include="js\plugins\jquery.sharrre.js" />
+    <Content Include="js\plugins\nouislider.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\img\social\.DS_Store" />
@@ -193,6 +221,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\main.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -207,9 +236,12 @@
     <Content Include="Views\Home\ContactUs.cshtml" />
     <Content Include="Views\Home\AddNewSheep.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Home\MyCVPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\core\" />
+    <Folder Include="Scripts\plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

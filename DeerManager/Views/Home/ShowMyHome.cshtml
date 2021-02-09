@@ -16,6 +16,7 @@
     @*Bootstrap*@
     @*<table id="employeeTable" class="table table-striped table-bordered">*@
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
+
     <thead>
         <tr>
             <th>תעודת זהות</th>
@@ -68,7 +69,7 @@
 
     <script>
         $(document).ready(function () {
-
+            
             $("#SheepTable").DataTable(
                 {
                     "ajax": {
@@ -91,7 +92,11 @@
                             "searchable":false,
                             "width":"150px"
                         }
-                    ]
+                    ],
+                    "language": {
+
+                        "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
+                    }
                 });
 
         });
@@ -142,7 +147,7 @@
                 return false;
             }
         function Delete(id) {
-            if(confirm('Are You Sure to Delete this Employee Record ?'))
+            if(confirm('האם אתה בטוח שברצונך למחוק שורה זאת ?'))
             {
                 $.ajax({
                     type: "POST",

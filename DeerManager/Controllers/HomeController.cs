@@ -14,12 +14,19 @@ namespace DeerManager.Controllers
     public class HomeController : Controller
     {
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
+
+
+        public ActionResult MyCVPage()
+        {
+            return View();
+        }
         public ActionResult ShowMyHome()
         {
             return View("ShowMyHome");
         }
         public ActionResult Details()
         {
+            
             return View();
         }
         [HttpPost]
