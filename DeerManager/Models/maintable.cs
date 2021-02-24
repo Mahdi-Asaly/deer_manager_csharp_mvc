@@ -31,7 +31,7 @@ namespace DeerManager.Models
         [StringLength(10)]
         public string Birthday { get; set; }
 
-        public int Status { get; set; }
+
 
     }
 }

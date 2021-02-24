@@ -8,6 +8,7 @@
 }
 
 <h2>טבלה ראשית</h2>
+    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
 
 @* Normal and ThemeRoller*@
 <table id="SheepTable" class="display">
@@ -15,7 +16,6 @@
     @*<table id="employeeTable" class="ui celled table">*@
     @*Bootstrap*@
     @*<table id="employeeTable" class="table table-striped table-bordered">*@
-    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
 
     <thead>
         <tr>
@@ -84,21 +84,14 @@
                         { "data": "Gender" },
                         { "data": "Group" },
                         { "data": "Birthday" },
-                        {
-                            "data": "Id", "render": function (id) {
-                                var html = '';
-                                html += '<button type="button" class="btn btn-primary search-btn" data-toggle="tooltip" title="עריכה"  onclick="PopupForm(' + '@Url.Action("Details","Home")/" + data + "' + ')">הצג</button>';
-                                html += '<button type="button" class="btn btn-primary search-btn" data-toggle="tooltip" title="מחיקה" onclick="Delete(' + id + ')">מחיקה</button>';
-                                return html;
-                            }
-                        }
-                        @*{"data":"Id" , "render" : function (data) {
-                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","Employee")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                        {"data":"Id" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i>הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=\'Delete(" + data +")\'><i class='fa fa-trash'></i>מחק</a>";
                         },
                             "orderable": false,
                             "searchable":false,
                             "width":"150px"
-                        }*@
+                        }
+
                     ],
                     "language": {
 
@@ -120,7 +113,7 @@
                 Popup = formDiv.dialog({
                     autoOpen: true,
                     resizable: false,
-                    title: 'כבש חדש',
+                    title: 'עריכה/מחיקה',
                     height: 500,
                     width: 700,
                     close: function () {
@@ -152,14 +145,18 @@
                     });
                 }
                 return false;
-            }
+        }
+
+
         function Delete(id) {
             if(confirm('האם אתה בטוח שברצונך למחוק שורה זאת ?'))
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","Home")/'+id,
+                    url: '@Url.Action("Delete","Home")/' + id,
+
                     success: function (data) {
+                        myTable.ajax.reload();
                         if (data.success)
                         {
                             dataTable.ajax.reload();

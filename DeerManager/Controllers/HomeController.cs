@@ -24,22 +24,55 @@ namespace DeerManager.Controllers
         {
             return View("ShowMyHome");
         }
-        public ActionResult Details()
-        {
-            
-            return View();
-        }
+
         [HttpPost]
         public ActionResult Delete(string id)
         {
             using (DBModel db = new DBModel())
             {
-                maintable shp = db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>();
-                db.maintables.Remove(shp);
+                maintable emp = db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>();
+                db.maintables.Remove(emp);
                 db.SaveChanges();
                 return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public ActionResult Details(string id="")
+        {
+            if (id == "")
+                return View(new maintable());
+            else
+            {
+                using (DBModel db = new DBModel())
+                {
+                    return View(db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>());
+                }
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Details(maintable emp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                if (emp.Id == "")
+                {
+                    db.maintables.Add(emp);
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    db.Entry(emp).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+
+
+        }
+
         [HttpPost]
         public ActionResult AddNewSheep(maintable shp)
         {
