@@ -15,11 +15,13 @@ namespace DeerManager.Controllers
     {
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
 
-
-        public ActionResult MyCVPage()
+        public ActionResult AdvancedDetails(int id)
         {
+            //here you should import the informations from tables: Hamlatot,Vaccinations,Disesaes,Details
+
             return View();
         }
+
         public ActionResult ShowMyHome()
         {
             return View("ShowMyHome");

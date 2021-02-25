@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DeerTableModelStoreContainer" CdmEntityContainer="DeerTableEntities">
+    <EntitySetMapping Name="Details">
+      <EntityTypeMapping TypeName="DeerTableModel.Details">
+        <MappingFragment StoreEntitySet="Details">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Information" ColumnName="Information" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Diseases">
+      <EntityTypeMapping TypeName="DeerTableModel.Diseases">
+        <MappingFragment StoreEntitySet="Diseases">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ShpDisease" ColumnName="ShpDisease" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Hamlatot">
+      <EntityTypeMapping TypeName="DeerTableModel.Hamlatot">
+        <MappingFragment StoreEntitySet="Hamlatot">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DateOfHamlata" ColumnName="DateOfHamlata" />
+          <ScalarProperty Name="DateOfTakser" ColumnName="DateOfTakser" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Vaccinations">
+      <EntityTypeMapping TypeName="DeerTableModel.Vaccinations">
+        <MappingFragment StoreEntitySet="Vaccinations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DateOfVaccination" ColumnName="DateOfVaccination" />
+          <ScalarProperty Name="Medicine" ColumnName="Medicine" />
+          <ScalarProperty Name="NextVaccinationDate" ColumnName="NextVaccinationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

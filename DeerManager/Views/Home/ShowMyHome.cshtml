@@ -157,10 +157,10 @@
                     url: '@Url.Action("Delete","Home")/' + id,
 
                     success: function (data) {
-
+                        $("#SheepTable").DataTable().ajax.reload();
                         if (data.success)
                         {
-                            $("#SheepTable").DataTable().ajax.reload();
+                            
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
