@@ -85,7 +85,7 @@
                         { "data": "Group" },
                         { "data": "Birthday" },
                         {"data":"Id" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i>הצג</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=\'Delete(" + data +")\'><i class='fa fa-trash'></i>מחק</a>";
+                            return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=\'Delete(" + data + ")\'><i class='fa fa-trash'></i>מחק</a><a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i>הצג</a>";
                         },
                             "orderable": false,
                             "searchable":false,
@@ -104,7 +104,8 @@
 
 
     //adding new sheep
-    function PopupForm(url) {
+        function PopupForm(url) {
+
         var formDiv = $('<div/>');
         $.get(url)
             .done(function (response) {
@@ -123,7 +124,7 @@
                 });
             });
     }
-            function SubmitForm(form) {
+    function SubmitForm(form) {
                 $.validator.unobtrusive.parse(form);
                 if ($(form).valid()) {
                     $.ajax({
@@ -156,11 +157,10 @@
                     url: '@Url.Action("Delete","Home")/' + id,
 
                     success: function (data) {
-                        myTable.ajax.reload();
+
                         if (data.success)
                         {
-                            dataTable.ajax.reload();
-
+                            $("#SheepTable").DataTable().ajax.reload();
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"

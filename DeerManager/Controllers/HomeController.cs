@@ -26,21 +26,22 @@ namespace DeerManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int id)
         {
             using (DBModel db = new DBModel())
             {
                 maintable emp = db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>();
                 db.maintables.Remove(emp);
                 db.SaveChanges();
-                return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+                //return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
+                return View("ShowMyHome");
             }
         }
 
         [HttpGet]
-        public ActionResult Details(string id="")
+        public ActionResult Details(int id=0)
         {
-            if (id == "")
+            if (id ==0)
                 return View(new maintable());
             else
             {
@@ -56,17 +57,19 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                if (emp.Id == "")
+                if (emp.Id == 0)
                 {
                     db.maintables.Add(emp);
                     db.SaveChanges();
                     return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+
                 }
                 else
                 {
                     db.Entry(emp).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+
                 }
             }
 

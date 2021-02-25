@@ -12,8 +12,7 @@ namespace DeerManager.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
-        [StringLength(10)]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public int SheepNum { get; set; }
 
