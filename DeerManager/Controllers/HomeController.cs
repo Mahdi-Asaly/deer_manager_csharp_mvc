@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DeerManager.DB_AccessLayer;
 using Newtonsoft.Json;
 using System.Data.Entity;
+using DeerManager.ViewModels;
 
 namespace DeerManager.Controllers
 {
@@ -18,8 +19,19 @@ namespace DeerManager.Controllers
         public ActionResult AdvancedDetails(int id)
         {
             //here you should import the informations from tables: Hamlatot,Vaccinations,Disesaes,Details
+            using (DBModel db = new DBModel())
+            {
 
-            return View();
+                var shpVM = new UserViewModel
+                {
+                    shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
+                    shpDiseases = db.Diseases.FirstOrDefault(x => x.Id == id),
+                    shpVac = db.Vaccinations.FirstOrDefault(x => x.Id == id),
+                    shpHamlata = db.Hamlatot.FirstOrDefault(x => x.Id == id),
+                    maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id)
+                };
+                return View(shpVM) ;
+            }
         }
 
         public ActionResult ShowMyHome()
@@ -32,8 +44,8 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                maintable emp = db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>();
-                db.maintables.Remove(emp);
+                maintable emp = db.maintable.Where(x => x.Id == id).FirstOrDefault<maintable>();
+                db.maintable.Remove(emp);
                 db.SaveChanges();
                 //return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
                 return View("ShowMyHome");
@@ -49,7 +61,7 @@ namespace DeerManager.Controllers
             {
                 using (DBModel db = new DBModel())
                 {
-                    return View(db.maintables.Where(x => x.Id == id).FirstOrDefault<maintable>());
+                    return View(db.maintable.Where(x => x.Id == id).FirstOrDefault<maintable>());
                 }
             }
         }
@@ -61,7 +73,7 @@ namespace DeerManager.Controllers
             {
                 if (emp.Id == 0)
                 {
-                    db.maintables.Add(emp);
+                    db.maintable.Add(emp);
                     db.SaveChanges();
                     return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
 
@@ -83,7 +95,7 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                    db.maintables.Add(shp);
+                    db.maintable.Add(shp);
                     db.SaveChanges();
                     return View("ShowMyHome");
             }
@@ -105,7 +117,7 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                var shpList = db.maintables.ToList<maintable>();
+                var shpList = db.maintable.ToList<maintable>();
                 return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
             }
         }

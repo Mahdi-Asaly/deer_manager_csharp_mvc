@@ -1,0 +1,121 @@
+﻿
+@model  DeerManager.ViewModels.UserViewModel
+
+@{
+    ViewBag.Title = "AdvancedDetails";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+
+<div style="text-align:center" ;>
+    @Html.HiddenFor(model => model.maintblSheeps.Id)
+    <div class="form-group">
+        <h4>מספר הכבש</h4>
+        @Html.EditorFor(model => model.maintblSheeps.SheepNum, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.maintblSheeps.SheepNum)
+    </div>
+    <div class="form-group">
+        <h4>סוג הדם</h4>
+        @Html.EditorFor(model => model.maintblSheeps.Blood, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.maintblSheeps.Blood)
+    </div>
+    <div class="form-group">
+        <h4>מין</h4>
+        @Html.EditorFor(model => model.maintblSheeps.Gender, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="form-group">
+
+        <div class="form-group" style="direction: rtl;">
+            <div>קבוצה</div>
+            <select name="Group" id="Group">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="8">9</option>
+                <option value="8">10</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>תאריך לידה</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.maintblSheeps.Birthday, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>מידע כללי</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpDetail.Information, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>מחלות רקע</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpDiseases.ShpDisease, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>חיסון שלקח/ה ככבש/ה</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpVac.Medicine, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>תאריך שבו הכבש הקח את החיסון הבא</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpVac.NextVaccinationDate, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>תאריך שבו הכבש לקח את החיסון </h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpVac.DateOfVaccination, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>תאריך ההמלטה האחרון</h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpHamlata.DateOfHamlata, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h4>תאריך שבירת הריון </h4>
+            <div class="input-group">
+                @Html.EditorFor(model => model.shpHamlata.DateOfTakser, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+
+        <input type="button" title="דף ראשי" value="עבור לדף הראשי" onclick="location.href='@Url.Action("ShowMyHome", "Home")'" class="btn btn-info" />
+        <input type="reset" value="מחק את המידע הזה" class="btn btn-danger" />
+    </div>
+
+</div>
+
+
+
+
+

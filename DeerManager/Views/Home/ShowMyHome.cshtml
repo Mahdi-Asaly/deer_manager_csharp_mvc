@@ -11,12 +11,7 @@
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
 
 @* Normal and ThemeRoller*@
-<table id="SheepTable" class="display">
-    @*Semantic UI*@
-    @*<table id="employeeTable" class="ui celled table">*@
-    @*Bootstrap*@
-    @*<table id="employeeTable" class="table table-striped table-bordered">*@
-
+<table id="SheepTables" class="display">
     <thead>
         <tr>
             <th>תעודת זהות</th>
@@ -70,7 +65,7 @@
     <script>
         $(document).ready(function () {
 
-            $("#SheepTable").DataTable(
+            $("#SheepTables").DataTable(
                 {
                     "ajax": {
                         "url": "/Home/GetList",
@@ -157,7 +152,7 @@
                     url: '@Url.Action("Delete","Home")/' + id,
 
                     success: function (data) {
-                        $("#SheepTable").DataTable().ajax.reload();
+                        $("#SheepTables").DataTable().ajax.reload();
                         if (data.success)
                         {
                             
