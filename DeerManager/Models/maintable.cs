@@ -12,7 +12,10 @@ namespace DeerManager.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public maintable()
         {
+            Details = new HashSet<Details>();
             Diseases = new HashSet<Diseases>();
+            Hamlatot = new HashSet<Hamlatot>();
+            Vaccinations = new HashSet<Vaccinations>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -35,12 +38,15 @@ namespace DeerManager.Models
         public string Birthday { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Details> Details { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Diseases> Diseases { get; set; }
 
-        public virtual Details Details { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Hamlatot> Hamlatot { get; set; }
 
-        public virtual Hamlatot Hamlatot { get; set; }
-
-        public virtual Vaccinations Vaccinations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Vaccinations> Vaccinations { get; set; }
     }
 }

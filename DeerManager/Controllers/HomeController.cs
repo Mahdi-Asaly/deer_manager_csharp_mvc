@@ -9,6 +9,7 @@ using DeerManager.DB_AccessLayer;
 using Newtonsoft.Json;
 using System.Data.Entity;
 using DeerManager.ViewModels;
+using System.Data.Entity.Validation;
 
 namespace DeerManager.Controllers
 {
@@ -21,14 +22,13 @@ namespace DeerManager.Controllers
             //here you should import the informations from tables: Hamlatot,Vaccinations,Disesaes,Details
             using (DBModel db = new DBModel())
             {
-
                 var shpVM = new UserViewModel
                 {
-                    shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
-                    shpDiseases = db.Diseases.FirstOrDefault(x => x.Id == id),
-                    shpVac = db.Vaccinations.FirstOrDefault(x => x.Id == id),
-                    shpHamlata = db.Hamlatot.FirstOrDefault(x => x.Id == id),
-                    maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id)
+                    shpDiseases = db.Diseases.Where(x => x.Id == id).ToList<Diseases>(),
+                    maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
+                    shpDetail = db.Details.Where(x => x.Id == id).ToList<Details>(),
+                    shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
+                    shpVac= db.Vaccinations.Where(x=>x.Id==id).ToList<Vaccinations>()
                 };
                 return View(shpVM) ;
             }
@@ -107,6 +107,27 @@ namespace DeerManager.Controllers
         {
             return View(new maintable());
         }
+
+
+
+
+        [HttpPost]
+        public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                db.Entry(shp).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AdvancedDetailsUpdate()
+        {
+            return View();
+        }
+
 
 
         public ActionResult ContactUs()

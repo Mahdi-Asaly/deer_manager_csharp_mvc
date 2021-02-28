@@ -2,28 +2,37 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
-
+using DeerManager.ViewModels;
 namespace DeerManager.Models
 {
     public partial class DBModel : DbContext
     {
         public DBModel()
-            : base("name=DBModelDeer")
+            : base("name=DBModel")
         {
-            this.Configuration.LazyLoadingEnabled = false; //this solved the problem of ajax error
+            this.Configuration.LazyLoadingEnabled = false;
         }
 
+        public virtual DbSet<Details> Details { get; set; }
         public virtual DbSet<Diseases> Diseases { get; set; }
+        public virtual DbSet<Hamlatot> Hamlatot { get; set; }
         public virtual DbSet<maintable> maintable { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<Details> Details { get; set; }
-        public virtual DbSet<Hamlatot> Hamlatot { get; set; }
         public virtual DbSet<Vaccinations> Vaccinations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<Diseases>()
                 .Property(e => e.ShpDisease)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Hamlatot>()
+                .Property(e => e.DateOfHamlata)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Hamlatot>()
+                .Property(e => e.DateOfTakser)
                 .IsFixedLength();
 
             modelBuilder.Entity<maintable>()
@@ -36,29 +45,6 @@ namespace DeerManager.Models
 
             modelBuilder.Entity<maintable>()
                 .Property(e => e.Birthday)
-                .IsFixedLength();
-
-            modelBuilder.Entity<maintable>()
-                .HasOptional(e => e.Details)
-                .WithRequired(e => e.maintable)
-                .WillCascadeOnDelete();
-
-            modelBuilder.Entity<maintable>()
-                .HasOptional(e => e.Hamlatot)
-                .WithRequired(e => e.maintable)
-                .WillCascadeOnDelete();
-
-            modelBuilder.Entity<maintable>()
-                .HasOptional(e => e.Vaccinations)
-                .WithRequired(e => e.maintable)
-                .WillCascadeOnDelete();
-
-            modelBuilder.Entity<Hamlatot>()
-                .Property(e => e.DateOfHamlata)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Hamlatot>()
-                .Property(e => e.DateOfTakser)
                 .IsFixedLength();
 
             modelBuilder.Entity<Vaccinations>()

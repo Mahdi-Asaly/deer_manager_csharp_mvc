@@ -9,12 +9,18 @@ namespace DeerManager.Models
     [Table("Hamlatot")]
     public partial class Hamlatot
     {
+        [Key]
+        [Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
+        [Key]
+        [Column(Order = 1)]
         [StringLength(10)]
         public string DateOfHamlata { get; set; }
 
+        [Key]
+        [Column(Order = 2)]
         [StringLength(10)]
         public string DateOfTakser { get; set; }
 
