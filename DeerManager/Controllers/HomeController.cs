@@ -19,7 +19,7 @@ namespace DeerManager.Controllers
 
         public ActionResult AdvancedDetails(int id)
         {
-            //here you should import the informations from tables: Hamlatot,Vaccinations,Disesaes,Details
+            //here you should import the informations from tables:
             using (DBModel db = new DBModel())
             {
                 var shpVM = new UserViewModel
