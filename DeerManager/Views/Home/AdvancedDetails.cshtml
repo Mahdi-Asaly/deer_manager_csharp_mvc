@@ -11,44 +11,46 @@
 
 @using (Html.BeginForm("AdvancedDetailsUpdate", "Home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
 {
-    <div style="text-align:center" ;>
-        <div class="editor-field">
-            <div>תעודה מזהה</div>
-            @Html.EditorFor(model => model.maintblSheeps.Id, new
-       { disabled = "disabled", @readonly = "readonly" })
-        </div>
-        <div class="form-group">
-            <h4>מספר הכבש</h4>
-            @Html.EditorFor(model => model.maintblSheeps.SheepNum, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.maintblSheeps.SheepNum)
-        </div>
-        <div class="form-group">
-            <h4>סוג הדם</h4>
-            @Html.EditorFor(model => model.maintblSheeps.Blood, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.maintblSheeps.Blood)
-        </div>
-        <div class="form-group">
-            <h4>מין</h4>
-            @Html.EditorFor(model => model.maintblSheeps.Gender, new { htmlAttributes = new { @class = "form-control" } })
-        </div>
-        <div class="form-group">
+<div style="text-align:center" ;>
+    <div class="editor-field">
+        <div>תעודה מזהה</div>
+        @Html.EditorFor(model => model.maintblSheeps.Id, new
+   { disabled = "disabled", @readonly = "readonly" })
+    </div>
+    <div class="form-group">
+        <h4>מספר הכבש</h4>
+        @Html.EditorFor(model => model.maintblSheeps.SheepNum, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.maintblSheeps.SheepNum)
+    </div>
+    <div class="form-group">
+        <h4>סוג הדם</h4>
+        @Html.EditorFor(model => model.maintblSheeps.Blood, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.maintblSheeps.Blood)
+    </div>
+    <div class="form-group">
+        <h4>מין</h4>
+        @Html.EditorFor(model => model.maintblSheeps.Gender, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="form-group">
 
-            <div class="form-group" style="direction: rtl;">
-                <div>קבוצה</div>
-                <select name="Group" id="Group">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="8">9</option>
-                    <option value="8">10</option>
-                </select>
-            </div>
+        <div class="form-group" style="direction: rtl;">
+            <div>קבוצה</div>
+            <select name="Group" id="Group">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="8">9</option>
+                <option value="8">10</option>
+            </select>
         </div>
+    </div>
+
+
 
 
         <div class="form-group">
@@ -63,13 +65,8 @@
             <div style="text-align:center" ;>
                 <div>מידע כללי</div>
 
-                <div class="input-group">
-                    @for (var i = 0; i < Model.shpDetail.Count; i++)
-                    {
+                @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
 
-                            @Html.TextBoxFor(m => Model.shpDetail[i].Information)
-                    }
-                </div>
             </div>
         </div>
 

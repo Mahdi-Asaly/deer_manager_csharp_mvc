@@ -47,6 +47,11 @@ namespace DeerManager.Models
                 .IsFixedLength();
 
             modelBuilder.Entity<maintable>()
+                .HasOptional(e => e.Details)
+                .WithRequired(e => e.maintable)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<maintable>()
                 .HasOptional(e => e.Hamlatot)
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();

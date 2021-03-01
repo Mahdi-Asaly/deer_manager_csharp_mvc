@@ -12,7 +12,6 @@ namespace DeerManager.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public maintable()
         {
-            Details = new HashSet<Details>();
             Diseases = new HashSet<Diseases>();
         }
 
@@ -35,8 +34,7 @@ namespace DeerManager.Models
         [StringLength(10)]
         public string Birthday { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Details> Details { get; set; }
+        public virtual Details Details { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Diseases> Diseases { get; set; }

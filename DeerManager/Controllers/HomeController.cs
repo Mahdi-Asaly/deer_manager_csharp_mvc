@@ -26,7 +26,7 @@ namespace DeerManager.Controllers
                 {
                     shpDiseases = db.Diseases.Where(x => x.Id == id).ToList(),
                     maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
-                    shpDetail = db.Details.Where(x => x.Id == id).ToList<Details>(),
+                    shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
                     shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
                     shpVac= db.Vaccinations.Where(x=>x.Id==id).ToList<Vaccinations>()
                 };
