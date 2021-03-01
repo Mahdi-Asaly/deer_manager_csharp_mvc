@@ -1,6 +1,7 @@
 ﻿@model DeerManager.ViewModels.UserViewModel
 
 
+
 @{
     ViewBag.Title = "AdvancedDetails";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
@@ -13,7 +14,7 @@
     <div style="text-align:center" ;>
         <div class="editor-field">
             <div>תעודה מזהה</div>
-            @Html.TextBoxFor(model => model.maintblSheeps.Id, new
+            @Html.EditorFor(model => model.maintblSheeps.Id, new
        { disabled = "disabled", @readonly = "readonly" })
         </div>
         <div class="form-group">
@@ -63,9 +64,10 @@
                 <div>מידע כללי</div>
 
                 <div class="input-group">
-                    @foreach (var item in Model.shpDetail)
+                    @for (var i = 0; i < Model.shpDetail.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.Information, new { htmlAttributes = new { @class = "form-control" } })
+
+                            @Html.TextBoxFor(m => Model.shpDetail[i].Information)
                     }
                 </div>
             </div>
@@ -75,10 +77,10 @@
             <div style="text-align:center" ;>
                 <div>מחלות רקע</div>
                 <div class="input-group">
-
-                    @foreach (var item in Model.shpDiseases)
+                    @for (var i = 0; i < Model.shpDiseases.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.ShpDisease, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.TextBoxFor(m => Model.shpDiseases[i].ShpDisease)
                     }
                 </div>
             </div>
@@ -90,9 +92,10 @@
             <div style="text-align:center" ;>
                 <div>חיסון שלקח/ה ככבש/ה</div>
                 <div class="input-group">
-                    @foreach (var item in Model.shpVac)
+                    @for (var i = 0; i < Model.shpVac.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.Medicine, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.TextBoxFor(m => Model.shpVac[i].Medicine)
                     }
                 </div>
             </div>
@@ -101,10 +104,10 @@
             <div style="text-align:center" ;>
                 <div>תאריך שבו הכבש יקח את החיסון </div>
                 <div class="input-group">
-                    @*@Html.EditorFor(model => model.shpVac.ToString(), new { htmlAttributes = new { @class = "form-control" } })*@
-                    @foreach (var item in Model.shpVac)
+                    @for (var i = 0; i < Model.shpVac.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.NextVaccinationDate, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.TextBoxFor(m => Model.shpVac[i].NextVaccinationDate)
                     }
                 </div>
             </div>
@@ -114,12 +117,10 @@
             <div style="text-align:center" ;>
                 <div>תאריך ההמלטה האחרון</div>
                 <div class="input-group">
-
-                    @foreach (var item in Model.shpHamlata)
+                    @for (var i = 0; i < Model.shpHamlata.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.DateOfHamlata, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfHamlata)
                     }
-
                 </div>
             </div>
         </div>
@@ -127,11 +128,12 @@
             <div style="text-align:center" ;>
                 <div>תאריך שבירת הריון </div>
                 <div class="input-group">
-                    @*@Html.EditorFor(model => model.shpHamlata.DateOfTakser, new { htmlAttributes = new { @class = "form-control" } })*@
-                    @foreach (var item in Model.shpHamlata)
+
+                    @for (var i = 0; i < Model.shpHamlata.Count; i++)
                     {
-                        @Html.EditorFor(modelItem => item.DateOfTakser, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser)
                     }
+
                 </div>
             </div>
         </div>

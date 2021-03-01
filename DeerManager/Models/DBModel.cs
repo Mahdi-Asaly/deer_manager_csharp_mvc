@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
-using DeerManager.ViewModels;
+
 namespace DeerManager.Models
 {
     public partial class DBModel : DbContext
@@ -22,7 +22,6 @@ namespace DeerManager.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<Diseases>()
                 .Property(e => e.ShpDisease)
                 .IsFixedLength();
@@ -46,6 +45,16 @@ namespace DeerManager.Models
             modelBuilder.Entity<maintable>()
                 .Property(e => e.Birthday)
                 .IsFixedLength();
+
+            modelBuilder.Entity<maintable>()
+                .HasOptional(e => e.Hamlatot)
+                .WithRequired(e => e.maintable)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<maintable>()
+                .HasOptional(e => e.Vaccinations)
+                .WithRequired(e => e.maintable)
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Vaccinations>()
                 .Property(e => e.DateOfVaccination)

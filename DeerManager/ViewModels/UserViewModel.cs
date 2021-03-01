@@ -8,10 +8,10 @@ namespace DeerManager.ViewModels
 {
     public class UserViewModel
     {
-        public IEnumerable<Diseases> shpDiseases { get; set; }
-        public IEnumerable<Details> shpDetail { set; get; }
-        public IEnumerable<Hamlatot> shpHamlata { set; get; }
+        public IList<Diseases> shpDiseases { get; set; }
+        public IList<Details> shpDetail { set; get; }
+        public IList<Hamlatot> shpHamlata { set; get; }
         public maintable maintblSheeps { set; get; }
-        public IEnumerable<Vaccinations> shpVac { set; get; }
+        public IList<Vaccinations> shpVac { set; get; }
     }
 }

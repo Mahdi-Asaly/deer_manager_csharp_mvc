@@ -243,7 +243,6 @@
     <Content Include="Views\Home\AddNewSheep.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\AdvancedDetails.cshtml" />
-    <Content Include="Views\Home\AdvancedDetailsUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

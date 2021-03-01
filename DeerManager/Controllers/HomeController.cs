@@ -24,7 +24,7 @@ namespace DeerManager.Controllers
             {
                 var shpVM = new UserViewModel
                 {
-                    shpDiseases = db.Diseases.Where(x => x.Id == id).ToList<Diseases>(),
+                    shpDiseases = db.Diseases.Where(x => x.Id == id).ToList(),
                     maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
                     shpDetail = db.Details.Where(x => x.Id == id).ToList<Details>(),
                     shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
@@ -109,23 +109,81 @@ namespace DeerManager.Controllers
         }
 
 
+        //[HttpPost]
+        //public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
+        //{
 
+        //    try
+        //    {
+        //        using (DBModel db = new DBModel())
+        //        {
+        //            maintable user = db.maintable.FirstOrDefault(x => x.Id == shp.maintblSheeps.Id);
+        //            if (user != null)
+        //            {
+        //                user.Details = shp.shpDetail;
+        //                user.Diseases = shp.shpDiseases;
+        //                user.Vaccinations = shp.shpVac;
+        //                user.Hamlatot = shp.shpHamlata;
+        //                db.Entry(user).State = EntityState.Modified;
+        //                db.SaveChanges();
+        //                return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+        //            }
+        //            else
+        //            {
+        //                TempData["msg"] = "משתמש לא נמצא";
+        //                TempData["succ"] = false;
+        //                return Json(new { success = true, message = "Updated UnSucc" }, JsonRequestBehavior.AllowGet);
+        //            }
 
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["msg"] = "פרטי משתמש לא עודכנו";
+        //        TempData["succ"] = false;
+        //    }
+        //    return Redirect("https://localhost:44330/");
+        //}
         [HttpPost]
         public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
         {
-            using (DBModel db = new DBModel())
-            {
-                db.Entry(shp).State = EntityState.Modified;
-                db.SaveChanges();
-                return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-            }
-        }
+            try { 
+                using (DBModel db = new DBModel())
+                {
+                    maintable user = db.maintable.FirstOrDefault(x => x.Id == shp.maintblSheeps.Id);
+                    if (user != null)
+                    {
+                        user.Details = shp.shpDetail;
+                        user.Diseases = shp.shpDiseases;
+                        user.Vaccinations = shp.shpVac[0]; //check this
+                        user.Hamlatot = shp.shpHamlata[0]; //check this
+                        db.Entry(user).State = EntityState.Modified;
+                        db.SaveChanges();
+                       
+                    }
 
-        [HttpGet]
-        public ActionResult AdvancedDetailsUpdate()
-        {
-            return View();
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting  
+                        // the current instance as InnerException  
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
+
+            return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+
         }
 
 
