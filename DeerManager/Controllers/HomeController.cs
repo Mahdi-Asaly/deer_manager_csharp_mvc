@@ -34,6 +34,8 @@ namespace DeerManager.Controllers
             }
         }
 
+
+        
         public ActionResult ShowMyHome()
         {
             return View("ShowMyHome");
@@ -108,61 +110,73 @@ namespace DeerManager.Controllers
             return View(new maintable());
         }
 
+        [HttpPost]
+        public ActionResult MoveGroupPage(int sid)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var sheepDetails = db.maintable.Where(e => e.Group == sid);
+                return View(sheepDetails);
+            }
+        }
 
-        //[HttpPost]
-        //public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
-        //{
+        [HttpGet]
+        public ActionResult MoveGroupPage()
+        {
+            return View();
+        }
 
-        //    try
-        //    {
-        //        using (DBModel db = new DBModel())
-        //        {
-        //            maintable user = db.maintable.FirstOrDefault(x => x.Id == shp.maintblSheeps.Id);
-        //            if (user != null)
-        //            {
-        //                user.Details = shp.shpDetail;
-        //                user.Diseases = shp.shpDiseases;
-        //                user.Vaccinations = shp.shpVac;
-        //                user.Hamlatot = shp.shpHamlata;
-        //                db.Entry(user).State = EntityState.Modified;
-        //                db.SaveChanges();
-        //                return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-        //            }
-        //            else
-        //            {
-        //                TempData["msg"] = "משתמש לא נמצא";
-        //                TempData["succ"] = false;
-        //                return Json(new { success = true, message = "Updated UnSucc" }, JsonRequestBehavior.AllowGet);
-        //            }
 
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TempData["msg"] = "פרטי משתמש לא עודכנו";
-        //        TempData["succ"] = false;
-        //    }
-        //    return Redirect("https://localhost:44330/");
-        //}
+
+
+        public ActionResult MoveGroup()
+        {
+            return View();
+        }
+
+        public void updateDetails (UserViewModel shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var sheepDetails = db.Details.FirstOrDefault(e => e.Id == shp.maintblSheeps.Id);
+                sheepDetails.Information = shp.shpDetail.Information;
+                db.Entry(sheepDetails).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+        public void updateBasicInfo(UserViewModel shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var sheepDetails = db.maintable.FirstOrDefault(e => e.Id == shp.maintblSheeps.Id);
+                sheepDetails.SheepNum = shp.maintblSheeps.SheepNum;
+                sheepDetails.Group = shp.maintblSheeps.Group;
+                sheepDetails.Birthday = shp.maintblSheeps.Birthday;
+                sheepDetails.Blood = shp.maintblSheeps.Blood;
+                db.Entry(sheepDetails).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+        public void updateDiseases(UserViewModel shp)
+        {
+
+        }
+        public void updateHamlatot(UserViewModel shp)
+        {
+
+        }
+        public void updateVac(UserViewModel shp)
+        {
+
+        }
+
         [HttpPost]
         public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
         {
-            try { 
-                using (DBModel db = new DBModel())
-                {
-                    maintable user = db.maintable.FirstOrDefault(x => x.Id == shp.maintblSheeps.Id);
-                    if (user != null)
-                    {
-                        user.Details = shp.shpDetail;
-                        user.Diseases = shp.shpDiseases;
-                        user.Vaccinations = shp.shpVac[0]; //check this
-                        user.Hamlatot = shp.shpHamlata[0]; //check this
-                        db.Entry(user).State = EntityState.Modified;
-                        db.SaveChanges();
-                       
-                    }
-
-                }
+            try {
+                updateBasicInfo(shp);
+                updateDetails(shp);
+                //updateDetails(shp);
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
@@ -174,8 +188,6 @@ namespace DeerManager.Controllers
                         string message = string.Format("{0}:{1}",
                             validationErrors.Entry.Entity.ToString(),
                             validationError.ErrorMessage);
-                        // raise a new exception nesting  
-                        // the current instance as InnerException  
                         raise = new InvalidOperationException(message, raise);
                     }
                 }

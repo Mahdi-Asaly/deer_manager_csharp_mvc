@@ -7,10 +7,9 @@
     ViewBag.Title = "טבלת כבשים";
 }
 
-
 <h3 style="text-align:center">טבלה ראשית</h3>
-    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
-
+<a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
+<a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
 @* Normal and ThemeRoller*@
 <table id="SheepTables" class="display">
     <thead>
@@ -37,11 +36,8 @@
     </tfoot>
 </table>
 
-
 <!-- Normal -->
 <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
-
-
 
 @section scripts{
 
@@ -144,7 +140,6 @@
                 return false;
         }
 
-
         function Delete(id) {
             if(confirm('האם אתה בטוח שברצונך למחוק שורה זאת ?'))
             {
@@ -156,7 +151,7 @@
                         $("#SheepTables").DataTable().ajax.reload();
                         if (data.success)
                         {
-                            
+
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"

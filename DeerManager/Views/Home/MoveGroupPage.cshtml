@@ -1,0 +1,108 @@
+﻿@model List<DeerManager.Models.maintable>
+
+@{
+    ViewBag.Title = "MoveGroupPage";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h3 style="text-align:center;">הטבלה מציגה את כל הכבשים מקבוצה</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered" id="SheepTables">
+                <thead>
+                    <tr>
+                        <th scope="col">סמן</th>
+                        <th scope="col">תעודת זהות</th>
+                        <th scope="col">מספר הכבש</th>
+                        <th scope="col">סוג הדם</th>
+                        <th scope="col">מין</th>
+                        <th scope="col">קבוצה</th>
+                        <th scope="col">תאריך לידה</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                                <label class="custom-control-label" for="customCheck1">1</label>
+                            </div>
+                        </td>
+                        <td>1234</td>
+                        <td>12</td>
+                        <td>B+</td>
+                        <td>זכר</td>
+                        <td>5</td>
+                        <td>22/02/2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                                <label class="custom-control-label" for="customCheck1">1</label>
+                            </div>
+                        </td>
+                        <td>2222</td>
+                        <td>11</td>
+                        <td>B+</td>
+                        <td>זכר</td>
+                        <td>5</td>
+                        <td>1/1/2020</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+    @* Normal *@
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    @*For the add new sheep*@
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+    @*<script>
+        $(document).ready(function () {
+
+            $("#SheepTables").DataTable(
+                {
+                    "ajax": {
+                        "url": "/Home/GetList",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "SheepNum" },
+                        { "data": "Blood" },
+                        { "data": "Gender" },
+                        { "data": "Group" },
+                        { "data": "Birthday" }
+
+                    ],
+                    "language": {
+
+                        "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
+                    }
+                });
+
+        });
+    </script>*@
+}
