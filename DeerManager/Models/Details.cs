@@ -12,7 +12,6 @@ namespace DeerManager.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
         public string Information { get; set; }
 
         public virtual maintable maintable { get; set; }

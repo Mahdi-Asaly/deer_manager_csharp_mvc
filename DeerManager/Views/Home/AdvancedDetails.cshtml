@@ -31,11 +31,16 @@
         <h4>מין</h4>
         @Html.EditorFor(model => model.maintblSheeps.Gender, new { htmlAttributes = new { @class = "form-control" } })
     </div>
+    @{
+        int val = Model.maintblSheeps.Group;
+    }
+
     <div class="form-group">
 
         <div class="form-group" style="direction: rtl;">
             <div>קבוצה</div>
             <select name="Group" id="Group">
+                <option value="@Model.maintblSheeps.Group">@Model.maintblSheeps.Group</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -53,34 +58,35 @@
 
 
 
-        <div class="form-group">
-            <div style="text-align:center" ;>
-                <h6>תאריך לידה</h6>
-                <div class="input-group">
-                    @Html.EditorFor(model => model.maintblSheeps.Birthday, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <h6>תאריך לידה</h6>
+            <div class="input-group">
+                @Html.EditorFor(model => model.maintblSheeps.Birthday, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
-        <div class="form-group">
-            <div style="text-align:center" ;>
-                <div>מידע כללי</div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <div>מידע כללי</div>
 
-                @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
+            @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
 
-            </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <div style="text-align:center" ;>
-                <div>מחלות רקע</div>
-                <div class="input-group">
-                    @for (var i = 0; i < Model.shpDiseases.Count; i++)
-                    {
+            <div class="form-group">
+                <div style="text-align:center" ;>
+                    <div>מחלות רקע</div>
+                    <select name="Group" id="gDisease">
+                        @for (var i = 0; i < Model.shpDiseases.Count; i++)
+                        {
 
-                        @Html.TextBoxFor(m => Model.shpDiseases[i].ShpDisease)
-                    }
-                </div>
-            </div>
+                            <option value="a">@Model.shpDiseases[i].ShpDisease</option>
+
+                        }
+                    </select>
+                    </div>
         </div>
 
 
@@ -91,8 +97,13 @@
                 <div class="input-group">
                     @for (var i = 0; i < Model.shpVac.Count; i++)
                     {
-
                         @Html.TextBoxFor(m => Model.shpVac[i].Medicine)
+                    }
+                    @{ 
+                        if (Model.shpVac.Count < 1)
+                        {
+                            <div style="color:red;">לא לקח שום תרופה בעבר</div>
+                        }
                     }
                 </div>
             </div>
@@ -106,6 +117,12 @@
 
                         @Html.TextBoxFor(m => Model.shpVac[i].NextVaccinationDate)
                     }
+                    @{
+                        if (Model.shpVac.Count < 1)
+                        {
+                            <div style="color:red;">אין תאריך כיוון שאין תרופה</div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -118,6 +135,12 @@
                     {
                         @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfHamlata)
                     }
+                    @{
+                        if (Model.shpHamlata.Count < 1)
+                        {
+                            <div style="color:red;">אין תאריך המלטות בעבר</div>
+                        }
+                    }
                 </div>
             </div>
         </div>
@@ -128,19 +151,34 @@
 
                     @for (var i = 0; i < Model.shpHamlata.Count; i++)
                     {
-                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser)
+                        if (Model.shpHamlata[i].DateOfTakser != null)
+                        {
+                            @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser)
+                        }
                     }
-
+                    @{
+                        if (Model.shpHamlata.Count == 1)
+                        {
+                            if (Model.shpHamlata[0].DateOfTakser == null)
+                            {
+                                <div style="color:red;">לא היה שבירת הריון בעבר</div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="color:red;">לא היה שבירת הריון בעבר</div>
+                        }
+                    }
                 </div>
             </div>
         </div>
         <div class="form-group">
             <input type="button" title="דף ראשי" value="עבור לדף הראשי" onclick="location.href='@Url.Action("ShowMyHome", "Home")'" class="btn btn-info" />
             <input type="submit" value="עדכן" class="btn btn-warning" />
-            <input type="button" value="מחק" class="btn btn-danger" />
+            <input type="button" value="מחק" class="btn btn-danger" onclick="location.href = '@Url.Action("Delete", "Home")\@Model.maintblSheeps.Id'"/>
         </div>
 
-    </div>
+</div>
 
 
 }
