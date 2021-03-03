@@ -24,7 +24,7 @@ namespace DeerManager.Controllers
             {
                 var shpVM = new UserViewModel
                 {
-                    shpDiseases = db.Diseases.Where(x => x.Id == id).ToList(),
+                    shpDiseases = db.Diseases.FirstOrDefault(x => x.Id == id),
                     maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
                     shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
                     shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
@@ -33,8 +33,6 @@ namespace DeerManager.Controllers
                 return View(shpVM) ;
             }
         }
-
-
         
         public ActionResult ShowMyHome()
         {
@@ -50,7 +48,7 @@ namespace DeerManager.Controllers
                 db.maintable.Remove(emp);
                 db.SaveChanges();
                 //return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
-                return View("ShowMyHome");
+                return Redirect(Request.UrlReferrer.ToString());
             }
         }
 
@@ -73,23 +71,11 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                if (emp.Id == 0)
-                {
-                    db.maintable.Add(emp);
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
-
-                }
-                else
-                {
-                    db.Entry(emp).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-
-                }
+                 db.Entry(emp).State = EntityState.Modified;
+                 db.SaveChanges();
+                //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+                 return Redirect(Request.UrlReferrer.ToString());
             }
-
-
         }
 
         [HttpPost]
@@ -139,9 +125,21 @@ namespace DeerManager.Controllers
             using (DBModel db = new DBModel())
             {
                 var sheepDetails = db.Details.FirstOrDefault(e => e.Id == shp.maintblSheeps.Id);
-                sheepDetails.Information = shp.shpDetail.Information;
-                db.Entry(sheepDetails).State = EntityState.Modified;
-                db.SaveChanges();
+                //if there are already information but we need to modify it 
+                if (sheepDetails != null)
+                {
+                    sheepDetails.Information = shp.shpDetail.Information;
+                    db.Entry(sheepDetails).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else  //there are new information so we create new row in the db
+                {
+                    var newSheep = new Details();
+                    newSheep.Information = shp.shpDetail.Information;
+                    newSheep.Id = shp.maintblSheeps.Id;
+                    db.Details.Add(newSheep);
+                    db.SaveChanges();
+                }
             }
         }
         public void updateBasicInfo(UserViewModel shp)
@@ -157,9 +155,30 @@ namespace DeerManager.Controllers
                 db.SaveChanges();
             }
         }
+
+        //this function just update the current diseases (not adding new)
         public void updateDiseases(UserViewModel shp)
         {
-
+            using (DBModel db = new DBModel())
+            {
+                //first we update the current fields
+                var sheepDiseases = db.Diseases.FirstOrDefault(e => e.Id == shp.maintblSheeps.Id);
+                //already diseases but just modified.
+                if (sheepDiseases != null)
+                {
+                    sheepDiseases.ShpDisease = shp.shpDiseases.ShpDisease;
+                    db.Entry(sheepDiseases).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else //new row in database
+                {
+                    var newDisase = new Diseases();
+                    newDisase.ShpDisease = shp.shpDiseases.ShpDisease;
+                    newDisase.Id = shp.maintblSheeps.Id;
+                    db.Diseases.Add(newDisase);
+                    db.SaveChanges();
+                }
+            }
         }
         public void updateHamlatot(UserViewModel shp)
         {
@@ -167,7 +186,7 @@ namespace DeerManager.Controllers
         }
         public void updateVac(UserViewModel shp)
         {
-
+            
         }
 
         [HttpPost]
@@ -176,7 +195,7 @@ namespace DeerManager.Controllers
             try {
                 updateBasicInfo(shp);
                 updateDetails(shp);
-                //updateDetails(shp);
+                updateDiseases(shp);
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
@@ -193,9 +212,8 @@ namespace DeerManager.Controllers
                 }
                 throw raise;
             }
-
-            return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
-
+            return RedirectToAction("ShowMyHome");
+            //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
 

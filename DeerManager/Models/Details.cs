@@ -11,7 +11,6 @@ namespace DeerManager.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [Required]
         public string Information { get; set; }
 
         public virtual maintable maintable { get; set; }

@@ -22,10 +22,6 @@ namespace DeerManager.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Diseases>()
-                .Property(e => e.ShpDisease)
-                .IsFixedLength();
-
             modelBuilder.Entity<Hamlatot>()
                 .Property(e => e.DateOfHamlata)
                 .IsFixedLength();
@@ -48,6 +44,11 @@ namespace DeerManager.Models
 
             modelBuilder.Entity<maintable>()
                 .HasOptional(e => e.Details)
+                .WithRequired(e => e.maintable)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<maintable>()
+                .HasOptional(e => e.Diseases)
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();
 

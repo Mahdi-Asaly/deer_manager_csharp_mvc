@@ -75,10 +75,12 @@
         <div style="text-align:center" ;>
             <div>מחלות רקע</div>
 
-            @for (var i = 0; i < Model.shpDiseases.Count; i++)
+            @Html.TextAreaFor(m => m.shpDiseases.ShpDisease, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
+
+            @*@for (var i = 0; i < Model.shpDiseases.Count; i++)
             {
                 @Html.EditorFor(model => model.shpDiseases[i].ShpDisease, new { htmlAttributes = new { @class = "form-control" } })
-            }
+            }*@
 
         </div>
     </div>
