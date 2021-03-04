@@ -5,104 +5,198 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+<style>
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+        cursor: pointer;
+    }
+</style>
+
 <h3 style="text-align:center;">הטבלה מציגה את כל הכבשים מקבוצה</h3>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-bordered" id="SheepTables">
-                <thead>
-                    <tr>
-                        <th scope="col">סמן</th>
-                        <th scope="col">תעודת זהות</th>
-                        <th scope="col">מספר הכבש</th>
-                        <th scope="col">סוג הדם</th>
-                        <th scope="col">מין</th>
-                        <th scope="col">קבוצה</th>
-                        <th scope="col">תאריך לידה</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
-                                <label class="custom-control-label" for="customCheck1">1</label>
-                            </div>
-                        </td>
-                        <td>1234</td>
-                        <td>12</td>
-                        <td>B+</td>
-                        <td>זכר</td>
-                        <td>5</td>
-                        <td>22/02/2020</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
-                                <label class="custom-control-label" for="customCheck1">1</label>
-                            </div>
-                        </td>
-                        <td>2222</td>
-                        <td>11</td>
-                        <td>B+</td>
-                        <td>זכר</td>
-                        <td>5</td>
-                        <td>1/1/2020</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
 
 
-@section scripts{
-
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
-    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
-
-
-    @* Normal *@
-    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+    
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
 
 
-    <script src="~/Scripts/bootstrap.min.js"></script>
+<table id="example" class="display select" style="text-align:center;" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th><input name="select_all" value="1" type="checkbox"></th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+        </tr>
+    </tfoot>
+</table>
+<script>
+    //
+    // Updates "Select all" control in a data table
+    //
+    function updateDataTableSelectAllCtrl(table) {
+        var $table = table.table().node();
+        var $chkbox_all = $('tbody input[type="checkbox"]', $table);
+        var $chkbox_checked = $('tbody input[type="checkbox"]:checked', $table);
+        var chkbox_select_all = $('thead input[name="select_all"]', $table).get(0);
 
-    @*For the add new sheep*@
+        // If none of the checkboxes are checked
+        if ($chkbox_checked.length === 0) {
+            chkbox_select_all.checked = false;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = false;
+            }
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+            // If all of the checkboxes are checked
+        } else if ($chkbox_checked.length === $chkbox_all.length) {
+            chkbox_select_all.checked = true;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = false;
+            }
 
-
-    @*<script>
-        $(document).ready(function () {
-
-            $("#SheepTables").DataTable(
+            // If some of the checkboxes are checked
+        } else {
+            chkbox_select_all.checked = true;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = true;
+            }
+        }
+    }
+    $(document).ready(function () {
+        // Array holding selected row IDs
+        var rows_selected = [];
+        var currenturl = window.location.href;
+        var param = (currenturl.match(/(\d+)/g) || []);
+        var urls = '@Url.Action("GetListByGroup", "Home")/' + param[1];
+        var table = $('#example').DataTable({
+            'ajax': {
+                "url": urls,
+                "type": "GET",
+                "datatype": "json"
+            },
+            "columns": [
                 {
-                    "ajax": {
-                        "url": "/Home/GetList",
-                        "type": "GET",
-                        "datatype": "json"
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="checkbox">';
                     },
-                    "columns": [
-                        { "data": "Id" },
-                        { "data": "SheepNum" },
-                        { "data": "Blood" },
-                        { "data": "Gender" },
-                        { "data": "Group" },
-                        { "data": "Birthday" }
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                { "data": "Id" },
+                { "data": "SheepNum" },
+                { "data": "Blood" },
+                { "data": "Gender" },
+                { "data": "Group" },
+                { "data": "Birthday" }
+            ],
 
-                    ],
-                    "language": {
+            'order': [[1, 'asc']],
+            'rowCallback': function (row, data, dataIndex) {
+                // Get row ID
+                var rowId = data[0];
 
-                        "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
-                    }
-                });
-
+                // If row ID is in the list of selected row IDs
+                if ($.inArray(rowId, rows_selected) !== -1) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                    $(row).addClass('selected');
+                }
+            }
         });
-    </script>*@
-}
+
+        // Handle click on checkbox
+        $('#example tbody').on('click', 'input[type="checkbox"]', function (e) {
+            var $row = $(this).closest('tr');
+
+            // Get row data
+            var data = table.row($row).data();
+
+            // Get row ID
+            var rowId = data[0];
+
+            // Determine whether row ID is in the list of selected row IDs
+            var index = $.inArray(rowId, rows_selected);
+
+            // If checkbox is checked and row ID is not in list of selected row IDs
+            if (this.checked && index === -1) {
+                rows_selected.push(rowId);
+
+                // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+            } else if (!this.checked && index !== -1) {
+                rows_selected.splice(index, 1);
+            }
+
+            if (this.checked) {
+                $row.addClass('selected');
+            } else {
+                $row.removeClass('selected');
+            }
+
+            // Update state of "Select all" control
+            updateDataTableSelectAllCtrl(table);
+
+            // Prevent click event from propagating to parent
+            e.stopPropagation();
+        });
+
+        // Handle click on table cells with checkboxes
+        $('#example').on('click', 'tbody td, thead th:first-child', function (e) {
+            $(this).parent().find('input[type="checkbox"]').trigger('click');
+        });
+
+        // Handle click on "Select all" control
+        $('thead input[name="select_all"]', table.table().container()).on('click', function (e) {
+            if (this.checked) {
+                $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
+            } else {
+                $('#example tbody input[type="checkbox"]:checked').trigger('click');
+            }
+
+            // Prevent click event from propagating to parent
+            e.stopPropagation();
+        });
+
+        // Handle table draw event
+        table.on('draw', function () {
+            // Update state of "Select all" control
+            updateDataTableSelectAllCtrl(table);
+        });
+
+        // Handle form submission event
+        $('#frm-example').on('submit', function (e) {
+            var form = this;
+
+            // Iterate over all selected checkboxes
+            $.each(rows_selected, function (index, rowId) {
+                // Create a hidden element
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                );
+            });
+        });
+
+    });
+
+</script>

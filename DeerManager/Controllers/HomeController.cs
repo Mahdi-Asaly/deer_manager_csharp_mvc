@@ -96,23 +96,22 @@ namespace DeerManager.Controllers
             return View(new maintable());
         }
 
-        [HttpPost]
-        public ActionResult MoveGroupPage(int sid)
-        {
-            using (DBModel db = new DBModel())
-            {
-                var sheepDetails = db.maintable.Where(e => e.Group == sid);
-                return View(sheepDetails);
-            }
-        }
+        //[HttpPost]
+        //public ActionResult MoveGroupPage(int sid)
+        //{
+        //    //using (DBModel db = new DBModel())
+        //    //{
+        //    //    var sheepDetails = db.maintable.Where(e => e.Group == sid);
+        //    //    return View(sheepDetails);
+        //    //}
+        //}
 
         [HttpGet]
         public ActionResult MoveGroupPage()
         {
+
             return View();
         }
-
-
 
 
         public ActionResult MoveGroup()
@@ -196,6 +195,8 @@ namespace DeerManager.Controllers
                 updateBasicInfo(shp);
                 updateDetails(shp);
                 updateDiseases(shp);
+                //updateHamlatot(shp);
+                //updateVac(shp);
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
@@ -216,17 +217,25 @@ namespace DeerManager.Controllers
             //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
-
-
         public ActionResult ContactUs()
         {
             return View();
         }
+
         public ActionResult GetList()
         {
             using (DBModel db = new DBModel())
             {
                 var shpList = db.maintable.ToList<maintable>();
+                return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetListByGroup(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var shpList = db.maintable.Where(i => i.Group == id).ToList<maintable>();
                 return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
             }
         }
