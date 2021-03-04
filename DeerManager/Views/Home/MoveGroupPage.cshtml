@@ -13,15 +13,41 @@
 </style>
 
 <h3 style="text-align:center;">הטבלה מציגה את כל הכבשים מקבוצה</h3>
-
-
-
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
-    
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+
+
+@*<script>
+    var currenturl = window.location.href; //getting current url
+    var param = (currenturl.match(/ (\d +) / g) || []); //parsing the last argument
+    if (param[1] == null) {
+        param[1] = 999; //nothing choosed.
+    }
+</script>*@
+
+@*@using (Html.BeginForm("ToGroup", "Home", FormMethod.Post))
+    {
+        <h2>בחר קבוצה שברצונך להציג</h2>
+        <select name="test_redirect" id="togroup">
+            <option value="0">--בחר--</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="8">9</option>
+            <option value="8">10</option>
+        </select>
+
+        //<a class="btn btn-success" style="margin-bottom:10px" onclick="move()"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
+    }*@
 
 
 <table id="example" class="display select" style="text-align:center;" cellspacing="0" width="100%">
@@ -48,6 +74,7 @@
         </tr>
     </tfoot>
 </table>
+
 <script>
     //
     // Updates "Select all" control in a data table
@@ -83,14 +110,17 @@
     $(document).ready(function () {
         // Array holding selected row IDs
         var rows_selected = [];
-        var currenturl = window.location.href;
-        var param = (currenturl.match(/(\d+)/g) || []);
+        var currenturl = window.location.href; //getting current url
+        var param = (currenturl.match(/(\d+)/g) || []); //parsing the last argument
+        if (param[1] == null) {
+            param[1] = 999; //nothing choosed.
+        }
         var urls = '@Url.Action("GetListByGroup", "Home")/' + param[1];
         var table = $('#example').DataTable({
             'ajax': {
                 "url": urls,
                 "type": "GET",
-                "datatype": "json"
+                "daModelatype": "json"
             },
             "columns": [
                 {
@@ -196,7 +226,11 @@
                 );
             });
         });
+    });
 
+    var checked_rows = $('input.dt-checkboxes:checkbox:checked').parents("tr");
+    $.each(checked_rows, function (key, val) {
+        console.log($(this).attr('Group'));
     });
 
 </script>

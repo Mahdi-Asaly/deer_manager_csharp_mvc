@@ -8,6 +8,7 @@
 
     <h2>בחר קבוצה שברצונך להציג</h2>
     <select name="test_redirect" onchange="location.assign('@Url.Action("MoveGroupPage", "Home")/' + this.options[this.selectedIndex].value)">
+            <option value="0">--בחר--</option>    
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -19,10 +20,8 @@
             <option value="8">9</option>
             <option value="8">10</option>
         </select>
-
         <br />
         <br />
-
         <input type="submit" value="סגור" class="btn btn-danger" onclick="Close()" />
 </div>
 <script>

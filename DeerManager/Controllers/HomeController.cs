@@ -96,24 +96,35 @@ namespace DeerManager.Controllers
             return View(new maintable());
         }
 
-        //[HttpPost]
-        //public ActionResult MoveGroupPage(int sid)
-        //{
-        //    //using (DBModel db = new DBModel())
-        //    //{
-        //    //    var sheepDetails = db.maintable.Where(e => e.Group == sid);
-        //    //    return View(sheepDetails);
-        //    //}
-        //}
+        [HttpPost]
+        public ActionResult MoveGroupPage(int i = 0)
+        {
+            return View();
+        }
 
         [HttpGet]
         public ActionResult MoveGroupPage()
         {
-
-            return View();
+            using (DBModel db = new DBModel())
+            {
+                var sheepDetails = db.maintable.ToList();
+                return View(sheepDetails);
+            }
         }
 
 
+        //this function receives sheep id and group and updates the group
+        public ActionResult ToGroup(int sid, int group)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var shp = db.maintable.FirstOrDefault(e => e.Id == sid);
+                shp.Group = group;
+                db.Entry(shp).State = EntityState.Modified;
+                db.SaveChanges();
+                return null;
+            }
+        }
         public ActionResult MoveGroup()
         {
             return View();
@@ -214,7 +225,6 @@ namespace DeerManager.Controllers
                 throw raise;
             }
             return RedirectToAction("ShowMyHome");
-            //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ContactUs()

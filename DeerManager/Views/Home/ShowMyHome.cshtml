@@ -7,11 +7,11 @@
     ViewBag.Title = "טבלת כבשים";
 }
 
-<h3 style="text-align:center">טבלה ראשית</h3>
+<h2 style="text-align:center">טבלה ראשית</h2>
 <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
 <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
-@* Normal and ThemeRoller*@
-<table id="SheepTables" class="display">
+
+<table id="SheepTables" class="display" style="text-align:center;">
     <thead>
         <tr>
             <th>תעודת זהות</th>
@@ -96,25 +96,22 @@
 
 
     //adding new sheep
-        function PopupForm(url) {
-
+    function PopupForm(url) {
         var formDiv = $('<div/>');
         $.get(url)
             .done(function (response) {
                 formDiv.html(response);
-
                 Popup = formDiv.dialog({
                     autoOpen: true,
-                    resizable: false,
-                    title: 'עריכה/מחיקה',
-                    height: 500,
-                    width: 700,
+                    resizable: true,
+                    title: 'נא למלות את הנתונים',
+                    height: 450,
+                    width: 600,
                     close: function () {
                         Popup.dialog('destroy').remove();
                     }
-
                 });
-            });
+        });
     }
     function SubmitForm(form) {
                 $.validator.unobtrusive.parse(form);
