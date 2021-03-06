@@ -22,12 +22,12 @@
 
 
 @*<script>
-    var currenturl = window.location.href; //getting current url
-    var param = (currenturl.match(/ (\d +) / g) || []); //parsing the last argument
-    if (param[1] == null) {
-        param[1] = 999; //nothing choosed.
-    }
-</script>*@
+        var currenturl = window.location.href; //getting current url
+        var param = (currenturl.match(/ (\d +) / g) || []); //parsing the last argument
+        if (param[1] == null) {
+            param[1] = 999; //nothing choosed.
+        }
+    </script>*@
 
 @*@using (Html.BeginForm("ToGroup", "Home", FormMethod.Post))
     {
@@ -48,7 +48,20 @@
 
         //<a class="btn btn-success" style="margin-bottom:10px" onclick="move()"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
     }*@
-
+<h2>בחר קבוצה שברצונך להציג</h2>
+<select name="test_redirect" id="togroup" onchange="moveNow(6)">
+    <option value="0">--בחר--</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+    <option value="8">8</option>
+    <option value="8">9</option>
+    <option value="8">10</option>
+</select>
 
 <table id="example" class="display select" style="text-align:center;" cellspacing="0" width="100%">
     <thead>
@@ -227,10 +240,36 @@
             });
         });
     });
+    function moveAction(sheepId, togroupId) {
+        var currenturl = window.location.href; //getting current url
+        var fromGroup = (currenturl.match(/(\d+)/g) || []); //parsing the last argument
+        if (fromGroup[1] == null) {
+            fromGroup[1] = 999; //nothing choosed.
+        }
+        var sendObj = { sid: sheepId, group: togroupId, fromgroup:fromGroup[1] } //creating json obj
+        $.ajax({
+            url: '@Url.Action("ToGroup", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
 
-    var checked_rows = $('input.dt-checkboxes:checkbox:checked').parents("tr");
-    $.each(checked_rows, function (key, val) {
-        console.log($(this).attr('Group'));
-    });
+            }
+        });
+        $("#example").DataTable().ajax.reload();
+        
+    }
 
+    //now still bug ! ,its always send the first column fix that
+
+    function moveNow(toGroup) {
+        $("#example").each(function () {
+            var rowSelector = $(this);
+            if (rowSelector.find("input[type='checkbox']").prop('checked')) {
+                var id = rowSelector.find('td').first().next().html(); //get the sheep id
+                confirm(id);
+                moveAction(id, toGroup);
+            }
+        });
+    }
 </script>

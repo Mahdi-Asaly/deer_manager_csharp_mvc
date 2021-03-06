@@ -114,7 +114,7 @@ namespace DeerManager.Controllers
 
 
         //this function receives sheep id and group and updates the group
-        public ActionResult ToGroup(int sid, int group)
+        public ActionResult ToGroup(int sid, int group ,int fromgroup)
         {
             using (DBModel db = new DBModel())
             {
