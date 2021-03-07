@@ -34,10 +34,17 @@ namespace DeerManager.Controllers
             }
         }
         
+        public ActionResult errorPage(string err)
+        {
+            return View(err);
+        }
+
         public ActionResult ShowMyHome()
         {
             return View("ShowMyHome");
         }
+
+
 
         [HttpPost]
         public ActionResult Delete(int id)
@@ -45,6 +52,7 @@ namespace DeerManager.Controllers
             using (DBModel db = new DBModel())
             {
                 maintable emp = db.maintable.Where(x => x.Id == id).FirstOrDefault<maintable>();
+                if (emp == null) { return View("errorPage","Home",new { error = "something" }); }
                 db.maintable.Remove(emp);
                 db.SaveChanges();
                 //return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
@@ -96,11 +104,7 @@ namespace DeerManager.Controllers
             return View(new maintable());
         }
 
-        [HttpPost]
-        public ActionResult MoveGroupPage(int i = 0)
-        {
-            return View();
-        }
+
 
         [HttpGet]
         public ActionResult MoveGroupPage()

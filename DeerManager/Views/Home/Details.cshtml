@@ -50,10 +50,12 @@
         </div>
     </div>
     <div class="form-group">
-        <input type="submit" value="בצע" class="btn btn-success" />
         <input type="button" title="מידע נוסף" value="מידע נוסף" onclick="location.href='@Url.Action("AdvancedDetails", "Home", new { id = Model.Id })'" class="btn btn-info" />
-        <input type="reset" value="איתחול" class="btn btn-danger" />
+        <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("MoveGroupPage","Home", new { id = Model.Group })'">הצג כל הקבוצה</button>
+        <input type="submit" value="עדכן את המידע" class="btn btn-success" />
     </div>
 
 </div>
 }
+
+

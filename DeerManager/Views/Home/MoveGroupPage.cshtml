@@ -11,8 +11,14 @@
         cursor: pointer;
     }
 </style>
-
-<h3 style="text-align:center;">טבלת הכבשים מקבוצה</h3>
+@{
+    int group = 0;
+    if (Model != null)
+    {
+        group = Model[0].Group;
+    }
+}
+<h3 style="text-align:center;">קבוצה</h3> @group
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
@@ -78,14 +84,12 @@
             if ('indeterminate' in chkbox_select_all) {
                 chkbox_select_all.indeterminate = false;
             }
-
             // If all of the checkboxes are checked
         } else if ($chkbox_checked.length === $chkbox_all.length) {
             chkbox_select_all.checked = true;
             if ('indeterminate' in chkbox_select_all) {
                 chkbox_select_all.indeterminate = false;
             }
-
             // If some of the checkboxes are checked
         } else {
             chkbox_select_all.checked = true;
@@ -141,9 +145,7 @@
                     $(row).addClass('selected');
                 }
             },
-
         });
-
         // Handle click on checkbox
         $('#sheeps tbody').on('click', 'input[type="checkbox"]', function (e) {
             var $row = $(this).closest('tr');
@@ -191,7 +193,6 @@
             } else {
                 $('#sheeps tbody input[type="checkbox"]:checked').trigger('click');
             }
-
             // Prevent click event from propagating to parent
             e.stopPropagation();
         });
@@ -205,7 +206,6 @@
         // Handle form submission event
         $('#frm-sheeps').on('submit', function (e) {
             var form = this;
-
             // Iterate over all selected checkboxes
             $.each(rows_selected, function (index, rowId) {
                 // Create a hidden element
@@ -257,7 +257,9 @@
             $("#sheeps").DataTable().ajax.reload();
         } else { alert('לא נבחרו כבשים מהרשימה');}
     }
+
     function getId() {
        return document.getElementById("togroup").value;
     }
+
 </script>
