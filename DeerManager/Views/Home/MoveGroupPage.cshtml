@@ -12,7 +12,7 @@
     }
 </style>
 
-<h3 style="text-align:center;">הטבלה מציגה את כל הכבשים מקבוצה</h3>
+<h3 style="text-align:center;">טבלת הכבשים מקבוצה</h3>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
@@ -20,50 +20,24 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
 
-
-@*<script>
-        var currenturl = window.location.href; //getting current url
-        var param = (currenturl.match(/ (\d +) / g) || []); //parsing the last argument
-        if (param[1] == null) {
-            param[1] = 999; //nothing choosed.
-        }
-    </script>*@
-
-@*@using (Html.BeginForm("ToGroup", "Home", FormMethod.Post))
-    {
-        <h2>בחר קבוצה שברצונך להציג</h2>
-        <select name="test_redirect" id="togroup">
-            <option value="0">--בחר--</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="8">9</option>
-            <option value="8">10</option>
-        </select>
-
-        //<a class="btn btn-success" style="margin-bottom:10px" onclick="move()"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
-    }*@
-<h2>בחר קבוצה שברצונך להציג</h2>
-<select name="test_redirect" id="togroup" onchange="moveNow(6)">
-    <option value="0">--בחר--</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="8">9</option>
-    <option value="8">10</option>
-</select>
-
-<table id="example" class="display select" style="text-align:center;" cellspacing="0" width="100%">
+<div style="text-align:center;">
+    בחר לאן תרצה להעביר את הכבשים<br />
+    <select name="test_redirect" id="togroup">
+        <option value="0">--בחר--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="8">9</option>
+        <option value="8">10</option>
+    </select> <br />
+    <button type="button" class="btn btn-warning" onclick="moveNow(getId())">העבר עכשיו</button>
+</div>
+<table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
     <thead>
         <tr>
             <th><input name="select_all" value="1" type="checkbox"></th>
@@ -129,7 +103,7 @@
             param[1] = 999; //nothing choosed.
         }
         var urls = '@Url.Action("GetListByGroup", "Home")/' + param[1];
-        var table = $('#example').DataTable({
+        var table = $('#sheeps').DataTable({
             'ajax': {
                 "url": urls,
                 "type": "GET",
@@ -139,7 +113,7 @@
                 {
                     "data": "Id", "render": function (data) {
 
-                        return '<input type="checkbox">';
+                        return '<input type="checkbox" name="chkbox">';
                     },
                     "orderable": false,
                     "searchable": false,
@@ -152,7 +126,10 @@
                 { "data": "Group" },
                 { "data": "Birthday" }
             ],
+            "language": {
 
+                "emptyTable": "אין כבשים בקבצוה שבחרת"
+            },
             'order': [[1, 'asc']],
             'rowCallback': function (row, data, dataIndex) {
                 // Get row ID
@@ -163,11 +140,12 @@
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                     $(row).addClass('selected');
                 }
-            }
+            },
+
         });
 
         // Handle click on checkbox
-        $('#example tbody').on('click', 'input[type="checkbox"]', function (e) {
+        $('#sheeps tbody').on('click', 'input[type="checkbox"]', function (e) {
             var $row = $(this).closest('tr');
 
             // Get row data
@@ -202,16 +180,16 @@
         });
 
         // Handle click on table cells with checkboxes
-        $('#example').on('click', 'tbody td, thead th:first-child', function (e) {
+        $('#sheeps').on('click', 'tbody td, thead th:first-child', function (e) {
             $(this).parent().find('input[type="checkbox"]').trigger('click');
         });
 
         // Handle click on "Select all" control
         $('thead input[name="select_all"]', table.table().container()).on('click', function (e) {
             if (this.checked) {
-                $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
+                $('#sheeps tbody input[type="checkbox"]:not(:checked)').trigger('click');
             } else {
-                $('#example tbody input[type="checkbox"]:checked').trigger('click');
+                $('#sheeps tbody input[type="checkbox"]:checked').trigger('click');
             }
 
             // Prevent click event from propagating to parent
@@ -225,7 +203,7 @@
         });
 
         // Handle form submission event
-        $('#frm-example').on('submit', function (e) {
+        $('#frm-sheeps').on('submit', function (e) {
             var form = this;
 
             // Iterate over all selected checkboxes
@@ -240,6 +218,7 @@
             });
         });
     });
+
     function moveAction(sheepId, togroupId) {
         var currenturl = window.location.href; //getting current url
         var fromGroup = (currenturl.match(/(\d+)/g) || []); //parsing the last argument
@@ -253,23 +232,32 @@
             data: sendObj,
             type: "POST",
             success: function () {
-
+                $("#sheeps").DataTable().ajax.reload();
             }
         });
-        $("#example").DataTable().ajax.reload();
-        
     }
 
-    //now still bug ! ,its always send the first column fix that
-
     function moveNow(toGroup) {
-        $("#example").each(function () {
-            var rowSelector = $(this);
-            if (rowSelector.find("input[type='checkbox']").prop('checked')) {
-                var id = rowSelector.find('td').first().next().html(); //get the sheep id
-                confirm(id);
-                moveAction(id, toGroup);
+        var c = 0; //to count how many sheeps were moved.
+        if (toGroup == 0) { return alert('לא נבחרה קבוצה');} //No Group was choosen.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                moveAction(rowhtml.children[1].innerText, toGroup);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
         });
+        if (c != 0) {
+            alert('הכבשים בעלות ת"ז' + loanApplicationNumbers + 'הועברו בהצלחה ל' + toGroup); //Do whatever you want
+            $("#sheeps").DataTable().ajax.reload();
+        } else { alert('לא נבחרו כבשים מהרשימה');}
+    }
+    function getId() {
+       return document.getElementById("togroup").value;
     }
 </script>
