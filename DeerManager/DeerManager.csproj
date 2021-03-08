@@ -246,6 +246,10 @@
     <Content Include="Views\Home\MoveGroup.cshtml" />
     <Content Include="Views\Home\MoveGroupPage.cshtml" />
     <Content Include="Views\Home\errorPage.cshtml" />
+    <Content Include="Views\Home\AddHamlata.cshtml" />
+    <Content Include="Views\Home\AddVaccine.cshtml" />
+    <Content Include="Views\Home\RemoveVaccine.cshtml" />
+    <Content Include="Views\Home\RemoveHamlata.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

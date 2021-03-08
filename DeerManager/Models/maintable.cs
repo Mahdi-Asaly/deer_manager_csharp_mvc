@@ -9,6 +9,12 @@ namespace DeerManager.Models
     [Table("maintable")]
     public partial class maintable
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public maintable()
+        {
+            Vaccinations = new HashSet<Vaccinations>();
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
@@ -34,6 +40,7 @@ namespace DeerManager.Models
 
         public virtual Hamlatot Hamlatot { get; set; }
 
-        public virtual Vaccinations Vaccinations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Vaccinations> Vaccinations { get; set; }
     }
 }

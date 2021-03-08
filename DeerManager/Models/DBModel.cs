@@ -8,7 +8,7 @@ namespace DeerManager.Models
     public partial class DBModel : DbContext
     {
         public DBModel()
-            : base("name=DBModel")
+            : base("name=DBModel1")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }
@@ -54,11 +54,6 @@ namespace DeerManager.Models
 
             modelBuilder.Entity<maintable>()
                 .HasOptional(e => e.Hamlatot)
-                .WithRequired(e => e.maintable)
-                .WillCascadeOnDelete();
-
-            modelBuilder.Entity<maintable>()
-                .HasOptional(e => e.Vaccinations)
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();
 

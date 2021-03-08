@@ -45,7 +45,6 @@ namespace DeerManager.Controllers
         }
 
 
-
         [HttpPost]
         public ActionResult Delete(int id)
         {
@@ -104,7 +103,101 @@ namespace DeerManager.Controllers
             return View(new maintable());
         }
 
+        [HttpGet]
+        public ActionResult AddHamlata(int id)
+        {
+            var newHamlata = new Hamlatot();
+            newHamlata.Id = id;
+            return View(newHamlata);
+        }
 
+        [HttpPost]
+        public ActionResult AddHamlata(Hamlatot shp)
+        {
+            if (shp == null) { return View("ShowMyHome"); }
+            using (DBModel db = new DBModel())
+            {
+                db.Hamlatot.Add(shp);
+                db.SaveChanges();
+                return RedirectToAction("AdvancedDetails",new { id = shp.Id });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AddVaccine(int id)
+        {
+            var newVac = new Vaccinations();
+            newVac.Id = id;
+            return View(newVac);
+        }
+
+        [HttpPost]
+        public ActionResult AddVaccine(Vaccinations shp)
+        {
+            if (shp == null) { return View("ShowMyHome"); }
+            using (DBModel db = new DBModel())
+            {
+                db.Vaccinations.Add(shp);
+                db.SaveChanges();
+                return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult RemoveVaccine(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var RemoveVac = new List<Vaccinations>();
+                RemoveVac = db.Vaccinations.Where(x => x.Id == id).ToList();
+                if (RemoveVac == null)
+                {
+                    return null;
+                }
+                return View(RemoveVac);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RemoveVaccine(Vaccinations shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var SpecificVac = db.Vaccinations.Where(x => x.Id == shp.Id).Where(x=>x.Medicine==shp.Medicine).FirstOrDefault();
+                db.Vaccinations.Remove(SpecificVac);
+                db.SaveChanges();
+            }
+            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+        }
+
+
+
+        [HttpGet]
+        public ActionResult RemoveHamlata(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var RemoveHamlata = new Hamlatot();
+                RemoveHamlata = db.Hamlatot.Where(x => x.Id == id).FirstOrDefault();
+                if (RemoveHamlata == null)
+                {
+                    return null;
+                }
+                return View(RemoveHamlata);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RemoveHamlata(Hamlatot shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var SpecificHamlata = db.Hamlatot.Where(x => x.Id == shp.Id).FirstOrDefault();
+                db.Hamlatot.Remove(SpecificHamlata);
+                db.SaveChanges();
+            }
+            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+        }
 
         [HttpGet]
         public ActionResult MoveGroupPage()
