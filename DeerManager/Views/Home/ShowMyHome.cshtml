@@ -6,12 +6,29 @@
 @{
     ViewBag.Title = "טבלת כבשים";
 }
+<style>
+    .display {
+        border: 5px outset red;
+        background-color: lightblue;
+        text-align: center;
+    }
 
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
 <h2 style="text-align:center">טבלה ראשית</h2>
 <div style="text-align:right;">
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
 </div>
+
+<div class="alert alert-warning" style="text-align:center;">
+    <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a href="#" class="alert-link">כאן</a>.
+</div>
+
 <table id="SheepTables" class="display" style="text-align:center;">
     <thead>
         <tr>
@@ -59,7 +76,6 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
-
     <script>
         $(document).ready(function () {
 
@@ -82,10 +98,11 @@
                         },
                             "orderable": false,
                             "searchable":false,
-                            "width":"150px"
+                            "width":"100px"
                         }
 
                     ],
+
                     "language": {
 
                         "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
@@ -160,5 +177,38 @@
                 });
             }
         }
+        function findGroup() {
+            confirm('ok');
+            var table = $('#SheepTables').DataTable();
+            table.column('קבוצה').search("8").draw();
+
+        }
+        $(document).ready(function () {
+
+        });
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#SheepTables tfoot th').each(function () {
+                var title = $('#SheepTables thead th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="חפש ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#SheepTables').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    that
+                        .search(this.value)
+                        .draw();
+                });
+            });
+        });
+
     </script>
 }

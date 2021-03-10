@@ -210,6 +210,21 @@ namespace DeerManager.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult VacAlert()
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacs = db.Vaccinations.ToList();
+                var dateAndTime = DateTime.Now;
+                var date = dateAndTime.Date;
+                //loop on each vacs and get id
+                //then loop on ids and get group
+                //and return to view which groups and id will be soon
+                return View();
+            }
+        }
+
         //this function receives sheep id and group and updates the group
         public ActionResult ToGroup(int sid, int group ,int fromgroup)
         {

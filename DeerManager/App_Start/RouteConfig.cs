@@ -18,12 +18,6 @@ namespace DeerManager
                 defaults: new { controller = "Home", action = "ShowMyHome", id = UrlParameter.Optional }
             );
 
-            routes.MapRoute(
-                name: "ContatUs",
-                url: "",
-                defaults: new { controller = "Home", action = "ContactUs", id = UrlParameter.Optional }
-            );
-
         }
     }
 }
