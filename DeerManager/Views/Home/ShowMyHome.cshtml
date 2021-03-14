@@ -85,9 +85,6 @@
 
 </style>
 
-
-
-<h2 style="text-align:center">טבלה ראשית</h2>
 <div style="text-align:right;">
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
@@ -104,7 +101,7 @@
 
 <div class="alert alert-warning alert-dismissible" style="text-align:right;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a href="#" class="alert-link">כאן</a>.
+    <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a onclick="PopupForm('@Url.Action("VacAlert","Home")')" class="alert-link">כאן</a>.
 </div>
 
 <table id="SheepTables" class="display" style="text-align:center;">
@@ -244,12 +241,10 @@
                         $("#SheepTables").DataTable().ajax.reload();
                         if (data.success)
                         {
-
                             $.notify(data.message, {
                                 globalPosition: "top center",
                                 className: "success"
                             })
-
                         }
                     }
                 });
@@ -259,28 +254,28 @@
             confirm('ok');
             var table = $('#SheepTables').DataTable();
             table.column('קבוצה').search("8").draw();
-
         }
 
         //turn on alerts for upcoming vacs
         $(document).ready(function () {
-            if (document.getElementById("alerts").checked) {
-                $.ajax({
-                    type: "GET",
-                    url: "@Url.Action("VacAlert","Home")",
-
-                    success: function (msg) {
-                        PopupForm("@Url.Action("VacAlert","Home")");
-                        //alert(msg);
-                    },
-                    error: function (msg) {
-                        alert(msg);
-                    }
-                });
+            if ($("#alerts").is(":checked")) {
+                if (document.getElementById("alerts").checked) {
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("VacAlert","Home")",
+                        success: function (msg) {
+                            if (!msg.includes("אין חיסונים קרובים"))
+                            {
+                                PopupForm("@Url.Action("VacAlert","Home")");
+                            }
+                        },
+                        error: function (msg) {
+                            alert(msg);
+                        }
+                    });
+                }
             }
         });
-
-
 
         $(document).ready(function () {
             // Setup - add a text input to each footer cell

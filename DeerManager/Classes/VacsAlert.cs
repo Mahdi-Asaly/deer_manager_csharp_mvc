@@ -12,5 +12,6 @@ namespace DeerManager.Classes
         public int Group;
         public bool flag { get; set; } //flag to upcoming vacs
         public int days { get; set; }
+        public string medicine { get; set; }
     }
 }

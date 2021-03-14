@@ -18,7 +18,7 @@ namespace DeerManager.Controllers
     public class HomeController : Controller
     {
 
-
+        public bool toggle = false;
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
         public ActionResult AdvancedDetails(int id)
         {
@@ -213,6 +213,22 @@ namespace DeerManager.Controllers
             }
         }
 
+        public bool getToggle()
+        {
+            return toggle;
+        }
+
+        [HttpPost]
+        public ActionResult ChangeToggle()
+        {
+            if (this.toggle == false) { 
+                this.toggle = true; 
+            }
+            else { 
+                this.toggle = false; 
+            }
+            return View();
+        }
 
         [HttpGet]
         public ActionResult VacAlert()
@@ -230,6 +246,7 @@ namespace DeerManager.Controllers
                 DateTime d;
                 int id = 0;
                 int group = 0;
+                string med;
                 for (int i = 0; i < vacs.Count; i++)
                 {
                     //if you want to add more vacs , just use if for another type of vacs.
@@ -239,7 +256,8 @@ namespace DeerManager.Controllers
                             d = DateTime.ParseExact(vacs[i].NextVaccinationDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                             id = vacs[i].Id;
                             group = GetGroupById(vacs[i].Id);
-                            vac.Add(new VacsAlert { NextDate = d, Id = id, Group = group }); 
+                            med = vacs[i].Medicine;
+                            vac.Add(new VacsAlert { NextDate = d, Id = id, Group = group, medicine=med }); 
                         }
                     }
                 }
