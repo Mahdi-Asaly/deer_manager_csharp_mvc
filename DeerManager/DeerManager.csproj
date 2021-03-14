@@ -132,6 +132,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classes\VacsAlert.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DB_AccessLayer\DB.cs" />
     <Compile Include="Global.asax.cs">
@@ -250,6 +251,7 @@
     <Content Include="Views\Home\AddVaccine.cshtml" />
     <Content Include="Views\Home\RemoveVaccine.cshtml" />
     <Content Include="Views\Home\RemoveHamlata.cshtml" />
+    <Content Include="Views\Home\VacAlert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

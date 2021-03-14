@@ -1,0 +1,27 @@
+﻿@model List<DeerManager.Classes.VacsAlert>
+
+@{
+    Layout = null;
+}
+
+<div style="text-align:center;">
+    <h2>שם לב! מועד חיסון קרוב!</h2>
+    @{
+        for (int i = 0; i < Model.Count; i++)
+        {
+            if (Model[i].flag == true)
+            {
+                <div style="color:red;">קבוצה</div>
+                @Model[i].Group
+                <br /> <br />
+                <div style="color:red;">תאריך החיסון לשמירת הריון</div>
+                @Model[i].NextDate
+                <br /> <br />
+                <div style="color:red;"> ימים שנותרו </div>
+                @Model[i].days
+            }
+        }
+    }
+</div>
+
+

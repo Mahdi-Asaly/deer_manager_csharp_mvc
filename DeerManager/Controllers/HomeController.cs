@@ -10,15 +10,19 @@ using Newtonsoft.Json;
 using System.Data.Entity;
 using DeerManager.ViewModels;
 using System.Data.Entity.Validation;
+using System.Globalization;
+using DeerManager.Classes;
 
 namespace DeerManager.Controllers
 {
     public class HomeController : Controller
     {
-        DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
 
+
+        DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
         public ActionResult AdvancedDetails(int id)
         {
+
             //here you should import the informations from tables:
             using (DBModel db = new DBModel())
             {
@@ -33,7 +37,7 @@ namespace DeerManager.Controllers
                 return View(shpVM) ;
             }
         }
-        
+
         public ActionResult errorPage(string err)
         {
             return View(err);
@@ -216,15 +220,54 @@ namespace DeerManager.Controllers
             using (DBModel db = new DBModel())
             {
                 var vacs = db.Vaccinations.ToList();
+                if (vacs == null) { return null; } //nothing to check cuz there are no vacs YET!
                 var dateAndTime = DateTime.Now;
-                var date = dateAndTime.Date;
-                //loop on each vacs and get id
-                //then loop on ids and get group
-                //and return to view which groups and id will be soon
-                return View();
+                var Enddate = dateAndTime.Date; //current day
+                /*let's get from DB all the information 
+                            in order to check weither there are upcoming vacs 
+                */
+                var vac = new List<VacsAlert>();
+                DateTime d;
+                int id = 0;
+                int group = 0;
+                for (int i = 0; i < vacs.Count; i++)
+                {
+                    //if you want to add more vacs , just use if for another type of vacs.
+                    if (vacs[i].Medicine.Contains("Oxy")) {
+                        if (vacs[i].NextVaccinationDate != null)
+                        {
+                            d = DateTime.ParseExact(vacs[i].NextVaccinationDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            id = vacs[i].Id;
+                            group = GetGroupById(vacs[i].Id);
+                            vac.Add(new VacsAlert { NextDate = d, Id = id, Group = group }); 
+                        }
+                    }
+                }
+                //now let's do manupilation to check if there are upcoming vacs
+                //we should use the current date variable in order to check that.
+                for(int i = 0; i < vac.Count; i++)
+                {
+                    if ( (Enddate - vac[i].NextDate).TotalDays <=90)
+                    {
+                        vac[i].flag = true;
+                        vac[i].days = Math.Abs((Enddate - vac[i].NextDate).Days);
+                    }
+                }
+               return View(vac);
             }
         }
-
+        public int GetGroupById(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var shpId = db.maintable.FirstOrDefault(e => e.Id == id);
+                if (shpId == null)
+                {
+                    return -1;
+                }
+                else { return shpId.Group; }
+            }
+        }
         //this function receives sheep id and group and updates the group
         public ActionResult ToGroup(int sid, int group ,int fromgroup)
         {
