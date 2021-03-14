@@ -91,7 +91,7 @@
 </div>
 <div style="text-align:right;">
     <label class="switch">
-        <input type="checkbox" id="alerts" checked>
+        <input type="checkbox" id="alerts">  
         <span class="slider round"></span>
     </label>
 </div>
@@ -183,9 +183,7 @@
                         "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
                     }
                 });
-
         });
-
 
 
     //adding new sheep
@@ -258,24 +256,48 @@
 
         //turn on alerts for upcoming vacs
         $(document).ready(function () {
-            if ($("#alerts").is(":checked")) {
-                if (document.getElementById("alerts").checked) {
-                    $.ajax({
-                        type: "GET",
-                        url: "@Url.Action("VacAlert","Home")",
-                        success: function (msg) {
-                            if (!msg.includes("אין חיסונים קרובים"))
-                            {
-                                PopupForm("@Url.Action("VacAlert","Home")");
+            $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("getAlertBoolean", "Home")",
+                 success: function (msg) {
+                      if (msg == "True") {
+                          $('#alerts').attr("checked", true);
+                          $.ajax({
+                               type: "GET",
+                               url: "@Url.Action("VacAlert","Home")",
+                               success: function (msg) {
+                                   if (!msg.includes("אין חיסונים קרובים"))
+                                   {
+                                            PopupForm("@Url.Action("VacAlert","Home")");
+                                   }
+                               },
+                               error: function (msg) {
+                                   alert(msg);
+                               }
+                               });
+                            }
+                            else {
+                                $('#alerts').attr("checked", false);
                             }
                         },
-                        error: function (msg) {
-                            alert(msg);
-                        }
-                    });
-                }
-            }
+             error: function (msg) {
+                alert(msg);
+             }
+             });
         });
+
+        $('#alerts').change(function () {
+             $.ajax({
+                 type: "POST",
+                 url: "@Url.Action("ChangeToggle", "Home")",
+                 success: function (msg) {
+                 },
+                 error: function (msg) {
+
+                 }
+             });
+        });
+
 
         $(document).ready(function () {
             // Setup - add a text input to each footer cell

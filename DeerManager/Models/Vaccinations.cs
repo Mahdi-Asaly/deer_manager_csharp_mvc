@@ -26,6 +26,8 @@ namespace DeerManager.Models
         [StringLength(10)]
         public string NextVaccinationDate { get; set; }
 
+        public int? isEnabled { get; set; }
+
         public virtual maintable maintable { get; set; }
     }
 }

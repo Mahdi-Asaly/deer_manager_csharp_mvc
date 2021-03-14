@@ -34,7 +34,7 @@ namespace DeerManager.Controllers
                     shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
                     shpVac= db.Vaccinations.Where(x=>x.Id==id).ToList<Vaccinations>()
                 };
-                return View(shpVM) ;
+                return View(shpVM);
             }
         }
 
@@ -47,7 +47,6 @@ namespace DeerManager.Controllers
         {
             return View("ShowMyHome");
         }
-
 
         [HttpPost]
         public ActionResult Delete(int id)
@@ -141,6 +140,7 @@ namespace DeerManager.Controllers
             if (shp == null) { return View("ShowMyHome"); }
             using (DBModel db = new DBModel())
             {
+                shp.isEnabled = 1; //enabling alerts
                 db.Vaccinations.Add(shp);
                 db.SaveChanges();
                 return RedirectToAction("AdvancedDetails", new { id = shp.Id });
@@ -213,21 +213,45 @@ namespace DeerManager.Controllers
             }
         }
 
-        public bool getToggle()
+        public bool getAlertBoolean()
         {
-            return toggle;
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault();
+                if (vacalert == null) { return false; }
+                if (vacalert.isEnabled == 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         [HttpPost]
         public ActionResult ChangeToggle()
         {
-            if (this.toggle == false) { 
-                this.toggle = true; 
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault();
+                if (vacalert == null) { return View("NULL"); }
+                if (vacalert.isEnabled == 1)
+                {
+                    vacalert.isEnabled = 0;
+                    db.Entry(vacalert).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return View();
+                }
+                else
+                {
+                    vacalert.isEnabled = 1;
+                    db.Entry(vacalert).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return View();
+                }
             }
-            else { 
-                this.toggle = false; 
-            }
-            return View();
         }
 
         [HttpGet]

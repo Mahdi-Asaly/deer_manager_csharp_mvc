@@ -8,7 +8,7 @@ namespace DeerManager.Models
     public partial class DBModel : DbContext
     {
         public DBModel()
-            : base("name=DBModel1")
+            : base("name=DBModel")
         {
             this.Configuration.LazyLoadingEnabled = false;
         }

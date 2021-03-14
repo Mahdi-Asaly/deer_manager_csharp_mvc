@@ -15,7 +15,7 @@
         {
             if (Model[i].flag == true)
             {
-                <div style="color:red;">קבוצה</div>
+                <h4 style="color:red;">קבוצה</h4>
                 @Model[i].Group
                 <br />
                 <div style="color:red;">תאריך החיסון לשמירת הריון</div>
@@ -26,6 +26,10 @@
                 <br />
                 <div style="color:red;">  תרופה </div>
                 @Model[i].medicine
+                if (Model.Count > 1)
+                {
+                    <h2>-----------------</h2>
+                }
 
             }
         }
@@ -39,6 +43,19 @@
 
 
 <div class="form-group" style="text-align:center;">
-    <input type="submit" value="אל תציג שוב" class="btn btn-warning" />
-    <input type="button" value="סגור" class="btn btn-danger"  />
+    <input type="submit" value="אל תציג שוב" class="btn btn-warning" onclick="dontshowAgain()" />
 </div>
+
+<script>
+    function dontshowAgain() {
+            Popup.dialog('destroy').remove();
+             $.ajax({
+                 type: "POST",
+                 url: "@Url.Action("ChangeToggle", "Home")",
+                 success: function (msg) {
+                 },
+                 error: function (msg) {
+                 }
+             });
+         }
+</script>
