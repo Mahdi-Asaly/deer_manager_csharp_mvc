@@ -134,6 +134,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\VacsAlert.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="DB_AccessLayer\DB.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -143,6 +144,7 @@
     <Compile Include="Models\Diseases.cs" />
     <Compile Include="Models\Hamlatot.cs" />
     <Compile Include="Models\maintable.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\sysdiagrams.cs" />
     <Compile Include="Models\Vaccinations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -252,6 +254,7 @@
     <Content Include="Views\Home\RemoveVaccine.cshtml" />
     <Content Include="Views\Home\RemoveHamlata.cshtml" />
     <Content Include="Views\Home\VacAlert.cshtml" />
+    <Content Include="Views\Settings\EditSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

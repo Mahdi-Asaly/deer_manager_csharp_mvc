@@ -1,4 +1,4 @@
-namespace DeerManager.Models
+﻿namespace DeerManager.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,20 +17,21 @@ namespace DeerManager.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
-
+        [Required(AllowEmptyStrings = false,ErrorMessage ="יש להכניס מספר כבש")]
         public int SheepNum { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש לבחור סוג דם")]
         [StringLength(10)]
         public string Blood { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש לבחור מין")]
         [StringLength(10)]
         public string Gender { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש להכניס מספר קבוצה")]
         public int Group { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "יש לבחור תאריך לידה")]
         [StringLength(10)]
         public string Birthday { get; set; }
 

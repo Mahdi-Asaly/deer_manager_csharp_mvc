@@ -17,6 +17,7 @@ namespace DeerManager.Models
         public virtual DbSet<Diseases> Diseases { get; set; }
         public virtual DbSet<Hamlatot> Hamlatot { get; set; }
         public virtual DbSet<maintable> maintable { get; set; }
+        public virtual DbSet<Settings> Settings { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Vaccinations> Vaccinations { get; set; }
 
@@ -56,6 +57,22 @@ namespace DeerManager.Models
                 .HasOptional(e => e.Hamlatot)
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();
+
+            modelBuilder.Entity<Settings>()
+                .Property(e => e.Name)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Settings>()
+                .Property(e => e.Email)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Settings>()
+                .Property(e => e.Password)
+                .IsFixedLength();
+
+            modelBuilder.Entity<Settings>()
+                .Property(e => e.Address)
+                .IsFixedLength();
 
             modelBuilder.Entity<Vaccinations>()
                 .Property(e => e.DateOfVaccination)

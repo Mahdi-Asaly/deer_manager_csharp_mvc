@@ -7,6 +7,9 @@
     ViewBag.Title = "טבלת כבשים";
 }
 
+
+
+
 <style>
     .display {
         border: 5px outset red;
@@ -79,11 +82,11 @@
         border-radius: 34px;
     }
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
-
+    .slider.round:before {
+      border-radius: 50%;
+    }
 </style>
+
 
 <div style="text-align:right;">
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
@@ -91,18 +94,16 @@
 </div>
 <div style="text-align:right;">
     <label class="switch">
-        <input type="checkbox" id="alerts">  
+        <input type="checkbox" id="alerts">
         <span class="slider round"></span>
     </label>
 </div>
-@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
 
-<div class="alert alert-warning alert-dismissible" style="text-align:right;">
+
+@*<div class="alert alert-warning alert-dismissible" style="text-align:right;">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a onclick="PopupForm('@Url.Action("VacAlert","Home")')" class="alert-link">כאן</a>.
-</div>
+</div>*@
 
 <table id="SheepTables" class="display" style="text-align:center;">
     <thead>
@@ -150,7 +151,7 @@
     @*For the add new sheep*@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+    <div id='loader'></div>
     <script>
         $(document).ready(function () {
 
@@ -177,14 +178,14 @@
                         }
 
                     ],
-
+                    "processing": true,
                     "language": {
-
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
+                        "search": "חיפוש",
                         "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
                     }
                 });
         });
-
 
     //adding new sheep
     function PopupForm(url) {
@@ -220,7 +221,6 @@
                                     globalPosition: "top center",
                                     className: "success"
                                 })
-
                             }
                         }
                     });
@@ -320,6 +320,5 @@
                 });
             });
         });
-
     </script>
 }

@@ -91,12 +91,16 @@ namespace DeerManager.Controllers
         [HttpPost]
         public ActionResult AddNewSheep(maintable shp)
         {
-            using (DBModel db = new DBModel())
+            if (ModelState.IsValid)
             {
+                using (DBModel db = new DBModel())
+                {
                     db.maintable.Add(shp);
                     db.SaveChanges();
                     return View("ShowMyHome");
+                }
             }
+            return View("errorPage");
         }
 
         [HttpGet]
@@ -109,21 +113,29 @@ namespace DeerManager.Controllers
         [HttpGet]
         public ActionResult AddHamlata(int id)
         {
-            var newHamlata = new Hamlatot();
-            newHamlata.Id = id;
-            return View(newHamlata);
+            if (ModelState.IsValid)
+            {
+                var newHamlata = new Hamlatot();
+                newHamlata.Id = id;
+                return View(newHamlata);
+            }
+            else { return View("errorPage"); }
         }
 
         [HttpPost]
         public ActionResult AddHamlata(Hamlatot shp)
         {
-            if (shp == null) { return View("ShowMyHome"); }
-            using (DBModel db = new DBModel())
+            if (ModelState.IsValid)
             {
-                db.Hamlatot.Add(shp);
-                db.SaveChanges();
-                return RedirectToAction("AdvancedDetails",new { id = shp.Id });
+                if (shp == null) { return View("ShowMyHome"); }
+                using (DBModel db = new DBModel())
+                {
+                    db.Hamlatot.Add(shp);
+                    db.SaveChanges();
+                    return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+                }
             }
+            else { return View("errorPage"); }
         }
 
         [HttpGet]
@@ -137,14 +149,18 @@ namespace DeerManager.Controllers
         [HttpPost]
         public ActionResult AddVaccine(Vaccinations shp)
         {
-            if (shp == null) { return View("ShowMyHome"); }
-            using (DBModel db = new DBModel())
+            if (ModelState.IsValid)
             {
-                shp.isEnabled = 1; //enabling alerts
-                db.Vaccinations.Add(shp);
-                db.SaveChanges();
-                return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+                if (shp == null) { return View("ShowMyHome"); }
+                using (DBModel db = new DBModel())
+                {
+                    shp.isEnabled = 1; //enabling alerts
+                    db.Vaccinations.Add(shp);
+                    db.SaveChanges();
+                    return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+                }
             }
+            else { return View("errorPage"); }
         }
 
         [HttpGet]
