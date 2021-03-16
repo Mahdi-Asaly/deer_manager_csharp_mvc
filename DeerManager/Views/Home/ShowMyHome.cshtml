@@ -9,7 +9,6 @@
 
 
 
-
 <style>
     .display {
         border: 5px outset red;
@@ -22,9 +21,6 @@
         padding: 3px;
         box-sizing: border-box;
     }
-
-
-
 
     .switch {
         position: relative;
@@ -89,7 +85,9 @@
 
 
 <div style="text-align:right;">
-    <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>הוספה חדשה</a>
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>תיק חדש</a>
+    <a class="btn btn-warning" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddMedicine","Home")')"><i class="fa fa-plus"></i>חיסון חדשה</a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveMedicine","Home")')"><i class="fa icon-remove"></i>מחיקת חיסון קיים</a>
     <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i>העבר מקבוצה לקבוצה</a>
 </div>
 <div style="text-align:right;">
@@ -151,7 +149,7 @@
     @*For the add new sheep*@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <div id='loader'></div>
+  
     <script>
         $(document).ready(function () {
 
@@ -176,7 +174,6 @@
                             "searchable":false,
                             "width":"100px"
                         }
-
                     ],
                     "processing": true,
                     "language": {
@@ -196,7 +193,7 @@
                 Popup = formDiv.dialog({
                     autoOpen: true,
                     resizable: true,
-                    title: 'נא למלות את הנתונים',
+                    title: 'Deer Manager - הדיר שלי',
                     height: 450,
                     width: 600,
                     close: function () {

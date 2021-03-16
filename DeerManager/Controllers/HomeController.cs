@@ -138,6 +138,7 @@ namespace DeerManager.Controllers
             else { return View("errorPage"); }
         }
 
+
         [HttpGet]
         public ActionResult AddVaccine(int id)
         {
@@ -158,6 +159,66 @@ namespace DeerManager.Controllers
                     db.Vaccinations.Add(shp);
                     db.SaveChanges();
                     return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+                }
+            }
+            else { return View("errorPage"); }
+        }
+
+
+
+        [HttpGet]
+        public ActionResult AddMedicine()
+        {
+            return View(new Medicine());
+        }
+
+        [HttpPost]
+        public ActionResult AddMedicine(Medicine med)
+        {
+            if (ModelState.IsValid)
+            {
+                if (med == null) { return View("errorPage"); }
+                using (DBModel db = new DBModel())
+                {
+                    if(db.Medicine.Any(md => md.MedName == med.MedName))
+                    {
+                        return View("errorPage");
+                    }
+                    db.Medicine.Add(med);
+                    db.SaveChanges();
+                    return RedirectToAction("ShowMyHome");
+                }
+            }
+            else { return View("errorPage"); }
+        }
+
+        [HttpGet]
+        public ActionResult RemoveMedicine()
+        {
+            using (DBModel db = new DBModel())
+            {
+
+                var meds = db.Medicine.ToList();
+                return View(meds);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult RemoveMedicine(Medicine med)
+        {
+            if (ModelState.IsValid)
+            {
+                if (med == null) { return View("errorPage"); }
+                using (DBModel db = new DBModel())
+                {
+                    if (!db.Medicine.Any(md => md.MedName == med.MedName))
+                    {
+                        return View("errorPage");
+                    }
+                    var SpecificMed = db.Medicine.Where(x => x.MedName == med.MedName).FirstOrDefault();
+                    db.Medicine.Remove(SpecificMed);
+                    db.SaveChanges();
+                    return RedirectToAction("ShowMyHome");
                 }
             }
             else { return View("errorPage"); }
@@ -451,6 +512,32 @@ namespace DeerManager.Controllers
             {
                 var shpList = db.maintable.ToList<maintable>();
                 return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpGet]
+        public ActionResult GetMedsJson()
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+            using (DBModel db = new DBModel())
+            {
+                var medsJson = db.Medicine.ToList<Medicine>();
+                for(int i = 0; i < medsJson.Count; i++)
+                {
+                    items.Add(new SelectListItem() { Text = medsJson[i].MedName,Value = medsJson[i].Info, Selected = false });
+                }
+                //items.Insert(0, new SelectListItem { Text = "Please select", Value = "0" });
+                return Json(items, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult Vacs()
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacs = db.Vaccinations.ToList<Vaccinations>();
+                return View(vacs);
             }
         }
 

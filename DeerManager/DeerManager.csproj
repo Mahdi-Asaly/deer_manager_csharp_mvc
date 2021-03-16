@@ -144,6 +144,7 @@
     <Compile Include="Models\Diseases.cs" />
     <Compile Include="Models\Hamlatot.cs" />
     <Compile Include="Models\maintable.cs" />
+    <Compile Include="Models\Medicine.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\sysdiagrams.cs" />
     <Compile Include="Models\Vaccinations.cs" />
@@ -255,6 +256,9 @@
     <Content Include="Views\Home\RemoveHamlata.cshtml" />
     <Content Include="Views\Home\VacAlert.cshtml" />
     <Content Include="Views\Settings\EditSettings.cshtml" />
+    <Content Include="Views\Home\Vacs.cshtml" />
+    <Content Include="Views\Home\AddMedicine.cshtml" />
+    <Content Include="Views\Home\RemoveMedicine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

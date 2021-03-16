@@ -8,7 +8,7 @@ namespace DeerManager.Models
 
     public partial class Settings
     {
-
+        [Required]
         [StringLength(10)]
         public string Name { get; set; }
 
@@ -23,7 +23,8 @@ namespace DeerManager.Models
 
         [StringLength(10)]
         public string Address { get; set; }
-        [Key]
+
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
     }
 }

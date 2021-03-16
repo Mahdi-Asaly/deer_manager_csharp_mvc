@@ -4,18 +4,18 @@
     Layout = null;
 }
 
-<div style="text-align:center;">
+<div style="text-align:center; font-size:22px; font-style:italic;">
 
     @{
         if (Model.Count > 0)
         {
-        <h2>שם לב! מועד חיסון קרוב!</h2>
+            <h2>שם לב מועד חיסון קרוב</h2>
         }
         for (int i = 0; i < Model.Count; i++)
         {
             if (Model[i].flag == true)
             {
-                <h4 style="color:red;">קבוצה</h4>
+                <div style="color:red;">קבוצה</div>
                 @Model[i].Group
                 <br />
                 <div style="color:red;">תאריך החיסון לשמירת הריון</div>
@@ -34,13 +34,13 @@
             }
         }
 
-        if (Model.Count < 1)
-        {
-            <h2 style="color:red;">אין חיסונים קרובים</h2>
-        }
-    }
+   }
 </div>
 
+@if(Model.Count < 1)
+{
+        <h2 style="color:red;">אין חיסונים קרובים</h2>
+}
 
 <div class="form-group" style="text-align:center;">
     <input type="submit" value="אל תציג שוב" class="btn btn-warning" onclick="dontshowAgain()" />

@@ -1,0 +1,42 @@
+﻿@model List<DeerManager.Models.Vaccinations>
+
+@{
+    ViewBag.Title = "Vacs";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<h2 style="text-align:center;">חיסונים</h2>
+
+@using (Html.BeginForm())
+{
+<div style="text-align:center;">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+
+        <div style="color:red;">ת"ז</div>
+        @Model[i].Id
+        <br />
+        <div style="color:red;">  תרופה </div>
+        @Model[i].Medicine
+        <br />
+        <div style="color:red;">תאריך חיסון </div>
+        @Model[i].DateOfVaccination
+        <br />
+        <div style="color:red;">  תאריך חיסון הבא </div>
+        @Model[i].NextVaccinationDate
+        <br />
+        if(Model.Count > 1)
+        {
+            <h2>-----------------</h2>
+        }
+    }
+    @if(Model.Count < 1)
+    {
+        <h2 style="color:red;">אין חיסונים קרובים</h2>
+    }
+</div>
+}
+
+
+
+
