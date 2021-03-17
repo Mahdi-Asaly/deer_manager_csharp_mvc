@@ -165,6 +165,36 @@ namespace DeerManager.Controllers
         }
 
 
+        //still bugs
+        [HttpGet]
+        public ActionResult AddVaccineGroup(int id)
+        {
+            var vacs = new List<Vaccinations>();
+            var shps = new List<maintable>();
+            using (DBModel db = new DBModel())
+            {
+                vacs = db.Vaccinations.ToList();
+                shps = db.maintable.Where(x=>x.Group== id).ToList();
+            }
+            return View(vacs);
+        }
+
+        //[HttpPost]
+        //public ActionResult AddVaccineGroup(Vaccinations shps)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (shp == null) { return View("ShowMyHome"); }
+        //        using (DBModel db = new DBModel())
+        //        {
+        //            shp.isEnabled = 1; //enabling alerts
+        //            db.Vaccinations.Add(shp);
+        //            db.SaveChanges();
+        //            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+        //        }
+        //    }
+        //    else { return View("errorPage"); }
+        //}
 
         [HttpGet]
         public ActionResult AddMedicine()

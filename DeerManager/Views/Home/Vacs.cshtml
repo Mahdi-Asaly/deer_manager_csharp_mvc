@@ -4,39 +4,104 @@
     ViewBag.Title = "Vacs";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+<div style="text-align:right;">
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף חיסון לקבוצה </a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i>  מחק חיסון עבור קבוצה  </a>
+</div>
+<h2 style="text-align:center;">חיסונים קרובים</h2>
 
-<h2 style="text-align:center;">חיסונים</h2>
+    <!-- Normal -->
+ <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+ 
+
+ <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+ <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+ <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+    @* Normal *@
+ <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+    @*<script src="~/Scripts/bootstrap.min.js"></script>*@
+
+    @*For the add new sheep*@
+
+ <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
 
 @using (Html.BeginForm())
 {
-<div style="text-align:center;">
-    @for (int i = 0; i < Model.Count; i++)
-    {
-
-        <div style="color:red;">ת"ז</div>
-        @Model[i].Id
-        <br />
-        <div style="color:red;">  תרופה </div>
-        @Model[i].Medicine
-        <br />
-        <div style="color:red;">תאריך חיסון </div>
-        @Model[i].DateOfVaccination
-        <br />
-        <div style="color:red;">  תאריך חיסון הבא </div>
-        @Model[i].NextVaccinationDate
-        <br />
-        if(Model.Count > 1)
+    <div style="text-align:center;">
+        @for (int i = 0; i < Model.Count; i++)
         {
-            <h2>-----------------</h2>
+
+            <div style="color:red;">ת"ז</div>
+            @Model[i].Id
+            <br />
+            <div style="color:red;">  תרופה </div>
+            @Model[i].Medicine
+            <br />
+            <div style="color:red;">תאריך חיסון </div>
+            @Model[i].DateOfVaccination
+            <br />
+            <div style="color:red;">  תאריך חיסון הבא </div>
+            @Model[i].NextVaccinationDate
+            <br />
+            if (Model.Count > 1)
+            {
+                <h2>-----------------</h2>
+            }
         }
-    }
-    @if(Model.Count < 1)
-    {
-        <h2 style="color:red;">אין חיסונים קרובים</h2>
-    }
-</div>
+        @if (Model.Count < 1)
+        {
+            <h2 style="color:red;">אין חיסונים קרובים</h2>
+        }
+    </div>
 }
 
 
 
+<script>
+    function PopupForm(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    title: 'חיסונים',
+                    height: 450,
+                    width: 600,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+    }
+    function SubmitForm(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
 
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+        }
+        return false;
+    }
+</script>

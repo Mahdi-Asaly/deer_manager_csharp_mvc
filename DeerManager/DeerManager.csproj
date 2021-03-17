@@ -259,6 +259,7 @@
     <Content Include="Views\Home\Vacs.cshtml" />
     <Content Include="Views\Home\AddMedicine.cshtml" />
     <Content Include="Views\Home\RemoveMedicine.cshtml" />
+    <Content Include="Views\Home\AddVaccineGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
