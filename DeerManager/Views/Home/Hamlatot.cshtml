@@ -1,9 +1,10 @@
-﻿@model List<DeerManager.Models.Vaccinations>
+﻿@model List<DeerManager.Models.Hamlatot>
 
 @{
-    ViewBag.Title = "Vacs";
+    ViewBag.Title = "Hamlatot";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
+
 
 
 <style>
@@ -12,14 +13,13 @@
         background-color: lightblue;
         text-align: center;
     }
-
 </style>
 
 <div style="text-align:right;">
-    <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף חיסון לקבוצה </a>
-    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i>  מחק חיסון עבור קבוצה  </a>
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף המלטה לקבוצה </a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i>  מחק המלטה עבור קבוצה  </a>
 </div>
-<h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
+<h2 style="text-align:center; font-style:italic;">דף המלטות</h2>
 
 <!-- Normal -->
 <link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
@@ -45,11 +45,11 @@
 
 @using (Html.BeginForm())
 {
-<body>
+    <body>
 
         <div style="text-align:center;">
             <select name="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
-                <option value="0">-- בחר קבוצה  --</option>
+                <option value="0">--בחר קבוצה--</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -62,34 +62,6 @@
                 <option value="8">10</option>
             </select>
         </div>
-        @*<div id="note">
-            <div style="text-align:center;">
-                @for (int i = 0; i < Model.Count; i++)
-                {
-
-                    <div style="color:red;">ת"ז</div>
-                    @Model[i].Id
-                    <br />
-                    <div style="color:red;">  תרופה </div>
-                    @Model[i].Medicine
-                    <br />
-                    <div style="color:red;">תאריך חיסון </div>
-                    @Model[i].DateOfVaccination
-                    <br />
-                    <div style="color:red;">  תאריך חיסון הבא </div>
-                    @Model[i].NextVaccinationDate
-                    <br />
-                    if (Model.Count > 1)
-                    {
-                        <h2>-----------------</h2>
-                    }
-                }
-                @if (Model.Count < 1)
-                {
-                    <h2 style="color:red;">אין חיסונים קרובים</h2>
-                }
-            </div>
-        </div>*@
 
         <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
             <thead>
@@ -115,7 +87,7 @@
                 </tr>
             </tfoot>
         </table>
-</body>
+    </body>
 }
 
 
@@ -310,3 +282,4 @@
         return false;
     }
 </script>
+

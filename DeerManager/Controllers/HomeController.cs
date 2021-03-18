@@ -570,7 +570,15 @@ namespace DeerManager.Controllers
                 return View(vacs);
             }
         }
-
+        [HttpGet]
+        public ActionResult Hamlatot()
+        {
+            using (DBModel db = new DBModel())
+            {
+                var Hamlatot = db.Hamlatot.ToList<Hamlatot>();
+                return View(Hamlatot);
+            }
+        }
         public ActionResult GetListByGroup(int id)
         {
             using (DBModel db = new DBModel())
