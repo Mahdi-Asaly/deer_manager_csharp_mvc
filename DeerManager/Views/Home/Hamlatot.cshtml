@@ -8,40 +8,47 @@
 
 
 <style>
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+        cursor: pointer;
+    }
+
     #sheeps {
         border: 5px outset red;
         background-color: lightblue;
         text-align: center;
     }
+
+    #bootstrap-alert {
+        margin: auto;
+        width: 390px;
+        font-size:large;
+        box-shadow: 1px 1px 3px black;
+    }
 </style>
 
-<div style="text-align:right;">
-    <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף המלטה לקבוצה </a>
-    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i>  מחק המלטה עבור קבוצה  </a>
-</div>
+
 <h2 style="text-align:center; font-style:italic;">דף המלטות</h2>
 
-<!-- Normal -->
-<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 
-<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- THIS IS BOOTSTRAP ALERT -->
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='bootstrap-alert'>
+    התהליך בוצע בהצלחה
+    <div id="date"></div>
+</div>
 
-<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
-
-
-@* Normal *@
-<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-
-
-@*<script src="~/Scripts/bootstrap.min.js"></script>*@
-
-@*For the add new sheep*@
-
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
+    תאריך המלטה נמחק בהצלחה
+</div>
 
 @using (Html.BeginForm())
 {
@@ -90,7 +97,16 @@
     </body>
 }
 
-
+<div style="text-align:center;">
+    <div style="text-align:center" ;>
+        <div class="form-group" style="direction: rtl;">
+            <h4> תאריך המלטה:</h4>
+            <input type="date" id="DateOfHamlata" name="DateOfHamlata">
+        </div>
+    </div>
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף המלטה לקבוצה </a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק המלטה </a>
+</div>
 
 
 <script>
@@ -243,43 +259,79 @@
             });
         });
     }
-    function PopupForm(url) {
-        var formDiv = $('<div/>');
-        $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizable: true,
-                    title: 'חיסונים',
-                    height: 450,
-                    width: 600,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    }
-                });
-            });
+    function showAlerts() {
+        window.scrollTo(0, 0);
+        document.getElementById("date").innerHTML = " תאריך "+ document.getElementById("DateOfHamlata").value + " התווסף לרשומות ";
+        document.getElementById('bootstrap-alert').style.display = 'block';
+        setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 2700);
     }
-    function SubmitForm(form) {
-        $.validator.unobtrusive.parse(form);
-        if ($(form).valid()) {
-            $.ajax({
-                type: "POST",
-                url: form.action,
-                data: $(form).serialize(),
-                success: function (data) {
-                    if (data.success) {
-                        Popup.dialog('close');
-                        dataTable.ajax.reload();
-                        $.notify(data.message, {
-                            globalPosition: "top center",
-                            className: "success"
-                        })
-                    }
-                }
-            });
-        }
-        return false;
+    function deleteAlert() {
+        window.scrollTo(0, 0);
+        document.getElementById('deleteAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('deleteAlert').style.display = 'none' }, 2700);
     }
+
+    function updateSheep(sheepid, date) {
+        var sendObj = { shpid: sheepid, date: date} //creating json obj
+        $.ajax({
+            url: '@Url.Action("AddSpecificHamlata", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
+    }
+    function UpdateHamlatot() {
+        var date = document.getElementById("DateOfHamlata").value;
+        if (date == "") { return alert('לא נבחר תאריך')}
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                updateSheep(rowhtml.children[1].innerText, date);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else { showAlerts()}
+    }
+
+    function removeHamlata(sheepid) {
+        var sendObj = { id: sheepid} //creating json obj
+        $.ajax({
+            url: '@Url.Action("RemoveHamlata", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
+    }
+    function RemoveHamlatot() {
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                removeHamlata(rowhtml.children[1].innerText);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else { deleteAlert() }
+    }
+    
 </script>
 

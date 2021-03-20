@@ -12,26 +12,20 @@
         background-color: lightblue;
         text-align: center;
     }
-
 </style>
 
 <div style="text-align:right;">
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף חיסון לקבוצה </a>
-    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i>  מחק חיסון עבור קבוצה  </a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i> מחק חיסון עבור קבוצה  </a>
 </div>
 <h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
 
-<!-- Normal -->
-<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
 
-
-<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
-<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
-
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
 @* Normal *@
 <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
@@ -45,7 +39,7 @@
 
 @using (Html.BeginForm())
 {
-<body>
+    <body>
 
         <div style="text-align:center;">
             <select name="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
@@ -63,33 +57,33 @@
             </select>
         </div>
         @*<div id="note">
-            <div style="text-align:center;">
-                @for (int i = 0; i < Model.Count; i++)
-                {
-
-                    <div style="color:red;">ת"ז</div>
-                    @Model[i].Id
-                    <br />
-                    <div style="color:red;">  תרופה </div>
-                    @Model[i].Medicine
-                    <br />
-                    <div style="color:red;">תאריך חיסון </div>
-                    @Model[i].DateOfVaccination
-                    <br />
-                    <div style="color:red;">  תאריך חיסון הבא </div>
-                    @Model[i].NextVaccinationDate
-                    <br />
-                    if (Model.Count > 1)
+                <div style="text-align:center;">
+                    @for (int i = 0; i < Model.Count; i++)
                     {
-                        <h2>-----------------</h2>
+
+                        <div style="color:red;">ת"ז</div>
+                        @Model[i].Id
+                        <br />
+                        <div style="color:red;">  תרופה </div>
+                        @Model[i].Medicine
+                        <br />
+                        <div style="color:red;">תאריך חיסון </div>
+                        @Model[i].DateOfVaccination
+                        <br />
+                        <div style="color:red;">  תאריך חיסון הבא </div>
+                        @Model[i].NextVaccinationDate
+                        <br />
+                        if (Model.Count > 1)
+                        {
+                            <h2>-----------------</h2>
+                        }
                     }
-                }
-                @if (Model.Count < 1)
-                {
-                    <h2 style="color:red;">אין חיסונים קרובים</h2>
-                }
-            </div>
-        </div>*@
+                    @if (Model.Count < 1)
+                    {
+                        <h2 style="color:red;">אין חיסונים קרובים</h2>
+                    }
+                </div>
+            </div>*@
 
         <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
             <thead>
@@ -115,7 +109,7 @@
                 </tr>
             </tfoot>
         </table>
-</body>
+    </body>
 }
 
 

@@ -250,6 +250,7 @@
             //Check the state of the checkbox
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
+                alert(rowhtml.children[1].innerText)
                 c += 1;
                 moveAction(rowhtml.children[1].innerText, toGroup);
                 //If the checkbox is checked, then add the inner text of the cell to the array

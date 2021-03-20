@@ -122,6 +122,51 @@ namespace DeerManager.Controllers
             else { return View("errorPage"); }
         }
 
+        //this function receives sheep id and date and update hamlata
+        public bool AddSpecificHamlata(int shpid, DateTime date)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (DBModel db = new DBModel())
+                    {
+                        var hamlata = new Hamlatot();
+                        //we check if there are column in database with already date with same sheep id.
+                        var checkAlready = db.Hamlatot.FirstOrDefault(x => x.Id == shpid);
+                        //we remove the old date if exists.
+                        if (checkAlready != null)
+                        {
+                            db.Hamlatot.Remove(checkAlready);
+                        }
+                        hamlata.DateOfTakser = null;
+                        hamlata.Id = shpid;
+                        hamlata.DateOfHamlata = date.ToString("dd/MM/yyyy");
+                        db.Hamlatot.Add(hamlata);
+                        db.SaveChanges();
+                        return true;
+                    }
+                }
+                else { return false; }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
+        }
+
+
         [HttpPost]
         public ActionResult AddHamlata(Hamlatot shp)
         {
@@ -429,6 +474,9 @@ namespace DeerManager.Controllers
                 return null;
             }
         }
+
+
+
         public ActionResult MoveGroup()
         {
             return View();
