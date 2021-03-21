@@ -13,12 +13,53 @@
         text-align: center;
     }
 </style>
-
-<div style="text-align:right;">
-    <a class="btn btn-primary" style="margin-bottom:10px" onclick="alert('הוסף')"><i class="fa fa-plus"></i> הוסף חיסון לקבוצה </a>
-    <a class="btn btn-danger" style="margin-bottom:10px" onclick="alert('מחק')"><i class="icon-remove"></i> מחק חיסון עבור קבוצה  </a>
-</div>
 <h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='bootstrap-alert'>
+    התהליך בוצע בהצלחה
+    <div id="med"></div>
+</div>
+
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
+    תאריך חיסון נמחק בהצלחה
+    <div id="sheepsamount"></div>
+</div>
+<div style="text-align:center;">
+    <div style="text-align:center;">
+        <label for="test_redirect">קבוצה</label>
+        <select name="test_redirect" id="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
+            <option value="0">-- בחר --</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="8">9</option>
+            <option value="8">10</option>
+        </select>
+    </div>
+    <div>
+        <div class="form-group" style="direction: rtl;">
+            <label for="Medicine">בחר תרופה</label>
+            <select name="Medicine" id="Medicine">
+            </select>
+        </div>
+        <div class="form-group" style="direction: rtl;">
+            <label for="DateOfVaccination">תאריך שבו לקח את החיסון</label>
+            <input type="date" id="DateOfVaccination" name="DateOfVaccination" value="s">
+        </div>
+        <div class="form-group" style="direction: rtl;">
+            <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
+            <input type="date" id="NextVaccinationDate" name="NextVaccinationDate">
+        </div>
+    </div>
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="AddVacForAllCheckBox()"><i class="fa fa-plus"></i> הוסף  </a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveVacs()"><i class="icon-remove"></i> מחק חיסון  </a>
+</div>
+
+
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -30,60 +71,23 @@
 <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
 
-@*<script src="~/Scripts/bootstrap.min.js"></script>*@
+
 
 @*For the add new sheep*@
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
+
+
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
 @using (Html.BeginForm())
 {
     <body>
-
-        <div style="text-align:center;">
-            <select name="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
-                <option value="0">-- בחר קבוצה  --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="8">9</option>
-                <option value="8">10</option>
-            </select>
-        </div>
-        @*<div id="note">
-                <div style="text-align:center;">
-                    @for (int i = 0; i < Model.Count; i++)
-                    {
-
-                        <div style="color:red;">ת"ז</div>
-                        @Model[i].Id
-                        <br />
-                        <div style="color:red;">  תרופה </div>
-                        @Model[i].Medicine
-                        <br />
-                        <div style="color:red;">תאריך חיסון </div>
-                        @Model[i].DateOfVaccination
-                        <br />
-                        <div style="color:red;">  תאריך חיסון הבא </div>
-                        @Model[i].NextVaccinationDate
-                        <br />
-                        if (Model.Count > 1)
-                        {
-                            <h2>-----------------</h2>
-                        }
-                    }
-                    @if (Model.Count < 1)
-                    {
-                        <h2 style="color:red;">אין חיסונים קרובים</h2>
-                    }
-                </div>
-            </div>*@
 
         <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
             <thead>
@@ -111,10 +115,6 @@
         </table>
     </body>
 }
-
-
-
-
 <script>
         //
     // Updates "Select all" control in a data table
@@ -145,7 +145,22 @@
             }
         }
     }
+    function checkSoonUpdate(id) {
+        PopupForm('@Url.Action("VacAlertByGroup", "Home")/' + id)
+    }
+    function setCurrentDate() {
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+        var today = year + "-" + month + "-" + day;
+        document.getElementById("DateOfVaccination").value = today;
+    }
     function Display(id) {
+        setCurrentDate()
+        checkSoonUpdate(id)
         var table = $('#sheeps').DataTable();
         table.destroy();
         // Array holding selected row IDs
@@ -174,7 +189,6 @@
                 { "data": "Group" },
                 { "data": "Birthday" }
             ],
-
             "processing": true,
             "language": {
                 processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
@@ -214,16 +228,13 @@
             } else if (!this.checked && index !== -1) {
                 rows_selected.splice(index, 1);
             }
-
             if (this.checked) {
                 $row.addClass('selected');
             } else {
                 $row.removeClass('selected');
             }
-
             // Update state of "Select all" control
             updateDataTableSelectAllCtrl(table);
-
             // Prevent click event from propagating to parent
             e.stopPropagation();
         });
@@ -265,6 +276,114 @@
             });
         });
     }
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetMedsJson", "Home")",
+            data: "{}",
+            success: function (data) {
+                var s = '<option value="0">בחר תרופה</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].Text + '">' + data[i].Text + '</option>';
+                }
+                $("#Medicine").html(s);
+            }
+        });
+    });
+    function showAlerts() {
+        window.scrollTo(0, 0);
+        document.getElementById("med").innerHTML = " תרופה " + document.getElementById("Medicine").value + " התווסף לרשומות ";
+        document.getElementById('bootstrap-alert').style.display = 'block';
+        setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 2700);
+    }
+    function deleteAlert(c) {
+        window.scrollTo(0, 0);
+        document.getElementById('deleteAlert').style.display = 'block';
+        sheepsamount
+        document.getElementById("sheepsamount").innerHTML = "סכ הכל "+ c+" כבשים נמחק להם חיסון";
+        setTimeout(function () { document.getElementById('deleteAlert').style.display = 'none' }, 2700);
+    }
+
+    function updateSheepVac(sheepid, group, med, curdate, nextdate) {
+        var sendObj = { shpid: sheepid, group: group, med: med, curdate: curdate, nextdate: nextdate } //creating json obj
+        $.ajax({
+            url: '@Url.Action("AddSpecificVac", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
+    }
+    function AddVacForAllCheckBox() {
+        var c = 0; //to count how many sheeps were moved.
+        var group, med, curdate, nextdate;
+        if (document.getElementById("test_redirect").value == 0) {
+            return alert('לא נבחרה קבוצה')
+        }
+        if (document.getElementById("Medicine").value ==0) {
+            return alert('לא נבחרה חיסון')
+        }
+        if (document.getElementById("DateOfVaccination").value == "") {
+            return alert('נא לבחור תאריך חיסון')
+        }
+        if (document.getElementById("NextVaccinationDate").value == "") {
+            return alert('נא לבחור תאריך חיסון הבא')
+        }
+        group = document.getElementById("test_redirect").value;
+        med = document.getElementById("Medicine").value;
+        curdate = document.getElementById("DateOfVaccination").value;
+        nextdate = document.getElementById("NextVaccinationDate").value;
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                updateSheepVac(rowhtml.children[1].innerText,group,med,curdate,nextdate);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else { showAlerts()}
+    }
+
+
+     function removeVac(sheepid) {
+        var sendObj = { id: sheepid} //creating json obj
+        $.ajax({
+            url: '@Url.Action("RemoveVaccine", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
+    }
+    function RemoveVacs() {
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                removeVac(rowhtml.children[1].innerText);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else { deleteAlert(c) }
+    }
+
+
     function PopupForm(url) {
         var formDiv = $('<div/>');
         $.get(url)

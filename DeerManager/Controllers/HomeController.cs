@@ -167,6 +167,52 @@ namespace DeerManager.Controllers
         }
 
 
+        //this function receives sheep id and date and update hamlata
+        public bool AddSpecificVac(int shpid, int group, string med, string curdate ,string nextdate)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (DBModel db = new DBModel())
+                    {
+                        var vac = new Vaccinations();
+                        //we check if there are column in database with already date with same sheep id.
+                        var checkAlready = db.Vaccinations.FirstOrDefault(x => x.Id == shpid && x.DateOfVaccination == curdate && x.Medicine==med);
+                        //we remove the old date if exists.
+                        if (checkAlready != null)
+                        {
+                            db.Vaccinations.Remove(checkAlready);
+                        }
+                        vac.Id = shpid;
+                        vac.Medicine = med; 
+                        vac.DateOfVaccination = curdate;
+                        vac.NextVaccinationDate = nextdate;
+                        db.Vaccinations.Add(vac);
+                        db.SaveChanges();
+                        return true;
+                    }
+                }
+                else { return false; }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
+        }
+
+
         [HttpPost]
         public ActionResult AddHamlata(Hamlatot shp)
         {
@@ -214,14 +260,7 @@ namespace DeerManager.Controllers
         [HttpGet]
         public ActionResult AddVaccineGroup(int id)
         {
-            var vacs = new List<Vaccinations>();
-            var shps = new List<maintable>();
-            using (DBModel db = new DBModel())
-            {
-                vacs = db.Vaccinations.ToList();
-                shps = db.maintable.Where(x=>x.Group== id).ToList();
-            }
-            return View(vacs);
+            return View(id);
         }
 
         //[HttpPost]
@@ -405,6 +444,57 @@ namespace DeerManager.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public ActionResult VacAlertByGroup(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacs = db.Vaccinations.ToList();
+                if (vacs == null) { return null; } //nothing to check cuz there are no vacs YET!
+                var dateAndTime = DateTime.Now;
+                var Enddate = dateAndTime.Date; //current day
+                /*let's get from DB all the information 
+                            in order to check weither there are upcoming vacs 
+                */
+                var vac = new List<VacsAlert>();
+                DateTime d;
+                int _id = 0;
+                int group = 0;
+                string med;
+                for (int i = 0; i < vacs.Count; i++)
+                {
+                    //if you want to add more vacs , just use if for another type of vacs.
+                    if (vacs[i].Medicine.Contains("Oxy"))
+                    {
+                        if (vacs[i].NextVaccinationDate != null)
+                        {
+                            d = DateTime.ParseExact(vacs[i].NextVaccinationDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            _id = vacs[i].Id;
+                            group = GetGroupById(vacs[i].Id);
+                            med = vacs[i].Medicine;
+                            if (id == group)
+                            {
+                                vac.Add(new VacsAlert { NextDate = d, Id = _id, Group = group, medicine = med });
+                            }
+                        }
+                    }
+                }
+                //now let's do manupilation to check if there are upcoming vacs
+                //we should use the current date variable in order to check that.
+                for (int i = 0; i < vac.Count; i++)
+                {
+                    if ((Enddate - vac[i].NextDate).TotalDays <= 90)
+                    {
+                        vac[i].flag = true;
+                        vac[i].days = Math.Abs((Enddate - vac[i].NextDate).Days);
+                    }
+                }
+                return View(vac);
+            }
+        }
+
+
 
         [HttpGet]
         public ActionResult VacAlert()

@@ -10,10 +10,10 @@
 {
     @Html.AntiForgeryToken()
     <div style="text-align:center" ;>
-        <div class="form-group">
+        @*<div class="form-group">
             <label for="Id">תעודת זהות</label>
-            @Html.TextBoxFor(model => model.Id, new { disabled = "disabled" })
-        </div>
+            @Html.TextBoxFor(model => model.Gr, new { disabled = "disabled" })
+        </div>*@
         <div class="form-group" style="direction: rtl; text-align:center;">
             <label for="DateOfVaccination">תאריך שבו הקבוצה לקחה את החיסון</label>
             <input type="date" id="DateOfVaccination" name="DateOfVaccination">
