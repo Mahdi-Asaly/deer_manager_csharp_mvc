@@ -405,6 +405,43 @@ namespace DeerManager.Controllers
             }
         }
 
+        //this function check if the sheep vacced (means there are vac)
+        //public bool isVaced(int id)
+        //{
+        //    using (DBModel db = new DBModel())
+        //    {
+        //        var vacalert = db.Vaccinations.Where(x=>x.Id==id);
+        //        if (vacalert == null) 
+        //        { 
+        //            return false;
+        //        }
+        //        else {
+        //            return true;
+        //        }
+        //    }
+        //}
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult isVaced(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
+                if (vacalert == null)
+                {
+                    return Json(new { emailSent = "False" });
+                }
+                else
+                {
+                    return Json(new { emailSent = "True" });
+                }
+            }
+        }
+
+
         public bool getAlertBoolean()
         {
             using (DBModel db = new DBModel())

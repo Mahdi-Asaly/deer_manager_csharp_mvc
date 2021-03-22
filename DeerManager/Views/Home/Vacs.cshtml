@@ -99,6 +99,7 @@
                     <th>מין</th>
                     <th>קבוצה</th>
                     <th>תאריך לידה</th>
+                    <th>סטטוס חיסון</th>
                 </tr>
             </thead>
             <tfoot>
@@ -110,6 +111,7 @@
                     <th>מין</th>
                     <th>קבוצה</th>
                     <th>תאריך לידה</th>
+                    <th>סטטוס חיסון</th>
                 </tr>
             </tfoot>
         </table>
@@ -158,9 +160,29 @@
         var today = year + "-" + month + "-" + day;
         document.getElementById("DateOfVaccination").value = today;
     }
+
+    //this function to check weither each column in specific group vacinated.
+    function checkStatus() {
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
+            $.ajax({
+            url: '@Url.Action("isVaced", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    alert(msg.emailSent);
+            }
+            });
+        });
+    }
+
     function Display(id) {
         setCurrentDate()
         checkSoonUpdate(id)
+        checkStatus(); //bugged fix it
         var table = $('#sheeps').DataTable();
         table.destroy();
         // Array holding selected row IDs
@@ -187,7 +209,16 @@
                 { "data": "Blood" },
                 { "data": "Gender" },
                 { "data": "Group" },
-                { "data": "Birthday" }
+                { "data": "Birthday" },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="checkbox" name="status" disabled="true" >';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                }
             ],
             "processing": true,
             "language": {
@@ -275,6 +306,7 @@
                 );
             });
         });
+
     }
 
     $(document).ready(function () {

@@ -98,12 +98,13 @@
                 <br />
                 @for (var i = 0; i < Model.shpVac.Count; i++)
                 {
-                    @Html.TextBoxFor(m => Model.shpVac[i].Medicine)
+                    @Html.TextBoxFor(m => Model.shpVac[i].Medicine, new
+                     { disabled = "disabled", @readonly = "readonly" })
                 }
                 @{
                     if (Model.shpVac.Count < 1)
                     {
-                        <div style="color:red;">לא לקח שום תרופה בעבר</div>
+                        <div style="color:red;">לא לקח שום חיסון בעבר</div>
                     }
                 }
             </div>
@@ -120,7 +121,7 @@
                 @{
                     if (Model.shpVac.Count < 1)
                     {
-                        <div style="color:red;">לא לקח שום תרופה בעבר</div>
+                        <div style="color:red;">לא לקח שום חיסון בעבר</div>
                     }
                 }
             </div>
@@ -138,7 +139,7 @@
                 @{
                     if (Model.shpVac.Count < 1)
                     {
-                        <div style="color:red;">אין תאריך כיוון שאין תרופה</div>
+                        <div style="color:red;">אין תאריך כיוון שאין חיסון</div>
                     }
                 }
             </div>
@@ -157,7 +158,7 @@
                 @{
                     if (Model.shpHamlata.Count < 1)
                     {
-                        <div style="color:red;">אין תאריך המלטות בעבר</div>
+                        <div style="color:red;">אין היסטורית המלטות בעבר</div>
                     }
                 }
             </div>
