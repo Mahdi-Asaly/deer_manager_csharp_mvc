@@ -1,4 +1,4 @@
-﻿@model List<DeerManager.Classes.VacsAlert>
+﻿@model HashSet<DeerManager.Classes.VacsAlert>
 
 @{
     Layout = null;
@@ -11,21 +11,21 @@
         {
             <h2>שם לב מועד חיסון קרוב</h2>
         }
-        for (int i = 0; i < Model.Count; i++)
+        foreach (var i in Model)
         {
-            if (Model[i].flag == true)
+            if (i.flag == true)
             {
                 <div style="color:red;">קבוצה</div>
-                @Model[i].Group
+                @i.Group
                 <br />
                 <div style="color:red;">תאריך החיסון לשמירת הריון</div>
-                @Model[i].NextDate
+                @i.NextDate
                 <br />
                 <div style="color:red;"> ימים שנותרו </div>
-                @Model[i].days
+                @i.days
                 <br />
                 <div style="color:red;">  תרופה </div>
-                @Model[i].medicine
+                @i.medicine
                 if (Model.Count > 1)
                 {
                     <h2>-----------------</h2>
@@ -33,7 +33,7 @@
             }
         }
 
-   }
+    }
 </div>
 
 @if(Model.Count < 1)

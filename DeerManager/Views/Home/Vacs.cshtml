@@ -353,8 +353,8 @@
     }
 
 
-     function removeVac(sheepid) {
-        var sendObj = { id: sheepid} //creating json obj
+    function removeVac(sheepid, med) {
+        var sendObj = { id: sheepid, Medicine: med } //creating json obj
         $.ajax({
             url: '@Url.Action("RemoveVaccine", "Home")',
             dataType: "json",
@@ -368,12 +368,15 @@
         var c = 0; //to count how many sheeps were moved.
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        var Med = document.getElementById("Medicine").value;
+        var Index = document.getElementById("Medicine").selectedIndex;
+        if (Index == 0) {return alert("אנא בחר תרופה שברצונך למחוק")}
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
             //Check the state of the checkbox
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
                 c += 1;
-                removeVac(rowhtml.children[1].innerText);
+                removeVac(rowhtml.children[1].innerText, Med);
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
