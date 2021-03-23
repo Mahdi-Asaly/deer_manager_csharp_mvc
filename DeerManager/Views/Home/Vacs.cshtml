@@ -164,8 +164,10 @@
     //this function to check weither each column in specific group vacinated.
     function checkStatus() {
         oTable = $("#sheeps").dataTable(); // Get the datatable,
-        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            var checked = $('input[type="checkbox"][name="status"]', rowhtml);
+
+
             var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
             $.ajax({
             url: '@Url.Action("isVaced", "Home")',
@@ -173,16 +175,21 @@
             data: sendObj,
             type: "POST",
                 success: function (msg) {
-                    alert(msg.emailSent);
+                    if (msg.emailSent == "True") {
+                        alert(sendObj.id + 'מחוסן')
+                        $('input[type="radio"]').attr("checked", "checked");
+                    } else if (msg.emailSent == "False") {
+                        alert(sendObj.id + 'איננו מחוסן')
+                    }
             }
             });
         });
     }
 
+
     function Display(id) {
         setCurrentDate()
         checkSoonUpdate(id)
-        checkStatus(); //bugged fix it
         var table = $('#sheeps').DataTable();
         table.destroy();
         // Array holding selected row IDs
@@ -213,7 +220,7 @@
                 {
                     "data": "Id", "render": function (data) {
 
-                        return '<input type="checkbox" name="status" disabled="true" >';
+                        return '<input type="radio" name="status" disabled="true" >';
                     },
                     "orderable": false,
                     "searchable": false,
@@ -237,6 +244,9 @@
                     $(row).addClass('selected');
                 }
             },
+            "initComplete": function () {
+                checkStatus() //calling the status function
+            }
         });
         // Handle click on checkbox
         $('#sheeps tbody').on('click', 'input[type="checkbox"]', function (e) {
