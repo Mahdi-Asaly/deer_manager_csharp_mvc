@@ -12,15 +12,38 @@
         background-color: lightblue;
         text-align: center;
     }
+    @*this is for check mark status*@
+    :root {
+        --borderWidth: 7px;
+        --height: 24px;
+        --width: 12px;
+        --borderColor: #78b13f;
+    }
+
+    body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .check {
+        display: inline-block;
+        transform: rotate(45deg);
+        height: var(--height);
+        width: var(--width);
+        border-bottom: var(--borderWidth) solid var(--borderColor);
+        border-right: var(--borderWidth) solid var(--borderColor);
+    }
+
+
 </style>
 <h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
 <div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='bootstrap-alert'>
-    התהליך בוצע בהצלחה
+    התהליך בוצע בהצלחה <div class="check"></div>
     <div id="med"></div>
 </div>
 
 <div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
-    תאריך חיסון נמחק בהצלחה
+    תאריך חיסון נמחק בהצלחה <div class="check"></div>
     <div id="sheepsamount"></div>
 </div>
 <div style="text-align:center;">
@@ -165,9 +188,8 @@
     function checkStatus() {
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
-            var checked = $('input[type="checkbox"][name="status"]', rowhtml);
-
-
+            var checked = $('input[type="text"][name="status"]', rowhtml);
+            //var checked = $('div[id="tst"][class="check"]', rowhtml);
             var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
             $.ajax({
             url: '@Url.Action("isVaced", "Home")',
@@ -176,10 +198,12 @@
             type: "POST",
                 success: function (msg) {
                     if (msg.emailSent == "True") {
-                        alert(sendObj.id + 'מחוסן')
-                        $('input[type="radio"]').attr("checked", "checked");
+                        $(checked).val("מחוסן")
+                        $(checked).attr('style', 'color:green;text-align:center;');
+                        //$("#tst").remove();
                     } else if (msg.emailSent == "False") {
-                        alert(sendObj.id + 'איננו מחוסן')
+                        //alert(sendObj.id + 'איננו מחוסן')
+                        //$("#tst").remove();
                     }
             }
             });
@@ -220,7 +244,8 @@
                 {
                     "data": "Id", "render": function (data) {
 
-                        return '<input type="radio" name="status" disabled="true" >';
+                        return '<input type="text" style="color:red; text-align:center;" name="status" value="לא מחוסן" readonly="readonly">';
+                        //return '<div class="check" id="tst"></div>';
                     },
                     "orderable": false,
                     "searchable": false,
@@ -391,10 +416,11 @@
         });
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
-        } else { showAlerts()}
+        } else {
+            Display(document.getElementById("test_redirect").value)
+            showAlerts()
+        }
     }
-
-
     function removeVac(sheepid, med) {
         var sendObj = { id: sheepid, Medicine: med } //creating json obj
         $.ajax({
@@ -403,6 +429,7 @@
             data: sendObj,
             type: "POST",
             success: function () {
+
             }
         });
     }
@@ -425,10 +452,11 @@
         });
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
-        } else { deleteAlert(c) }
+        } else {
+            deleteAlert(c)
+            Display(document.getElementById("test_redirect").value)
+        }
     }
-
-
     function PopupForm(url) {
         var formDiv = $('<div/>');
         $.get(url)
