@@ -30,7 +30,7 @@ namespace DeerManager.Models
 
         public int Group { get; set; }
 
-        [Required]
+     
         [StringLength(10)]
         public string Birthday { get; set; }
 

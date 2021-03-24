@@ -200,10 +200,7 @@
                     if (msg.emailSent == "True") {
                         $(checked).val("מחוסן")
                         $(checked).attr('style', 'color:green;text-align:center;');
-                        //$("#tst").remove();
                     } else if (msg.emailSent == "False") {
-                        //alert(sendObj.id + 'איננו מחוסן')
-                        //$("#tst").remove();
                     }
             }
             });
@@ -245,7 +242,6 @@
                     "data": "Id", "render": function (data) {
 
                         return '<input type="text" style="color:red; text-align:center;" name="status" value="לא מחוסן" readonly="readonly">';
-                        //return '<div class="check" id="tst"></div>';
                     },
                     "orderable": false,
                     "searchable": false,

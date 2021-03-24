@@ -25,7 +25,22 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
-
+<div style="text-align:center;">
+   קבוצה נוכחית<br />
+    <select name="curgroup" id="curgroup">
+        <option value="0">--בחר--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="8">9</option>
+        <option value="8">10</option>
+    </select> <br />
+</div>
 <div style="text-align:center;">
     בחר לאן תרצה להעביר את הכבשים<br />
     <select name="test_redirect" id="togroup">
@@ -250,7 +265,6 @@
             //Check the state of the checkbox
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
-                alert(rowhtml.children[1].innerText)
                 c += 1;
                 moveAction(rowhtml.children[1].innerText, toGroup);
                 //If the checkbox is checked, then add the inner text of the cell to the array
@@ -267,5 +281,8 @@
        return document.getElementById("togroup").value;
     }
 
+    $("#curgroup").change(function () {
+        window.location.replace("/Home/MoveGroupPage/" + document.getElementById("curgroup").value);
+    });
 
 </script>

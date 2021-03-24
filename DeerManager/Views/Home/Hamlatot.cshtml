@@ -55,7 +55,7 @@
     <body>
 
         <div style="text-align:center;">
-            <select name="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
+            <select name="test_redirect" id="groupsselect" onchange="Display(this.options[this.selectedIndex].value)">
                 <option value="0">--בחר קבוצה--</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -79,7 +79,8 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
-                    <th>תאריך לידה</th>
+                    <th>תאריך המלטה אחרון</th>
+                    <th>מספר ימים</th>
                 </tr>
             </thead>
             <tfoot>
@@ -90,7 +91,8 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
-                    <th>תאריך לידה</th>
+                    <th>תאריך המלטה אחרון</th>
+                    <th>מספר ימים</th>
                 </tr>
             </tfoot>
         </table>
@@ -139,6 +141,39 @@
             }
         }
     }
+
+    //this function to check weither each column in specific group vacinated.
+    function AddHamlata() {
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            var checked = $('input[type="text"][name="hamlatadate"]', rowhtml);
+            var checked2 = $('input[type="text"][name="dayshamlata"]', rowhtml);
+
+            //var checked = $('div[id="tst"][class="check"]', rowhtml);
+            var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
+            $.ajax({
+            url: '@Url.Action("getHamlataDetails", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.emailSent == "null") {
+                        $(checked).val("אין תאריך")
+                        $(checked2).val("0")
+                        $(checked2).attr('style', 'color:red;text-align:center;');
+                    } 
+                    else {
+                        $(checked2).val(msg.Days)
+                        $(checked2).attr('style', 'color:green;text-align:center;');
+                        $(checked).val(msg.emailSent)
+                        $(checked).attr('style', 'color:green;text-align:center;');
+                    }
+            }
+            });
+        });
+    }
+
+
     function Display(id) {
         var table = $('#sheeps').DataTable();
         table.destroy();
@@ -166,7 +201,24 @@
                 { "data": "Blood" },
                 { "data": "Gender" },
                 { "data": "Group" },
-                { "data": "Birthday" }
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="hamlatadate" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="dayshamlata" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                }
             ],
 
             "processing": true,
@@ -186,6 +238,9 @@
                     $(row).addClass('selected');
                 }
             },
+            "initComplete": function () {
+                AddHamlata() //calling the status function
+            }
         });
         // Handle click on checkbox
         $('#sheeps tbody').on('click', 'input[type="checkbox"]', function (e) {
@@ -300,7 +355,10 @@
         });
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
-        } else { showAlerts()}
+        } else {
+            showAlerts()
+            Display(document.getElementById("groupsselect").value)
+        }
     }
 
     function removeHamlata(sheepid) {
@@ -330,8 +388,11 @@
         });
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
-        } else { deleteAlert() }
+        } else {
+            deleteAlert()
+            Display(document.getElementById("groupsselect").value)
+        }
     }
-    
+
 </script>
 

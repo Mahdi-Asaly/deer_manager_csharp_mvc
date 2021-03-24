@@ -95,6 +95,10 @@ namespace DeerManager.Controllers
             {
                 using (DBModel db = new DBModel())
                 {
+                    if(shp.Birthday == null)
+                    {
+                        shp.Birthday = "אין תאריך";
+                    }
                     db.maintable.Add(shp);
                     db.SaveChanges();
                     return View("ShowMyHome");
@@ -437,6 +441,31 @@ namespace DeerManager.Controllers
                 else
                 {
                     return Json(new { emailSent = "True" });
+                }
+            }
+        }
+
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult getHamlataDetails(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Hamlatot.FirstOrDefault(x => x.Id == id);
+                if (vacalert == null)
+                {
+                    return Json(new { emailSent = "null" });
+                }
+                else
+                {
+                    var date = vacalert.DateOfHamlata;
+                    var dateAndTime = DateTime.Now;
+                    var TodayDate = dateAndTime.Date; //current day
+                    var HamlataDate = DateTime.Parse(date);
+                    return Json(new { emailSent = date.ToString(), Days= (TodayDate-HamlataDate).Days });
                 }
             }
         }
