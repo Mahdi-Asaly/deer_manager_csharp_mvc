@@ -1,0 +1,23 @@
+﻿@model List<DeerManager.Models.Vaccinations>
+
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    <div style="text-align:center" ;>
+        <h3>בחר איזה תרופה תרצה למחוק</h3>
+        <div>
+            <select name="Medicine" id="Medicine">
+                <option value="0">--בחר--</option>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <option value="@Model[i].Medicine">@Model[i].Medicine</option>
+                }
+            </select>
+        </div>
+        <div class="form-actions no-color">
+            <input type="submit" value="מחק" class="btn btn-default" /> 
+        </div>
+    </div>
+}

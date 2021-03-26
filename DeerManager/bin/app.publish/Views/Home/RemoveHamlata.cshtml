@@ -1,0 +1,16 @@
+﻿
+@model DeerManager.Models.Hamlatot
+<div style="text-align:center;">
+    <h3>בטוח שברצונך למחוק המלטות עבור הכבש?</h3>
+</div>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    <div class="form-group" style="text-align:center;">
+        <div class="col-md-offset-2 col-md-10">
+            @*<input type="submit" value="הוסף" class="btn btn-default" />*@
+            <input type="submit" value="מחק" class="btn btn-danger" />
+        </div>
+    </div>
+}

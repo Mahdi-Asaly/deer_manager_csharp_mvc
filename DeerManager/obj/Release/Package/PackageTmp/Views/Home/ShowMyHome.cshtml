@@ -1,0 +1,321 @@
+﻿
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+@{
+    ViewBag.Title = "טבלת כבשים";
+}
+
+
+
+<style>
+    .display {
+        border: 5px outset red;
+        background-color: lightblue;
+        text-align: center;
+    }
+
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+</style>
+
+
+<div style="text-align:right;">
+    <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>תיק חדש</a>
+    <a class="btn btn-warning" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddMedicine","Home")')"><i class="fa fa-plus"></i>חיסון חדשה</a>
+    <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveMedicine","Home")')"><i class="fa icon-remove"></i>מחיקת חיסון קיים</a>
+    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i> קבוצות </a>
+</div>
+<div style="text-align:right;">
+    <label class="switch">
+        <input type="checkbox" id="alerts">
+        <span class="slider round"></span>
+    </label>
+</div>
+
+
+@*<div class="alert alert-warning alert-dismissible" style="text-align:right;">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a onclick="PopupForm('@Url.Action("VacAlert","Home")')" class="alert-link">כאן</a>.
+</div>*@
+
+<table id="SheepTables" class="display" style="text-align:center;">
+    <thead>
+        <tr>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+            <th>מידע נוסף</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+            <th>מידע נוסף</th>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Normal -->
+<link href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
+    @* Normal *@
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+    @*<script src="~/Scripts/bootstrap.min.js"></script>*@
+
+    @*For the add new sheep*@
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  
+    <script>
+        $(document).ready(function () {
+
+            $("#SheepTables").DataTable(
+                {
+                    "ajax": {
+                        "url": "/Home/GetList",
+                        "type": "GET",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "SheepNum" },
+                        { "data": "Blood" },
+                        { "data": "Gender" },
+                        { "data": "Group" },
+                        { "data": "Birthday" },
+                        {"data":"Id" , "render" : function (data) {
+                            return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=\'Delete(" + data + ")\'><i class='fa fa-trash'></i>מחק</a><a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("Details","Home")/" + data + "')><i class='fa fa-pencil'></i>הצג</a>";
+                        },
+                            "orderable": false,
+                            "searchable":false,
+                            "width":"100px"
+                        }
+                    ],
+                    "processing": true,
+                    "language": {
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
+                        "search": "חיפוש",
+                        "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
+                    }
+                });
+        });
+
+    //adding new sheep
+    function PopupForm(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    title: 'Deer Manager - הדיר שלי',
+                    height: 450,
+                    width: 600,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+        });
+    }
+    function SubmitForm(form) {
+                $.validator.unobtrusive.parse(form);
+                if ($(form).valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: form.action,
+                        data: $(form).serialize(),
+                        success: function (data) {
+                            if (data.success) {
+                                Popup.dialog('close');
+                                dataTable.ajax.reload();
+
+                                $.notify(data.message, {
+                                    globalPosition: "top center",
+                                    className: "success"
+                                })
+                            }
+                        }
+                    });
+                }
+                return false;
+        }
+
+        function Delete(id) {
+            if(confirm('האם אתה בטוח שברצונך למחוק שורה זאת ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Home")/' + id,
+
+                    success: function (data) {
+                        $("#SheepTables").DataTable().ajax.reload();
+                        if (data.success)
+                        {
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+        }
+        function findGroup() {
+            confirm('ok');
+            var table = $('#SheepTables').DataTable();
+            table.column('קבוצה').search("8").draw();
+        }
+
+        //turn on alerts for upcoming vacs
+        $(document).ready(function () {
+            $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("getAlertBoolean", "Home")",
+                 success: function (msg) {
+                      if (msg == "True") {
+                          $('#alerts').attr("checked", true);
+                          $.ajax({
+                               type: "GET",
+                               url: "@Url.Action("VacAlert","Home")",
+                               success: function (msg) {
+                                   if (!msg.includes("אין חיסונים קרובים"))
+                                   {
+                                            PopupForm("@Url.Action("VacAlert","Home")");
+                                   }
+                               },
+                               error: function (msg) {
+                                   alert(msg);
+                               }
+                               });
+                            }
+                            else {
+                                $('#alerts').attr("checked", false);
+                            }
+                        },
+             error: function (msg) {
+                alert(msg);
+             }
+             });
+        });
+
+        $('#alerts').change(function () {
+             $.ajax({
+                 type: "POST",
+                 url: "@Url.Action("ChangeToggle", "Home")",
+                 success: function (msg) {
+                 },
+                 error: function (msg) {
+
+                 }
+             });
+        });
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#SheepTables tfoot th').each(function () {
+                var title = $('#SheepTables thead th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="חפש ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#SheepTables').DataTable();
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    that
+                        .search(this.value)
+                        .draw();
+                });
+            });
+        });
+    </script>
+}

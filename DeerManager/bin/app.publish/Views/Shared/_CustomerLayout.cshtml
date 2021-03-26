@@ -1,0 +1,135 @@
+﻿
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>מערכת ניהול חוות 2021</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--Font-->
+    @*<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600' rel='stylesheet' type='text/css'>*@
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+
+    <!-- Bootstrap -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet">
+    <link href="~/Content/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="~/Content/css/style.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <!--HEADER ROW-->
+    <div id="header-row">
+        <div class="container">
+            <div class="row">
+                <!--LOGO-->
+                <div class="span3"><a class="brand" href="#"><img src="~/Content/img/logo.png" /></a></div>
+                <!-- /LOGO -->
+                <!-- MAIN NAVIGATION -->
+                <div class="span9">
+                    <div class="navbar  pull-right">
+                        <div class="navbar-inner">
+                            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+                            <div class="nav-collapse collapse navbar-responsive-collapse">
+                                <ul class="nav">
+                                    <li class="active"><a href="@Url.Action("ShowMyHome","Home")">דף ראשי</a></li>
+                                    <li><a href="@Url.Action("AddNewSheep","Home")">תיק חדש</a></li>
+                                    <li><a href="@Url.Action("MoveGroup","Home")">קבוצות</a></li>
+                                    <li><a href="@Url.Action("Vacs","Home")">חיסונים</a></li>
+                                    <li><a href="@Url.Action("Hamlatot","Home")">המלטות</a></li>
+                                    <li><a href="@Url.Action("EditSettings","Settings")">הגדרות</a></li>
+                                    <li><a href="@Url.Action("ContactUs","Home")">צור קשר</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MAIN NAVIGATION -->
+            </div>
+        </div>
+    </div>
+    <!-- /HEADER ROW -->
+    <!-- /.Row View -->
+    <!--Footer
+    ==========================-->
+
+    @RenderBody()
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="span6">
+                    Copyright 2021 | All Rights Reserved  <br>
+                    <small>-Mahdi Asali-</small>
+                </div>
+                <div class="span6">
+                    <div class="social pull-right">
+                        <a href="#"><img src="~/Content/img/social/googleplus.png" alt=""></a>
+                        <a href="#"><img src="~/Content/img/social/dribbble.png" alt=""></a>
+                        <a href="#"><img src="~/Content/img/social/twitter.png" alt=""></a>
+                        <a href="#"><img src="~/Content/img/social/dribbble.png" alt=""></a>
+                        <a href="#"><img src="~/Content/img/social/rss.png" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+
+<script>
+    //adding new sheep
+    function PopupForm(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    title: 'נא למלות את הנתונים',
+                    height: 450,
+                    width: 600,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+    }
+    function SubmitForm(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid()) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+        }
+        return false;
+    }
+</script>

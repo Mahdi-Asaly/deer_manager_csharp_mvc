@@ -126,6 +126,7 @@ namespace DeerManager.Controllers
             else { return View("errorPage"); }
         }
 
+        [HttpPost]
         //this function receives sheep id and date and update hamlata
         public bool AddSpecificHamlata(int shpid, DateTime date)
         {
@@ -447,7 +448,7 @@ namespace DeerManager.Controllers
 
 
 
-        [HttpPost]
+        [HttpGet]
         [ValidateInput(false)]
         public ActionResult getHamlataDetails(int id)
         {
@@ -457,7 +458,7 @@ namespace DeerManager.Controllers
                 var vacalert = db.Hamlatot.FirstOrDefault(x => x.Id == id);
                 if (vacalert == null)
                 {
-                    return Json(new { emailSent = "null" });
+                    return Json(new { emailSent = "null" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
@@ -465,7 +466,7 @@ namespace DeerManager.Controllers
                     var dateAndTime = DateTime.Now;
                     var TodayDate = dateAndTime.Date; //current day
                     var HamlataDate = DateTime.Parse(date);
-                    return Json(new { emailSent = date.ToString(), Days= (TodayDate-HamlataDate).Days });
+                    return Json(new { emailSent = date.ToString(), Days= (TodayDate-HamlataDate).Days },JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -787,6 +788,7 @@ namespace DeerManager.Controllers
                 return View(Hamlatot);
             }
         }
+        [HttpGet]
         public ActionResult GetListByGroup(int id)
         {
             using (DBModel db = new DBModel())
