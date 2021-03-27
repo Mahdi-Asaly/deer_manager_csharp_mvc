@@ -88,7 +88,7 @@
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>תיק חדש</a>
     <a class="btn btn-warning" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddMedicine","Home")')"><i class="fa fa-plus"></i>חיסון חדשה</a>
     <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveMedicine","Home")')"><i class="fa icon-remove"></i>מחיקת חיסון קיים</a>
-    <a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("MoveGroup","Home")')"><i class="fa fa-home"></i> קבוצות </a>
+    <a class="btn btn-success" style="margin-bottom:10px" onclick="location.href='@Url.Action("MoveGroupPage","Home")'"><i class="fa fa-home"></i> קבוצות </a>
 </div>
 <div style="text-align:right;">
     <label class="switch">
@@ -172,7 +172,7 @@
                         },
                             "orderable": false,
                             "searchable":false,
-                            "width":"100px"
+                            "width":"140px"
                         }
                     ],
                     "processing": true,
@@ -194,8 +194,8 @@
                     autoOpen: true,
                     resizable: true,
                     title: 'Deer Manager - הדיר שלי',
-                    height: 450,
-                    width: 600,
+                    height: 480,
+                    width: 620,
                     close: function () {
                         Popup.dialog('destroy').remove();
                     }

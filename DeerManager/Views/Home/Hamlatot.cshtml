@@ -52,63 +52,76 @@
 
 @using (Html.BeginForm())
 {
-    <body>
+<body>
+    <div class="row">
+        <div class="leftcolumn">
+            <div class="card">
+                <div style="text-align:center;">
+                    <select name="test_redirect" id="groupsselect" onchange="Display(this.options[this.selectedIndex].value)">
+                        <option value="0">--בחר קבוצה--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="8">9</option>
+                        <option value="8">10</option>
+                    </select>
+                </div>
+                <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+                    <thead>
+                        <tr>
+                            <th><input name="select_all" value="1" type="checkbox"></th>
+                            <th>תעודת זהות</th>
+                            <th>מספר הכבש</th>
+                            <th>סוג הדם</th>
+                            <th>מין</th>
+                            <th>קבוצה</th>
+                            <th>תאריך המלטה אחרון</th>
+                            <th> ימי המלטה</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>תעודת זהות</th>
+                            <th>מספר הכבש</th>
+                            <th>סוג הדם</th>
+                            <th>מין</th>
+                            <th>קבוצה</th>
+                            <th>תאריך המלטה אחרון</th>
+                            <th> ימי המלטה</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div style="text-align:center;">
+                    <div style="text-align:center" ;>
+                        <div class="form-group" style="direction: rtl;">
+                            <h4> תאריך המלטה:</h4>
+                            <input type="date" id="DateOfHamlata" name="DateOfHamlata">
+                        </div>
+                    </div>
+                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף המלטה לקבוצה </a>
+                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק המלטה </a>
+                </div>
 
-        <div style="text-align:center;">
-            <select name="test_redirect" id="groupsselect" onchange="Display(this.options[this.selectedIndex].value)">
-                <option value="0">--בחר קבוצה--</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="8">9</option>
-                <option value="8">10</option>
-            </select>
+            </div>
         </div>
-
-        <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
-            <thead>
-                <tr>
-                    <th><input name="select_all" value="1" type="checkbox"></th>
-                    <th>תעודת זהות</th>
-                    <th>מספר הכבש</th>
-                    <th>סוג הדם</th>
-                    <th>מין</th>
-                    <th>קבוצה</th>
-                    <th>תאריך המלטה אחרון</th>
-                    <th> ימי המלטה</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th>תעודת זהות</th>
-                    <th>מספר הכבש</th>
-                    <th>סוג הדם</th>
-                    <th>מין</th>
-                    <th>קבוצה</th>
-                    <th>תאריך המלטה אחרון</th>
-                    <th> ימי המלטה</th>
-                </tr>
-            </tfoot>
-        </table>
-    </body>
-}
-
-<div style="text-align:center;">
-    <div style="text-align:center" ;>
-        <div class="form-group" style="direction: rtl;">
-            <h4> תאריך המלטה:</h4>
-            <input type="date" id="DateOfHamlata" name="DateOfHamlata">
+        <div class="rightcolumn">
+            <div class="card">
+                <h2>עדכונים</h2>
+                <div class="fakeimg" style="height:100px;">Image</div>
+                <p>כאן יהיה תאריכים קרובים עבור המלטות וחיסונים..</p>
+            </div>
         </div>
     </div>
-    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף המלטה לקבוצה </a>
-    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק המלטה </a>
-</div>
+
+</body>
+}
+
 
 
 <script>

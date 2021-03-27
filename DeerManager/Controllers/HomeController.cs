@@ -17,7 +17,6 @@ namespace DeerManager.Controllers
 {
     public class HomeController : Controller
     {
-
         public bool toggle = false;
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
         public ActionResult AdvancedDetails(int id)
@@ -57,7 +56,6 @@ namespace DeerManager.Controllers
                 if (emp == null) { return View("errorPage","Home",new { error = "something" }); }
                 db.maintable.Remove(emp);
                 db.SaveChanges();
-                //return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
                 return Redirect(Request.UrlReferrer.ToString());
             }
         }
@@ -83,7 +81,6 @@ namespace DeerManager.Controllers
             {
                  db.Entry(emp).State = EntityState.Modified;
                  db.SaveChanges();
-                //return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
                  return Redirect(Request.UrlReferrer.ToString());
             }
         }
@@ -95,7 +92,12 @@ namespace DeerManager.Controllers
             {
                 using (DBModel db = new DBModel())
                 {
-                    if(shp.Birthday == null)
+                    var check = db.maintable.FirstOrDefault(x => x.Id == shp.Id);
+                    if (check != null)
+                    {
+                        return View("errorPage");
+                    }
+                    if (shp.Birthday == null)
                     {
                         shp.Birthday = "אין תאריך";
                     }
@@ -105,6 +107,57 @@ namespace DeerManager.Controllers
                 }
             }
             return View("errorPage");
+        }
+
+        [HttpPost]
+        public ActionResult AddNewSheepPage(maintable shp)
+        {
+            if (ModelState.IsValid)
+            {
+                using (DBModel db = new DBModel())
+                {
+                    var check = db.maintable.FirstOrDefault(x => x.Id == shp.Id);
+                    if (check != null)
+                    {
+                        return View("errorPage");
+                    }
+                    if (shp.Birthday == null)
+                    {
+                        shp.Birthday = "אין תאריך";
+                    }
+                    db.maintable.Add(shp);
+                    db.SaveChanges();
+                    return View("ShowMyHome");
+                }
+            }
+            return View("errorPage");
+        }
+
+        //function check weither an id already exists in db.
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult isExists(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var check = db.maintable.FirstOrDefault(x => x.Id == id);
+                if (check == null)
+                {
+                    return Json(new { emailSent = "False" });
+                }
+                else
+                {
+                    return Json(new { emailSent = "True" });
+                }
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AddNewSheepPage()
+
+        {
+            return View(new maintable());
         }
 
         [HttpGet]
@@ -268,22 +321,6 @@ namespace DeerManager.Controllers
             return View(id);
         }
 
-        //[HttpPost]
-        //public ActionResult AddVaccineGroup(Vaccinations shps)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (shp == null) { return View("ShowMyHome"); }
-        //        using (DBModel db = new DBModel())
-        //        {
-        //            shp.isEnabled = 1; //enabling alerts
-        //            db.Vaccinations.Add(shp);
-        //            db.SaveChanges();
-        //            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
-        //        }
-        //    }
-        //    else { return View("errorPage"); }
-        //}
 
         [HttpGet]
         public ActionResult AddMedicine()
@@ -410,23 +447,6 @@ namespace DeerManager.Controllers
             }
         }
 
-        //this function check if the sheep vacced (means there are vac)
-        //public bool isVaced(int id)
-        //{
-        //    using (DBModel db = new DBModel())
-        //    {
-        //        var vacalert = db.Vaccinations.Where(x=>x.Id==id);
-        //        if (vacalert == null) 
-        //        { 
-        //            return false;
-        //        }
-        //        else {
-        //            return true;
-        //        }
-        //    }
-        //}
-
-
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult isVaced(int id)
@@ -445,8 +465,6 @@ namespace DeerManager.Controllers
                 }
             }
         }
-
-
 
         [HttpGet]
         [ValidateInput(false)]
@@ -470,7 +488,6 @@ namespace DeerManager.Controllers
                 }
             }
         }
-
 
         public bool getAlertBoolean()
         {
@@ -563,7 +580,6 @@ namespace DeerManager.Controllers
             }
         }
 
-
         [HttpGet]
         public ActionResult VacAlert()
         {
@@ -634,13 +650,6 @@ namespace DeerManager.Controllers
                 db.SaveChanges();
                 return null;
             }
-        }
-
-
-
-        public ActionResult MoveGroup()
-        {
-            return View();
         }
 
         public void updateDetails (UserViewModel shp)
@@ -753,7 +762,6 @@ namespace DeerManager.Controllers
                 return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
 
         [HttpGet]

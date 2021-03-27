@@ -1,6 +1,8 @@
 ﻿@model DeerManager.Models.maintable
+
 @{
-    Layout = null;
+    ViewBag.Title = "AddNewSheepPage";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 @using (Html.BeginForm("AddNewSheep", "Home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))

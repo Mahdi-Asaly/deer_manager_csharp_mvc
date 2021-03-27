@@ -243,11 +243,9 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\ShowMyHome.cshtml" />
     <Content Include="Views\Shared\_CustomerLayout.cshtml" />
-    <Content Include="Views\Home\ContactUs.cshtml" />
     <Content Include="Views\Home\AddNewSheep.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\AdvancedDetails.cshtml" />
-    <Content Include="Views\Home\MoveGroup.cshtml" />
     <Content Include="Views\Home\MoveGroupPage.cshtml" />
     <Content Include="Views\Home\errorPage.cshtml" />
     <Content Include="Views\Home\AddHamlata.cshtml" />
@@ -262,6 +260,7 @@
     <Content Include="Views\Home\AddVaccineGroup.cshtml" />
     <Content Include="Views\Home\Hamlatot.cshtml" />
     <Content Include="Views\Home\VacAlertByGroup.cshtml" />
+    <Content Include="Views\Home\AddNewSheepPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

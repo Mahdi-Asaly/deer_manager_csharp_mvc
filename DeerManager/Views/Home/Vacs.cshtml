@@ -121,7 +121,8 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
-                    <th>תאריך לידה</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
                 </tr>
             </thead>
@@ -133,7 +134,8 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
-                    <th>תאריך לידה</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
                 </tr>
             </tfoot>
@@ -237,7 +239,24 @@
                 { "data": "Blood" },
                 { "data": "Gender" },
                 { "data": "Group" },
-                { "data": "Birthday" },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="nextdate" value="אין תאריך" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="days" value="0" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
                 {
                     "data": "Id", "render": function (data) {
 

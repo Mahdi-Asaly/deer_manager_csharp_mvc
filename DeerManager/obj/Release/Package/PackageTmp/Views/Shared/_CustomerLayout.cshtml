@@ -1,6 +1,112 @@
-﻿
+﻿<!DOCTYPE html>
 <html>
 <head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial;
+            padding: 5px;
+            background: #f1f1f1;
+        }
+
+        /* Header/Blog Title */
+        .header {
+            padding: 30px;
+            text-align: center;
+            background: white;
+        }
+
+            .header h1 {
+                font-size: 50px;
+            }
+
+        /* Style the top navigation bar */
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
+
+            /* Style the topnav links */
+            .topnav a {
+                float: right;
+                display: block;
+                color: #f2f2f2;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+                /* Change color on hover */
+                .topnav a:hover {
+                    background-color: #ddd;
+                    color: black;
+                }
+
+        /* Create two unequal columns that floats next to each other */
+        /* Left column */
+        .leftcolumn {
+            float: left;
+            width: 75%;
+        }
+
+        /* Right column */
+        .rightcolumn {
+            float: left;
+            width: 25%;
+            background-color: #f1f1f1;
+            padding-left: 20px;
+        }
+
+        /* Fake image */
+        .fakeimg {
+            background-color: #aaa;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Add a card effect for articles */
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: #ddd;
+            margin-top: 20px;
+        }
+
+        /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other */
+        @@media screen and (max-width: 800px) {
+            .leftcolumn, .rightcolumn {
+                width: 100%;
+                padding: 0;
+            }
+        }
+
+        /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+        @@media screen and (max-width: 400px) {
+            .topnav a {
+                float: none;
+                width: 100%;
+            }
+        }
+    </style>
+
+
     <meta charset="utf-8">
     <title>מערכת ניהול חוות 2021</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,42 +136,22 @@
 </head>
 <body>
 
-    <!--HEADER ROW-->
-    <div id="header-row">
-        <div class="container">
-            <div class="row">
-                <!--LOGO-->
-                <div class="span3"><a class="brand" href="#"><img src="~/Content/img/logo.png" /></a></div>
-                <!-- /LOGO -->
-                <!-- MAIN NAVIGATION -->
-                <div class="span9">
-                    <div class="navbar  pull-right">
-                        <div class="navbar-inner">
-                            <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
-                            <div class="nav-collapse collapse navbar-responsive-collapse">
-                                <ul class="nav">
-                                    <li class="active"><a href="@Url.Action("ShowMyHome","Home")">דף ראשי</a></li>
-                                    <li><a href="@Url.Action("AddNewSheep","Home")">תיק חדש</a></li>
-                                    <li><a href="@Url.Action("MoveGroup","Home")">קבוצות</a></li>
-                                    <li><a href="@Url.Action("Vacs","Home")">חיסונים</a></li>
-                                    <li><a href="@Url.Action("Hamlatot","Home")">המלטות</a></li>
-                                    <li><a href="@Url.Action("EditSettings","Settings")">הגדרות</a></li>
-                                    <li><a href="@Url.Action("ContactUs","Home")">צור קשר</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- MAIN NAVIGATION -->
-            </div>
-        </div>
+    <div class="header">
+        <h1>דיר עסלי עבד אלחכים</h1>
+        <p>מערכת ניהול כבשים - מהדי עסלי 2021</p>
     </div>
-    <!-- /HEADER ROW -->
-    <!-- /.Row View -->
-    <!--Footer
-    ==========================-->
+
+    <div class="topnav">
+        <a href="@Url.Action("ShowMyHome","Home")">דף ראשי</a>
+        <a href="@Url.Action("AddNewSheepPage","Home")">תיק חדש</a>
+        <a href="@Url.Action("MoveGroupPage","Home")">קבוצות</a>
+        <a href="@Url.Action("Vacs","Home")">חיסונים</a>
+        <a href="@Url.Action("Hamlatot","Home")">המלטות</a>
+        <a href="@Url.Action("EditSettings","Settings")">הגדרות</a>
+    </div>
 
     @RenderBody()
+
     <footer>
         <div class="container">
             <div class="row">
@@ -85,51 +171,6 @@
             </div>
         </div>
     </footer>
-
     @RenderSection("scripts", required: false)
-
 </body>
 </html>
-
-<script>
-    //adding new sheep
-    function PopupForm(url) {
-        var formDiv = $('<div/>');
-        $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizable: true,
-                    title: 'נא למלות את הנתונים',
-                    height: 450,
-                    width: 600,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    }
-                });
-            });
-    }
-    function SubmitForm(form) {
-        $.validator.unobtrusive.parse(form);
-        if ($(form).valid()) {
-            $.ajax({
-                type: "POST",
-                url: form.action,
-                data: $(form).serialize(),
-                success: function (data) {
-                    if (data.success) {
-                        Popup.dialog('close');
-                        dataTable.ajax.reload();
-
-                        $.notify(data.message, {
-                            globalPosition: "top center",
-                            className: "success"
-                        })
-                    }
-                }
-            });
-        }
-        return false;
-    }
-</script>
