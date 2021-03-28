@@ -28,7 +28,6 @@
 </style>
 
 
-<h2 style="text-align:center; font-style:italic;">דף המלטות</h2>
 
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -67,8 +66,8 @@
                         <option value="6">6</option>
                         <option value="7">7</option>
                         <option value="8">8</option>
-                        <option value="8">9</option>
-                        <option value="8">10</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
                     </select>
                 </div>
                 <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
@@ -112,9 +111,12 @@
         </div>
         <div class="rightcolumn">
             <div class="card">
-                <h2>עדכונים</h2>
-                <div class="fakeimg" style="height:100px;">Image</div>
-                <p>כאן יהיה תאריכים קרובים עבור המלטות וחיסונים..</p>
+                <h3 style="text-align:center;">קבוצות היולדות בקרוב</h3>
+                <div id="updates" style="text-align:center;font-size:18px;direction: rtl;"></div>
+            </div>
+            <div class="card">
+                <h3 style="text-align:center;">קבוצות היולדות מאוחר יותר</h3>
+                <div id="laterupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
             </div>
         </div>
     </div>
@@ -125,6 +127,43 @@
 
 
 <script>
+
+    $(document).ready(function () {
+            $.ajax({
+            url: '@Url.Action("soonHamlata", "Home")',
+            dataType: "json",
+            type: "GET",
+                success: function (msg) {
+                    if (msg.flag == false || msg.result == "Null") {
+                        document.getElementById("updates").innerHTML = "אין קבוצה שאמורה ללדת בקרוב";
+                        document.getElementById("updates").style.color = "red";
+                    }
+                    else {
+                        document.getElementById("updates").innerHTML =
+                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max +" ימים " + " ונשאר "+msg.still +" ימים ";
+                        document.getElementById("updates").style.color = "green";
+                    }
+            }
+            });
+
+            $.ajax({
+            url: '@Url.Action("LaterHamlata", "Home")',
+            dataType: "json",
+            type: "GET",
+                success: function (msg) {
+                    if (msg.result == "Null") {
+                        document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה ללדת";
+                        document.getElementById("laterupdate").style.color = "red";
+                    }
+                    else {
+                        document.getElementById("laterupdate").innerHTML =
+                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max + " ימים ";
+                        document.getElementById("laterupdate").style.color = "green";
+                    }
+            }
+            });
+    });
+
         //
     // Updates "Select all" control in a data table
     //
@@ -174,7 +213,7 @@
                         $(checked).val("אין תאריך")
                         $(checked2).val("0")
                         $(checked2).attr('style', 'color:red;text-align:center;');
-                    } 
+                    }
                     else {
                         $(checked2).val(msg.Days)
                         $(checked2).attr('style', 'color:green;text-align:center;');

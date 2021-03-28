@@ -410,6 +410,70 @@ namespace DeerManager.Controllers
             return RedirectToAction("AdvancedDetails", new { id = shp.Id });
         }
 
+
+
+        [HttpGet]
+        public ActionResult soonHamlata()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var dates = db.Hamlatot.ToList();
+                var group = new Hamlatot();
+                var maximum = 0;
+                var flag = false;
+                var groupOfSheeps = 0;
+                if (dates.Count<1)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for(int i=0; i < dates.Count; i++)
+                {
+                    var shpdate= DateTime.Parse(dates[i].DateOfHamlata);
+                    if((curdate - shpdate).Days > maximum && (curdate - shpdate).Days <150 && (curdate-shpdate).Days >130)
+                    {
+                        maximum = (curdate - shpdate).Days;
+                        group.DateOfHamlata = dates[i].DateOfHamlata;
+                        groupOfSheeps = GetGroupById(dates[i].Id);
+                        flag = true;
+                    }
+                }
+                if (flag == false)
+                {
+                  return Json(new { flag=false }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { max = maximum, _date = group.DateOfHamlata.ToString(), shpsgroup= groupOfSheeps , still = 150-maximum }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public ActionResult LaterHamlata()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var dates = db.Hamlatot.ToList();
+                var group = new Hamlatot();
+                var maximum = 0;
+                var groupOfSheeps = 0;
+                if (dates.Count<1)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for (int i = 0; i < dates.Count; i++)
+                {
+                    var shpdate = DateTime.Parse(dates[i].DateOfHamlata);
+                    if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days < 130)
+                    {
+                        maximum = (curdate - shpdate).Days;
+                        group.DateOfHamlata = dates[i].DateOfHamlata;
+                        groupOfSheeps = GetGroupById(dates[i].Id);
+                    }
+                }
+                return Json(new { max = maximum, _date = group.DateOfHamlata.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         [HttpGet]
         public ActionResult RemoveHamlata(int id)
         {

@@ -78,17 +78,19 @@
         border-radius: 34px;
     }
 
-    .slider.round:before {
-      border-radius: 50%;
-    }
+        .slider.round:before {
+            border-radius: 50%;
+        }
 </style>
 
 
-<div style="text-align:right;">
+<div style="text-align:center;">
+    </br>
     <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddNewSheep","Home")')"><i class="fa fa-plus"></i>תיק חדש</a>
     <a class="btn btn-warning" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddMedicine","Home")')"><i class="fa fa-plus"></i>חיסון חדשה</a>
     <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveMedicine","Home")')"><i class="fa icon-remove"></i>מחיקת חיסון קיים</a>
     <a class="btn btn-success" style="margin-bottom:10px" onclick="location.href='@Url.Action("MoveGroupPage","Home")'"><i class="fa fa-home"></i> קבוצות </a>
+
 </div>
 <div style="text-align:right;">
     <label class="switch">
@@ -96,12 +98,10 @@
         <span class="slider round"></span>
     </label>
 </div>
-
-
 @*<div class="alert alert-warning alert-dismissible" style="text-align:right;">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-    <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a onclick="PopupForm('@Url.Action("VacAlert","Home")')" class="alert-link">כאן</a>.
-</div>*@
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>שם לב!</strong> מועד חיסון קרוב לפרטים לחץ <a onclick="PopupForm('@Url.Action("VacAlert","Home")')" class="alert-link">כאן</a>.
+    </div>*@
 
 <table id="SheepTables" class="display" style="text-align:center;">
     <thead>
@@ -112,7 +112,7 @@
             <th>מין</th>
             <th>קבוצה</th>
             <th>תאריך לידה</th>
-            <th>מידע נוסף</th>
+            <th>פעולות</th>
         </tr>
     </thead>
     <tfoot>
@@ -123,7 +123,7 @@
             <th>מין</th>
             <th>קבוצה</th>
             <th>תאריך לידה</th>
-            <th>מידע נוסף</th>
+            <th>פעולות</th>
         </tr>
     </tfoot>
 </table>
@@ -149,7 +149,7 @@
     @*For the add new sheep*@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-  
+
     <script>
         $(document).ready(function () {
 
