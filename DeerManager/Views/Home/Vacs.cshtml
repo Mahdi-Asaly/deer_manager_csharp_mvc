@@ -43,9 +43,14 @@
 </div>
 
 <div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
-    תאריך חיסון נמחק בהצלחה <div class="check"></div>
-    <div id="sheepsamount"></div>
+    <div class="check"></div>   תאריך חיסון נמחק בהצלחה עבור הרשומות שבחרת 
 </div>
+
+<div class='alert alert-error' style='display:none;font-style:italic; text-align:center;' id='erroralert'>
+    שגיאה בעת מחיקת תרופה
+    <div id="sheepid"></div>
+</div>
+
 <div style="text-align:center;">
     <div style="text-align:center;">
         <label for="test_redirect">קבוצה</label>
@@ -59,8 +64,8 @@
             <option value="6">6</option>
             <option value="7">7</option>
             <option value="8">8</option>
-            <option value="8">9</option>
-            <option value="8">10</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
         </select>
     </div>
     <div>
@@ -121,7 +126,9 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
+                    <th>תאריך חיסון</th>
                     <th>תאריך חיסון הבא</th>
+                    <th>תרופה</th>
                     <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
                 </tr>
@@ -134,7 +141,9 @@
                     <th>סוג הדם</th>
                     <th>מין</th>
                     <th>קבוצה</th>
+                    <th>תאריך חיסון</th>
                     <th>תאריך חיסון הבא</th>
+                    <th>תרופה</th>
                     <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
                 </tr>
@@ -191,8 +200,12 @@
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
             var checked = $('input[type="text"][name="status"]', rowhtml);
+            var checked2 = $('input[type="text"][name="vacdate"]', rowhtml);
+            var checked3 = $('input[type="text"][name="med"]', rowhtml);
+            var checked4 = $('input[type="text"][name="days"]', rowhtml);
+            var checked5 = $('input[type="text"][name="nxtdate"]', rowhtml);
             //var checked = $('div[id="tst"][class="check"]', rowhtml);
-            var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
+            var sendObj = { id: rowhtml.children[1].innerText } //creating json obj
             $.ajax({
             url: '@Url.Action("isVaced", "Home")',
             dataType: "json",
@@ -203,6 +216,68 @@
                         $(checked).val("מחוסן")
                         $(checked).attr('style', 'color:green;text-align:center;');
                     } else if (msg.emailSent == "False") {
+                    }
+            }
+            });
+            $.ajax({
+            url: '@Url.Action("getVacDate", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.emailSent == "Null") {
+                        $(checked2).val("אין תאריך")
+                        $(checked2).attr('style', 'color:red;text-align:center;');
+                    } else {
+                        $(checked2).val(msg.emailSent)
+                        $(checked2).attr('style', 'color:green;text-align:center;');
+                    }
+            }
+            });
+
+            $.ajax({
+            url: '@Url.Action("getMedById", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.emailSent == "Null") {
+                        $(checked3).val("אין תרופה")
+                        $(checked3).attr('style', 'color:red;text-align:center;');
+                    } else {
+                        $(checked3).val(msg.emailSent)
+                        $(checked3).attr('style', 'color:green;text-align:center;');
+                    }
+            }
+            });
+
+            $.ajax({
+            url: '@Url.Action("getTillDaysVac", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.emailSent == "Null") {
+                        $(checked4).val("0")
+                        $(checked4).attr('style', 'color:red;text-align:center;');
+                    } else {
+                        $(checked4).val(msg.emailSent)
+                        $(checked4).attr('style', 'color:green;text-align:center;');
+                    }
+            }
+            });
+            $.ajax({
+            url: '@Url.Action("getNextVacDate", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.emailSent == "Null") {
+                        $(checked5).val("אין תאריך")
+                        $(checked5).attr('style', 'color:red;text-align:center;');
+                    } else {
+                        $(checked5).val(msg.emailSent)
+                        $(checked5).attr('style', 'color:green;text-align:center;');
                     }
             }
             });
@@ -219,6 +294,15 @@
         var rows_selected = [];
         var urls = '@Url.Action("GetListByGroup", "Home")/' + id;
         var table = $('#sheeps').DataTable({
+
+            scrollY: "400px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            columnDefs: [
+                { width: '20%', targets: 0 }
+            ],
+            fixedColumns: true,
             'ajax': {
                 "url": urls,
                 "type": "GET",
@@ -242,7 +326,25 @@
                 {
                     "data": "Id", "render": function (data) {
 
-                        return '<input type="text" style="color:red; text-align:center;" name="nextdate" value="אין תאריך" readonly="readonly">';
+                        return '<input type="text" style="color:red; text-align:center;" name="vacdate" value="אין תאריך" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="nxtdate" value="אין תאריך" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="text" style="color:red; text-align:center;" name="med" value="אין תרופה" readonly="readonly">';
                     },
                     "orderable": false,
                     "searchable": false,
@@ -377,14 +479,19 @@
         window.scrollTo(0, 0);
         document.getElementById("med").innerHTML = " תרופה " + document.getElementById("Medicine").value + " התווסף לרשומות ";
         document.getElementById('bootstrap-alert').style.display = 'block';
-        setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 2700);
+        setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 8700);
     }
-    function deleteAlert(c) {
+    function deleteAlert() {
         window.scrollTo(0, 0);
         document.getElementById('deleteAlert').style.display = 'block';
-        sheepsamount
-        document.getElementById("sheepsamount").innerHTML = "סכ הכל "+ c+" כבשים נמחק להם חיסון";
-        setTimeout(function () { document.getElementById('deleteAlert').style.display = 'none' }, 2700);
+        setTimeout(function () { document.getElementById('deleteAlert').style.display = 'none' }, 8700);
+    }
+
+    function erroralert(c,med) {
+        window.scrollTo(0, 0);
+        document.getElementById('erroralert').style.display = 'block';
+        document.getElementById("sheepid").innerHTML = " כבשה בעלת זהות" + c + " לא נמצא עבורה תרופה " + med ;
+        setTimeout(function () { document.getElementById('erroralert').style.display = 'none' }, 10000);
     }
 
     function updateSheepVac(sheepid, group, med, curdate, nextdate) {
@@ -438,15 +545,30 @@
     }
     function removeVac(sheepid, med) {
         var sendObj = { id: sheepid, Medicine: med } //creating json obj
-        $.ajax({
-            url: '@Url.Action("RemoveVaccine", "Home")',
+        @*$.ajax({
+            url: '@Url.Action("RemoveVac", "Home")',
             dataType: "json",
             data: sendObj,
             type: "POST",
             success: function () {
 
             }
+        });*@
+        $.ajax({
+            url: '@Url.Action("RemoveVac", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.result == "ERROR") {
+                        //alert('כבשה בעלת זהות' + msg.id + ' לא נמחקה כי התרופה איננה קיימת לה ')
+                        erroralert(sheepid, med)
+                    }
+                    else { deleteAlert() }
+        }
         });
+
+
     }
     function RemoveVacs() {
         var c = 0; //to count how many sheeps were moved.
@@ -459,8 +581,8 @@
             //Check the state of the checkbox
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
-                c += 1;
                 removeVac(rowhtml.children[1].innerText, Med);
+                c += 1;
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
@@ -468,10 +590,11 @@
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
         } else {
-            deleteAlert(c)
             Display(document.getElementById("test_redirect").value)
         }
     }
+
+
     function PopupForm(url) {
         var formDiv = $('<div/>');
         $.get(url)
@@ -510,4 +633,5 @@
         }
         return false;
     }
+
 </script>

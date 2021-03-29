@@ -410,6 +410,22 @@ namespace DeerManager.Controllers
             return RedirectToAction("AdvancedDetails", new { id = shp.Id });
         }
 
+        [HttpPost]
+        public ActionResult RemoveVac(Vaccinations shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var SpecificVac = db.Vaccinations.Where(x => x.Id == shp.Id).Where(x => x.Medicine.Contains(shp.Medicine)).FirstOrDefault();
+                if (SpecificVac != null)
+                {
+                    db.Vaccinations.Remove(SpecificVac);
+                    db.SaveChanges();
+                    return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { result = "ERROR" , id = shp.Id }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         [HttpGet]
@@ -530,6 +546,84 @@ namespace DeerManager.Controllers
             }
         }
 
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult getVacDate(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
+                if (vacalert != null)
+                {
+                    return Json(new { emailSent = vacalert.DateOfVaccination });
+                }
+                else
+                {
+                    return Json(new { emailSent = "Null" });
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult getNextVacDate(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
+                if (vacalert != null)
+                {
+                    return Json(new { emailSent = vacalert.NextVaccinationDate });
+                }
+                else
+                {
+                    return Json(new { emailSent = "Null" });
+                }
+            }
+        }
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult getMedById(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
+                if (vacalert == null)
+                {
+                    return Json(new { emailSent = "Null" });
+                }
+                else
+                {
+                    return Json(new { emailSent = vacalert.Medicine });
+                }
+            }
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult getTillDaysVac(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
+                if (vacalert == null)
+                {
+                    return Json(new { emailSent = "Null" });
+                }
+                else
+                {
+                    var curdate = DateTime.Now;
+                    var shpvacdate = DateTime.Parse(vacalert.NextVaccinationDate);
+                    return Json(new { emailSent = (shpvacdate - curdate).Days.ToString() });
+                }
+            }
+        }
+        
         [HttpGet]
         [ValidateInput(false)]
         public ActionResult getHamlataDetails(int id)
