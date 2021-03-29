@@ -37,9 +37,10 @@ namespace DeerManager.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult errorPage(string err)
         {
-            return View(err);
+            return View((object)err);
         }
 
         public ActionResult ShowMyHome()
@@ -53,7 +54,10 @@ namespace DeerManager.Controllers
             using (DBModel db = new DBModel())
             {
                 maintable emp = db.maintable.Where(x => x.Id == id).FirstOrDefault<maintable>();
-                if (emp == null) { return View("errorPage","Home",new { error = "something" }); }
+                if (emp == null) {
+                    TempData["error"] = "כבשה לא קיימת";
+                    return View("errorPage"); 
+                }
                 db.maintable.Remove(emp);
                 db.SaveChanges();
                 return Redirect(Request.UrlReferrer.ToString());
@@ -79,9 +83,18 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                 db.Entry(emp).State = EntityState.Modified;
-                 db.SaveChanges();
-                 return Redirect(Request.UrlReferrer.ToString());
+                if (emp == null)
+                {
+                    TempData["error"] = "אתה מנסה למחוק משהו לא קיים";
+                    return View("errorPage");
+                }
+                else if (emp.Birthday == null || emp.Birthday == "")
+                {
+                    emp.Birthday = "אין תאריך";
+                }
+                db.Entry(emp).State = EntityState.Modified;
+                db.SaveChanges();
+                return Redirect(Request.UrlReferrer.ToString());
             }
         }
 
@@ -95,6 +108,7 @@ namespace DeerManager.Controllers
                     var check = db.maintable.FirstOrDefault(x => x.Id == shp.Id);
                     if (check != null)
                     {
+                        TempData["error"] = "כבשה כבר קיימת במערכת";
                         return View("errorPage");
                     }
                     if (shp.Birthday == null)
@@ -119,6 +133,7 @@ namespace DeerManager.Controllers
                     var check = db.maintable.FirstOrDefault(x => x.Id == shp.Id);
                     if (check != null)
                     {
+                        TempData["error"] = "כבשה כבר קיימת";
                         return View("errorPage");
                     }
                     if (shp.Birthday == null)
@@ -176,8 +191,12 @@ namespace DeerManager.Controllers
                 newHamlata.Id = id;
                 return View(newHamlata);
             }
-            else { return View("errorPage"); }
+            else {
+                TempData["error"] = "לא הצלחנו למצוא את רשומה עבור "+ id;
+                return View("errorPage");
+            }
         }
+
 
         [HttpPost]
         //this function receives sheep id and date and update hamlata
@@ -333,11 +352,15 @@ namespace DeerManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (med == null) { return View("errorPage"); }
+                if (med == null) {
+                    TempData["error"] = "לא נקלטה שם תרופה לחיסון";
+                    return View("errorPage"); 
+                }
                 using (DBModel db = new DBModel())
                 {
                     if(db.Medicine.Any(md => md.MedName == med.MedName))
                     {
+                        TempData["error"] = "תרופה כבר קיימת במערכת";
                         return View("errorPage");
                     }
                     db.Medicine.Add(med);
@@ -364,11 +387,15 @@ namespace DeerManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (med == null) { return View("errorPage"); }
+                if (med == null) {
+                    TempData["error"] = "לא נבחרה תרופה נכונה למחיקה";
+                    return View("errorPage"); 
+                }
                 using (DBModel db = new DBModel())
                 {
                     if (!db.Medicine.Any(md => md.MedName == med.MedName))
                     {
+                        TempData["error"] = "מנסה למחוק תרופה שלא מתאימה";
                         return View("errorPage");
                     }
                     var SpecificMed = db.Medicine.Where(x => x.MedName == med.MedName).FirstOrDefault();
@@ -427,7 +454,48 @@ namespace DeerManager.Controllers
         }
 
 
+        [HttpGet]
+        public ActionResult HistoryOfVacsById(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacs = db.Vaccinations.Where(x => x.Id == id).ToList();
+                if (vacs == null)
+                {
+                    return View();
+                }
+                return View(vacs.FirstOrDefault());
+            }
+        }
 
+        [HttpGet]
+        public ActionResult GetHistoryOfVacs(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacs = db.Vaccinations.Where(x => x.Id == id).ToList();
+                if (vacs == null)
+                {
+                    return View();
+                }
+                return Json(new { data = vacs }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        //[HttpGet]
+        //public ActionResult HistoryOfVacs(int id)
+        //{
+        //    using (DBModel db = new DBModel())
+        //    {
+        //        var vacs = db.Vaccinations.Where(x=>x.Id == id).ToList();
+        //        if(vacs== null)
+        //        {
+        //            return View();
+        //        }
+        //        return View(vacs);
+        //    }
+        //}
         [HttpGet]
         public ActionResult soonHamlata()
         {
@@ -775,7 +843,7 @@ namespace DeerManager.Controllers
                 //we should use the current date variable in order to check that.
                 foreach (var element in vac)
                 {
-                    if ((Enddate - element.NextDate).TotalDays <= 90)
+                    if ((Enddate - element.NextDate).TotalDays <= 75)
                     {
                         element.flag = true;
                         element.days = Math.Abs((Enddate - element.NextDate).Days);

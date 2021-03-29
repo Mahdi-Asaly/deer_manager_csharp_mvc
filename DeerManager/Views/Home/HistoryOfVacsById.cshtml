@@ -1,0 +1,95 @@
+﻿@model DeerManager.Models.Vaccinations
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+@* Normal *@
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+
+
+
+
+@*For the add new sheep*@
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<div>
+    <h4>חיסונים לשעבר</h4>
+    @{
+        if (Model == null)
+        {
+            <div>אין היסטוריה של חיסונים</div>
+        }
+        else
+        {
+            <table id="shp" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+                <thead>
+                    <tr>
+                        <th>תעודת זהות</th>
+                        <th>תאריך חיסון</th>
+                        <th>תרופה</th>
+                        <th>תאריך חיסון הבא</th>
+                        <th> פעולות </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>תעודת זהות</th>
+                        <th>תאריך חיסון</th>
+                        <th>תרופה</th>
+                        <th>תאריך חיסון הבא</th>
+                        <th> פעולות </th>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+    }
+</div>
+
+
+<script>
+    $(document).ready(function () {
+                var id = @Model.Id;
+                $("#shp").DataTable(
+                {
+                    "ajax": {
+                        "url": "@Url.Action("GetHistoryOfVacs", "Home")",
+                        "type": "GET",
+                         data: {id},
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "DateOfVaccination" },
+                        { "data": "Medicine" },
+                        { "data": "NextVaccinationDate" },
+                        {
+                            "data": "Id", "render": function (data) {
+                                return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-times'></i>מחק</a>";
+                            },
+                            "orderable": false,
+                            "searchable": false,
+                            "width": "90px"
+                        }
+                    ],
+                    "processing": true,
+                    "language": {
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
+                        "search": "חיפוש",
+                        "emptyTable": "הרשימה ריקה , נא להוסיף חיה חדשה בלחיצה על <b>הוספה חדשה</b>"
+                    }
+                });
+        });
+    function Delete(id) {
+        alert('deleting'+id+'...')
+    }
+</script>

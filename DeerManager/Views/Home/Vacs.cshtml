@@ -131,6 +131,7 @@
                     <th>תרופה</th>
                     <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
+                    <th>היסטוריה</th>
                 </tr>
             </thead>
             <tfoot>
@@ -146,6 +147,7 @@
                     <th>תרופה</th>
                     <th>ימים נשארים עד לחיסון הבא</th>
                     <th>סטטוס חיסון</th>
+                    <th>היסטוריה</th>
                 </tr>
             </tfoot>
         </table>
@@ -287,14 +289,13 @@
 
     function Display(id) {
         setCurrentDate()
-        checkSoonUpdate(id)
+        //checkSoonUpdate(id) //soon update
         var table = $('#sheeps').DataTable();
         table.destroy();
         // Array holding selected row IDs
         var rows_selected = [];
         var urls = '@Url.Action("GetListByGroup", "Home")/' + id;
         var table = $('#sheeps').DataTable({
-
             scrollY: "400px",
             scrollX: true,
             scrollCollapse: true,
@@ -367,6 +368,14 @@
                     "orderable": false,
                     "searchable": false,
                     "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+                       return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=PopupFormDetails('@Url.Action("HistoryOfVacsById", "Home")/" + data + "')><i class='fa fa-history'></i>צפה</a>";
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "90px"
                 }
             ],
             "processing": true,
@@ -593,7 +602,23 @@
             Display(document.getElementById("test_redirect").value)
         }
     }
-
+    function PopupFormDetails(url) {
+        var formDiv = $('<div/>');
+        $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: true,
+                    title: 'היסטורית חיסונים',
+                    height: 650,
+                    width: 850,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+    }
 
     function PopupForm(url) {
         var formDiv = $('<div/>');

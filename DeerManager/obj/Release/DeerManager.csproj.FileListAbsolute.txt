@@ -78,8 +78,8 @@ C:\Users\USER\source\repos\DeerManager\DeerManager\bin\System.Web.WebPages.Razor
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Newtonsoft.Json.xml
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Antlr3.Runtime.pdb
 C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.csprojAssemblyReference.cache
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.csproj.CoreCompileInputs.cache
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.csproj.CopyComplete
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.pdb
+C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Release\DeerManager.csprojAssemblyReference.cache
