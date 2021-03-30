@@ -453,7 +453,29 @@ namespace DeerManager.Controllers
             return Json(new { result = "ERROR" , id = shp.Id }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult RemoveVacInHistory(int Id, String Medicine)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var med = Medicine.Replace(" ", "");
 
+                var SpecificVa2c = db.Vaccinations.Where(x => x.Medicine.Contains(med)).FirstOrDefault() ;
+                if (SpecificVa2c == null)
+                {
+                    return null;
+                }
+
+                var SpecificVac = db.Vaccinations.Where(x => x.Id == Id).FirstOrDefault();
+                if (SpecificVac != null)
+                {
+                    db.Vaccinations.Remove(SpecificVac);
+                    db.SaveChanges();
+                    return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { result = "ERROR", id = Id }, JsonRequestBehavior.AllowGet);
+        }
         [HttpGet]
         public ActionResult HistoryOfVacsById(int id)
         {

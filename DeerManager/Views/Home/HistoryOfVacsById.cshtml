@@ -73,8 +73,11 @@
                         { "data": "Medicine" },
                         { "data": "NextVaccinationDate" },
                         {
-                            "data": "Id", "render": function (data) {
-                                return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-times'></i>מחק</a>";
+
+                            "data": "Medicine",
+                            "render": function (data, type, row) {
+                                return "<a class='btn btn-danger btn-sm' style='margin-left:5px' onclick='Delete(\" " + data +" \")'><i class='fa fa-trash'></i>מחק</a>";
+
                             },
                             "orderable": false,
                             "searchable": false,
@@ -89,7 +92,27 @@
                     }
                 });
         });
-    function Delete(id) {
-        alert('deleting'+id+'...')
+    function Delete(med) {
+        var shpid = @Model.Id;
+        var sendObj = {Id: shpid, Medicine: med}
+        $.ajax({
+            url: '@Url.Action("RemoveVacInHistory", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.result == "ERROR") {
+                        //alert('כבשה בעלת זהות' + msg.id + ' לא נמחקה כי התרופה איננה קיימת לה ')
+                        //erroralert(sheepid, med)
+                        alert('error while removing')
+                    }
+                    else {
+                        //deleteAlert()
+                        alert('removed!')
+                        $("#shp").DataTable().ajax.reload();
+                    }
+        }
+        });
+
     }
 </script>
