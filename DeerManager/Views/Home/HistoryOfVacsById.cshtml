@@ -13,30 +13,36 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='delAlert'>
+    <div class="check"></div>    חיסון נמחק בהצלחה עבור הרשומה שבחרת
+</div>
+<div class='alert alert-error' style='display:none;font-style:italic; text-align:center;' id='erralert'>
+    שגיאה בעת מחיקת תרופה
+    <div id="detailsshp"></div>
+</div>
 <div>
     <h4>היסטורית חיסונים</h4>
     @{
-
-            <table id="shp" class="display select" cellspacing="0" width="100%" style="text-align:center;">
-                <thead>
-                    <tr>
-                        <th>תעודת זהות</th>
-                        <th>תאריך חיסון</th>
-                        <th>תרופה</th>
-                        <th>תאריך חיסון הבא</th>
-                        <th> פעולות </th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>תעודת זהות</th>
-                        <th>תאריך חיסון</th>
-                        <th>תרופה</th>
-                        <th>תאריך חיסון הבא</th>
-                        <th> פעולות </th>
-                    </tr>
-                </tfoot>
-            </table>
+        <table id="shp" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+            <thead>
+                <tr>
+                    <th>תעודת זהות</th>
+                    <th>תאריך חיסון</th>
+                    <th>חיסון</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th> פעולות </th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>תעודת זהות</th>
+                    <th>תאריך חיסון</th>
+                    <th>תרופה</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th> פעולות </th>
+                </tr>
+            </tfoot>
+        </table>
     }
 </div>
 <script>
@@ -76,7 +82,18 @@
                         "emptyTable": "</b>אין היסטורית חיסונים עבור חיה זאתהוספה חדשה<b>"
                     }
                 });
-        });
+    });
+    function erroralert(c, med) {
+        //window.scrollTo(0, 0);
+        document.getElementById('erralert').style.display = 'block';
+        document.getElementById("detailsshp").innerHTML = " כבשה בעלת זהות" + c + " לא נמצא עבורה תרופה " + med;
+        setTimeout(function () { document.getElementById('erralert').style.display = 'none' }, 10000);
+    }
+    function deleteAlert() {
+        //window.scrollTo(0, 0);
+        document.getElementById('delAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('delAlert').style.display = 'none' }, 8700);
+    }
     function Delete(med) {
         var id=@Model;
         var sendObj = { Id: id, Medicine: med }
@@ -87,12 +104,10 @@
             type: "POST",
                 success: function (msg) {
                     if (msg.result == "ERROR") {
-                        //alert('כבשה בעלת זהות' + msg.id + ' לא נמחקה כי התרופה איננה קיימת לה ')
-                        //erroralert(sheepid, med)
-                        alert('error while removing')
+                        erroralert(id, med)
                     }
                     else {
-                        alert('נמחק!')
+                        deleteAlert()
                     }
         }
         });

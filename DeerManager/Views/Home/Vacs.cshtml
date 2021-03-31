@@ -115,44 +115,60 @@
 
 @using (Html.BeginForm())
 {
-    <body>
-
-        <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
-            <thead>
-                <tr>
-                    <th><input name="select_all" value="1" type="checkbox"></th>
-                    <th>תעודת זהות</th>
-                    <th>מספר הכבש</th>
-                    <th>סוג הדם</th>
-                    <th>מין</th>
-                    <th>קבוצה</th>
-                    <th>תאריך חיסון</th>
-                    <th>תאריך חיסון הבא</th>
-                    <th>תרופה</th>
-                    <th>ימים נשארים עד לחיסון הבא</th>
-                    <th>סטטוס חיסון</th>
-                    <th>היסטוריה</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th>תעודת זהות</th>
-                    <th>מספר הכבש</th>
-                    <th>סוג הדם</th>
-                    <th>מין</th>
-                    <th>קבוצה</th>
-                    <th>תאריך חיסון</th>
-                    <th>תאריך חיסון הבא</th>
-                    <th>תרופה</th>
-                    <th>ימים נשארים עד לחיסון הבא</th>
-                    <th>סטטוס חיסון</th>
-                    <th>היסטוריה</th>
-                </tr>
-            </tfoot>
-        </table>
-    </body>
+<body>
+    <div class="row">
+        <div class="leftcolumn">
+            <div class="card">
+                <table id="sheeps" class="display select" cellspacing="0" width="150%" style="text-align:center;">
+                    <thead>
+                        <tr>
+                            <th><input name="select_all" value="1" type="checkbox"></th>
+                            <th>תעודת זהות</th>
+                            <th>מספר הכבש</th>
+                            <th>סוג הדם</th>
+                            <th>מין</th>
+                            <th>קבוצה</th>
+                            <th>תאריך חיסון</th>
+                            <th>תאריך חיסון הבא</th>
+                            <th>תרופה</th>
+                            <th>ימים נשארים עד לחיסון הבא</th>
+                            <th>סטטוס חיסון</th>
+                            <th>היסטוריה</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>תעודת זהות</th>
+                            <th>מספר הכבש</th>
+                            <th>סוג הדם</th>
+                            <th>מין</th>
+                            <th>קבוצה</th>
+                            <th>תאריך חיסון</th>
+                            <th>תאריך חיסון הבא</th>
+                            <th>תרופה</th>
+                            <th>ימים נשארים עד לחיסון הבא</th>
+                            <th>סטטוס חיסון</th>
+                            <th>היסטוריה</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="rightcolumn">
+            <div class="card">
+                <h3 style="text-align:center;"> חיסונים קרובים </h3>
+                <div id="updates" style="text-align:center;font-size:18px;direction: rtl;"></div>
+            </div>
+            <div class="card">
+                <h3 style="text-align:center;"> חיססונים רחוקים </h3>
+                <div id="laterupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
+            </div>
+        </div>
+    </div>
+</body>
 }
+
 <script>
         //
     // Updates "Select all" control in a data table
@@ -486,7 +502,7 @@
     });
     function showAlerts() {
         window.scrollTo(0, 0);
-        document.getElementById("med").innerHTML = " תרופה " + document.getElementById("Medicine").value + " התווסף לרשומות ";
+        document.getElementById("med").innerHTML = " חיסון " + document.getElementById("Medicine").value + " התווסף לרשומות ";
         document.getElementById('bootstrap-alert').style.display = 'block';
         setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 8700);
     }
@@ -554,15 +570,6 @@
     }
     function removeVac(sheepid, med) {
         var sendObj = { id: sheepid, Medicine: med } //creating json obj
-        @*$.ajax({
-            url: '@Url.Action("RemoveVac", "Home")',
-            dataType: "json",
-            data: sendObj,
-            type: "POST",
-            success: function () {
-
-            }
-        });*@
         $.ajax({
             url: '@Url.Action("RemoveVac", "Home")',
             dataType: "json",
