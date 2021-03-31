@@ -471,23 +471,17 @@ namespace DeerManager.Controllers
                 {
                     db.Vaccinations.Remove(SpecificVac);
                     db.SaveChanges();
-                    return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = "OK", id= Id }, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(new { result = "ERROR", id = Id }, JsonRequestBehavior.AllowGet);
         }
+
+
         [HttpGet]
         public ActionResult HistoryOfVacsById(int id)
         {
-            using (DBModel db = new DBModel())
-            {
-                var vacs = db.Vaccinations.Where(x => x.Id == id).ToList();
-                if (vacs == null)
-                {
-                    return View();
-                }
-                return View(vacs.FirstOrDefault());
-            }
+            return View(id);
         }
 
         [HttpGet]
