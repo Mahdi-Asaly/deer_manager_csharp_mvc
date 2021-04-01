@@ -11,22 +11,22 @@
 <div style="text-align:center" ;>
     <div class="form-group">
         <label for="Id">תעודת זהות</label>
-        @Html.TextBoxFor(model => model.Id, new { disabled = "disabled" })
+        @Html.TextBoxFor(model => model.Id, new { disabled = "disabled" ,required="required"})
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
         <label for="DateOfVaccination">תאריך שבו לקח את החיסון</label>
-        <input type="date" id="DateOfVaccination" name="DateOfVaccination">
+        <input type="date" id="DateOfVaccination" name="DateOfVaccination" required>
     </div>
 
     <div class="form-group" style="direction: rtl; text-align:center;">
         <label for="Medicine">בחר תרופה</label>
-        <select name="Medicine" id="Medicine">
+        <select name="Medicine" id="Medicine" required>
         </select>
     </div>
 
     <div class="form-group" style="direction: rtl; text-align:center;">
         <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
-        <input type="date" id="NextVaccinationDate" name="NextVaccinationDate">
+        <input type="date" id="NextVaccinationDate" name="NextVaccinationDate" required>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
@@ -43,7 +43,7 @@
             url: "@Url.Action("GetMedsJson", "Home")",
             data: "{}",
             success: function (data) {
-                var s = '<option value="0">בחר תרופה</option>';
+                var s ;
                 for (var i = 0; i < data.length; i++) {
                     s += '<option value="' + data[i].Text + '">' + data[i].Text + '</option>';  
                 }

@@ -9,11 +9,11 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group" style="direction: rtl; text-align:center;">
         <div>מספר זהות</div>
-        <input type="number" id="Id" name="Id" min="999" max="9999999" pattern="[0-9]+" placeholder="תכתוב כאן תעודת זהות" /><br><br>
+        <input type="number" id="Id" name="Id" min="999" max="9999999" pattern="[0-9]+" placeholder="תכתוב כאן תעודת זהות" required/><br><br>
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
         <div>מספר כבש</div>
-        <input type="number" id="SheepNum" name="SheepNum" min="1" max="999" pattern="[0-9]+" placeholder="תכתוב מספר הכבש" /><br><br>
+        <input type="number" id="SheepNum" name="SheepNum" min="1" max="999" pattern="[0-9]+" placeholder="תכתוב מספר הכבש" required/><br><br>
         @Html.ValidationMessageFor(m => m.SheepNum)
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
@@ -28,8 +28,8 @@
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
         <div>מין</div>
-        <input type="radio" name="Gender" value="זכר" /> זכר
-        <input type="radio" name="Gender" value="נקבה" /> נקבה
+        <input type="radio" name="Gender" value="זכר" required/> זכר
+        <input type="radio" name="Gender" value="נקבה"required /> נקבה
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
         <div>קבוצה</div>

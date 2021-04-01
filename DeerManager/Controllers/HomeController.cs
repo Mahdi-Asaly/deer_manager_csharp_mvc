@@ -3,13 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using DeerManager.DB_AccessLayer;
-using Newtonsoft.Json;
 using System.Data.Entity;
 using DeerManager.ViewModels;
-using System.Data.Entity.Validation;
 using System.Globalization;
 using DeerManager.Classes;
 
@@ -21,7 +17,6 @@ namespace DeerManager.Controllers
         DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
         public ActionResult AdvancedDetails(int id)
         {
-
             //here you should import the informations from tables:
             using (DBModel db = new DBModel())
             {
@@ -458,14 +453,11 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                var med = Medicine.Replace(" ", "");
-
-                var SpecificVa2c = db.Vaccinations.Where(x => x.Medicine.Contains(med)).FirstOrDefault() ;
-                if (SpecificVa2c == null)
+                var med2 = db.Vaccinations.Where(x => x.Medicine.Replace(" ", "") == Medicine.Replace(" ",""));
+                if (med2 == null)
                 {
                     return null;
                 }
-
                 var SpecificVac = db.Vaccinations.Where(x => x.Id == Id).FirstOrDefault();
                 if (SpecificVac != null)
                 {
@@ -498,20 +490,6 @@ namespace DeerManager.Controllers
             }
         }
 
-
-        //[HttpGet]
-        //public ActionResult HistoryOfVacs(int id)
-        //{
-        //    using (DBModel db = new DBModel())
-        //    {
-        //        var vacs = db.Vaccinations.Where(x=>x.Id == id).ToList();
-        //        if(vacs== null)
-        //        {
-        //            return View();
-        //        }
-        //        return View(vacs);
-        //    }
-        //}
         [HttpGet]
         public ActionResult soonHamlata()
         {
