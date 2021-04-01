@@ -573,6 +573,96 @@ namespace DeerManager.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult soonVac()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var dates = db.Vaccinations.ToList();
+                var group = new Vaccinations();
+                var maximum = 0;
+                var flag = false;
+                var groupOfSheeps = 0;
+                var medicine = "";
+                if (dates.Count < 1 || dates == null)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for (int i = 0; i < dates.Count; i++)
+                {
+                    var shpdate = DateTime.Parse(dates[i].NextVaccinationDate);
+                    if (dates[i].Medicine.Contains("אוקסי"))
+                    {
+                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 110 && (shpdate - curdate).Days >= 70)
+                        {
+                            maximum = (shpdate - curdate).Days;
+                            group.DateOfVaccination = dates[i].DateOfVaccination;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                        }
+                    }
+                    else if (dates[i].Medicine.Contains("סימום מעיים"))
+                    {
+                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 120 && (shpdate - curdate).Days >= 110)
+                        {
+                            maximum = (shpdate - curdate).Days;
+                            group.DateOfVaccination = dates[i].DateOfVaccination;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                        }
+                    }
+                    else
+                    {
+                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 90 && (shpdate - curdate).Days >= 70)
+                        {
+                            maximum = (shpdate - curdate).Days;
+                            group.DateOfVaccination = dates[i].DateOfVaccination;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                        }
+                    }
+                }
+                if (flag == false)
+                {
+                    return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { max = maximum, _date = group.DateOfVaccination.ToString(), shpsgroup = groupOfSheeps , med =medicine}, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public ActionResult LaterVac()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var datesVac = db.Vaccinations.ToList();
+                var group = new Vaccinations();
+                var maximum = 0;
+                var groupOfSheeps = 0;
+                var med = "";
+                if (datesVac.Count < 1 || datesVac == null)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for (int i = 0; i < datesVac.Count; i++)
+                {
+                    var shpdate = DateTime.Parse(datesVac[i].NextVaccinationDate);
+                    if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days < 70)
+                    {
+                        maximum = (shpdate - curdate).Days;
+                        group.DateOfVaccination = datesVac[i].DateOfVaccination;
+                        groupOfSheeps = GetGroupById(datesVac[i].Id);
+                        med = datesVac[i].Medicine;
+                    }
+                }
+                return Json(new { max = maximum, _date = group.DateOfVaccination.ToString(), shpsgroup = groupOfSheeps, medicine= med }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpGet]
         public ActionResult RemoveHamlata(int id)

@@ -20,7 +20,7 @@ namespace DeerManager.Models
 
         [Key]
         [Column(Order = 2)]
-        [StringLength(10)]
+        [StringLength(50)]
         public string Medicine { get; set; }
 
         [StringLength(10)]

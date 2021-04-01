@@ -10,7 +10,7 @@
     public partial class Medicine
     {
         [Key]
-        [StringLength(10)]
+        [StringLength(50)]
         [Required(ErrorMessage ="שם תרופה חובה",AllowEmptyStrings =false)]
         public string MedName { get; set; }
 

@@ -64,7 +64,6 @@
                         { "data": "Medicine" },
                         { "data": "NextVaccinationDate" },
                         {
-
                             "data": "Medicine",
                             "render": function (data, type, row) {
                                 return "<a class='btn btn-danger btn-sm' id='del' style='margin-left:5px' onclick='Delete(\" " + data +" \")'><i class='fa fa-trash'></i>מחק</a>";
@@ -94,8 +93,9 @@
         document.getElementById('delAlert').style.display = 'block';
         setTimeout(function () { document.getElementById('delAlert').style.display = 'none' }, 8700);
     }
+
     function Delete(med) {
-        var id=@Model;
+        var id =@Model;
         var sendObj = { Id: id, Medicine: med }
         $.ajax({
             url: '@Url.Action("RemoveVacInHistory", "Home")',
