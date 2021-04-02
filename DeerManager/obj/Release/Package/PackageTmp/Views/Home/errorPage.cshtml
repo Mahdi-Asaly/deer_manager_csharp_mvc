@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "errorPage";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<style>
+    body{
+        background-color:blanchedalmond;
+    }
+</style>
+<body>
+    <h1 style="text-align:center; color:red;">שגיאה</h1>
+
+    <h3 style="text-align:center;color:black">פירוט מדויק</h3><h4 style="text-align:center;direction:rtl;color:red">@TempData["error"]</h4>
+
+    <div style="text-align:center;color:black; font-size:18px;">
+        <div style="font:bold">סיבות אחרות</div>
+        <div style="color:Red;font-size:14px;text-align:center;direction:rtl;">
+            <br />
+            לא הכנסת נתונים נכונים
+            <br />
+            הלינק שאתה מנסה לגשת אליו נכון
+            <br />
+            אתה מנסה להכניס פרטים שכבר קיימים או אינם תואמים את מה שנדרש
+            <br />
+            אם עדיין יש תקלה נא לפנות דרך המייל
+            <br />
+            mahdiasaly@gmail.com
+        </div>
+    </div>
+</body>

@@ -1,0 +1,43 @@
+﻿@model DeerManager.Models.Medicine
+
+
+
+@*For the add new sheep*@
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    <h2 style="text-align:center;font-style:italic;">הוספת חיסון חדש</h2>
+    @Html.AntiForgeryToken()
+<div style="text-align:center" ;>
+    <div class="form-group">
+        <label for="MedName">שם תרופה</label>
+        @Html.TextBoxFor(model => model.MedName,new { @class = "form-group", placeholder = "שם תרופה", required = "required"})
+    </div>
+
+    <div class="form-group" style="direction: rtl; text-align:center;">
+        <label for="Info">למה התרופה מיועדת</label>
+        @Html.TextBoxFor(model => model.Info)
+    </div>
+
+    <div class="form-group" style="direction: rtl; display:inline-block; text-align:center;">
+        <div>סוג תרופה</div>
+        @Html.RadioButtonFor(model => model.isGovermental, 1,new { @class = "form-group", required = "required" }) @Html.Label("ממשלתי")
+        @Html.RadioButtonFor(model => model.isGovermental, 0) @Html.Label("רגיל")
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="הוסף" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+}
+
+<script>
+    function close(form) {
+        Popup.dialog('close');
+    }
+</script>
+

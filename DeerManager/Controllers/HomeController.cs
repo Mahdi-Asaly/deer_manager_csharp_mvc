@@ -193,6 +193,26 @@ namespace DeerManager.Controllers
         }
 
 
+        public bool AddAutoVac(int shpid, DateTime date , int days, string medicine)
+        {
+            using (DBModel db = new DBModel())
+            {
+                /////////////////////////////////////
+                var NextVac = new Vaccinations();
+                var NextVacDateSimom = new DateTime(); //סימום מעיים
+                NextVacDateSimom = date.AddDays(days);
+                NextVac.NextVaccinationDate = NextVacDateSimom.ToString();
+                NextVac.Medicine = medicine;
+                NextVac.Id = shpid;
+                NextVac.isEnabled = 0;
+                /////////////////////////////////////
+                ///
+                db.Vaccinations.Add(NextVac);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
         [HttpPost]
         //this function receives sheep id and date and update hamlata
         public bool AddSpecificHamlata(int shpid, DateTime date)
@@ -204,6 +224,17 @@ namespace DeerManager.Controllers
                     using (DBModel db = new DBModel())
                     {
                         var hamlata = new Hamlatot();
+                        var res = true;
+                        /////////////////////////////////////
+                        res=AddAutoVac(shpid, date, 120, "סימום מעיים");
+                        if (res == false) { return false; }
+                        res=AddAutoVac(shpid, date, 70, "אוקסי");
+                        if (res == false) { return false; }
+                        res =AddAutoVac(shpid, date, 90, "אוקסי");
+                        if (res == false) { return false; }
+                        res =AddAutoVac(shpid, date, 110, "אוקסי");
+                        if (res == false) { return false; }
+                        /////////////////////////////////////
                         //we check if there are column in database with already date with same sheep id.
                         var checkAlready = db.Hamlatot.FirstOrDefault(x => x.Id == shpid);
                         //we remove the old date if exists.
@@ -240,7 +271,7 @@ namespace DeerManager.Controllers
 
 
         //this function receives sheep id and date and update hamlata
-        public bool AddSpecificVac(int shpid, int group, string med, string curdate ,string nextdate)
+        public bool AddSpecificVac(int shpid, int group, string med ,string nextdate)
         {
             try
             {
@@ -250,7 +281,7 @@ namespace DeerManager.Controllers
                     {
                         var vac = new Vaccinations();
                         //we check if there are column in database with already date with same sheep id.
-                        var checkAlready = db.Vaccinations.FirstOrDefault(x => x.Id == shpid && x.DateOfVaccination == curdate && x.Medicine==med);
+                        var checkAlready = db.Vaccinations.FirstOrDefault(x => x.Id == shpid && x.Medicine==med);
                         //we remove the old date if exists.
                         if (checkAlready != null)
                         {
@@ -258,7 +289,6 @@ namespace DeerManager.Controllers
                         }
                         vac.Id = shpid;
                         vac.Medicine = med; 
-                        vac.DateOfVaccination = curdate;
                         vac.NextVaccinationDate = nextdate;
                         db.Vaccinations.Add(vac);
                         db.SaveChanges();
@@ -558,6 +588,7 @@ namespace DeerManager.Controllers
             using (DBModel db = new DBModel())
             {
                 var dates = db.Vaccinations.ToList();
+
                 var group = new Vaccinations();
                 var maximum = 0;
                 var flag = false;
@@ -575,18 +606,17 @@ namespace DeerManager.Controllers
                         if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 110 && (shpdate - curdate).Days >= 70)
                         {
                             maximum = (shpdate - curdate).Days;
-                            group.DateOfVaccination = dates[i].DateOfVaccination;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
                         }
                     }
-                    else if (dates[i].Medicine.Contains("סימום מעיים"))
+                    else if (dates[i].Medicine.Replace(" ","").Contains("סימוםמעיים"))
                     {
                         if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 120 && (shpdate - curdate).Days >= 110)
                         {
                             maximum = (shpdate - curdate).Days;
-                            group.DateOfVaccination = dates[i].DateOfVaccination;
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
@@ -597,7 +627,7 @@ namespace DeerManager.Controllers
                         if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 90 && (shpdate - curdate).Days >= 70)
                         {
                             maximum = (shpdate - curdate).Days;
-                            group.DateOfVaccination = dates[i].DateOfVaccination;
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
@@ -608,7 +638,7 @@ namespace DeerManager.Controllers
                 {
                     return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { max = maximum, _date = group.DateOfVaccination.ToString(), shpsgroup = groupOfSheeps , med =medicine}, JsonRequestBehavior.AllowGet);
+                return Json(new { max = maximum, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps , med =medicine}, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpGet]
@@ -632,12 +662,12 @@ namespace DeerManager.Controllers
                     if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days < 70)
                     {
                         maximum = (shpdate - curdate).Days;
-                        group.DateOfVaccination = datesVac[i].DateOfVaccination;
+                        group.NextVaccinationDate = datesVac[i].NextVaccinationDate;
                         groupOfSheeps = GetGroupById(datesVac[i].Id);
                         med = datesVac[i].Medicine;
                     }
                 }
-                return Json(new { max = maximum, _date = group.DateOfVaccination.ToString(), shpsgroup = groupOfSheeps, medicine= med }, JsonRequestBehavior.AllowGet);
+                return Json(new { max = maximum, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps, medicine= med }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -699,24 +729,6 @@ namespace DeerManager.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult getVacDate(int id)
-        {
-
-            using (DBModel db = new DBModel())
-            {
-                var vacalert = db.Vaccinations.FirstOrDefault(x => x.Id == id);
-                if (vacalert != null)
-                {
-                    return Json(new { emailSent = vacalert.DateOfVaccination });
-                }
-                else
-                {
-                    return Json(new { emailSent = "Null" });
-                }
-            }
-        }
 
         [HttpPost]
         [ValidateInput(false)]

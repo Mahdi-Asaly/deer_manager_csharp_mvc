@@ -46,7 +46,7 @@
 </div>
 
 <div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
-    תאריך המלטה נמחק בהצלחה
+    תאריך הזרעה נמחק בהצלחה
 </div>
 
 @using (Html.BeginForm())
@@ -79,8 +79,8 @@
                             <th>סוג הדם</th>
                             <th>מין</th>
                             <th>קבוצה</th>
-                            <th>תאריך המלטה אחרון</th>
-                            <th> ימי המלטה</th>
+                            <th>תאריך הזרעה אחרון</th>
+                            <th> ימי הזרעה</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -91,20 +91,20 @@
                             <th>סוג הדם</th>
                             <th>מין</th>
                             <th>קבוצה</th>
-                            <th>תאריך המלטה אחרון</th>
-                            <th> ימי המלטה</th>
+                            <th>תאריך הזרעה אחרון</th>
+                            <th> ימי הזרעה</th>
                         </tr>
                     </tfoot>
                 </table>
                 <div style="text-align:center;">
                     <div style="text-align:center" ;>
                         <div class="form-group" style="direction: rtl;">
-                            <h4> תאריך המלטה:</h4>
+                            <h4> תאריך הזרעה:</h4>
                             <input type="date" id="DateOfHamlata" name="DateOfHamlata">
                         </div>
                     </div>
-                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף המלטה לקבוצה </a>
-                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק המלטה </a>
+                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף הזרעה לקבוצה </a>
+                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק הזרעה </a>
                 </div>
 
             </div>
@@ -138,7 +138,7 @@
                     }
                     else {
                         document.getElementById("updates").innerHTML =
-                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max +" ימים " + " ונשאר "+msg.still +" ימים ";
+                            " בתאריך " + msg._date + " היה הזרעה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max +" ימים " + " ונשאר "+msg.still +" ימים ";
                         document.getElementById("updates").style.color = "green";
                     }
             }
@@ -155,7 +155,7 @@
                     }
                     else {
                         document.getElementById("laterupdate").innerHTML =
-                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max + " ימים ";
+                            " בתאריך " + msg._date + " היה הזרעה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max + " ימים ";
                         document.getElementById("laterupdate").style.color = "green";
                     }
             }

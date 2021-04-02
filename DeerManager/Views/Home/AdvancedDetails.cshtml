@@ -20,9 +20,7 @@
 <div style="text-align:center" ;>
     <div class="editor-field">
         <div>תעודה מזהה</div>
-
-        @Html.TextBoxFor(model => model.maintblSheeps.Id, new { disabled = "disabled" })
-
+        @Html.TextBoxFor(model => model.maintblSheeps.Id, new { @readonly = "readonly" })
     </div>
     <div class="form-group">
         <h4>מספר הכבש</h4>
@@ -43,7 +41,6 @@
 
             <div class="form-group" style="direction: rtl;">
                 <div>קבוצה</div>
-
                 @Html.EditorFor(model => model.maintblSheeps.Group, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
@@ -77,15 +74,14 @@
     <div class="form-group">
         <div style="text-align:center" ;>
             <div>מידע כללי</div>
-            @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
-
+            @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;dir=rtl;" })
         </div>
     </div>
 
     <div class="form-group">
         <div style="text-align:center" ;>
             <div>מחלות רקע</div>
-            @Html.TextAreaFor(m => m.shpDiseases.ShpDisease, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;" })
+            @Html.TextAreaFor(m => m.shpDiseases.ShpDisease, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;dir=rtl;" })
         </div>
     </div>
 
@@ -99,8 +95,7 @@
                 <br />
                 @for (var i = 0; i < Model.shpVac.Count; i++)
                 {
-                    @Html.TextBoxFor(m => Model.shpVac[i].Medicine, new
-                     { disabled = "disabled", @readonly = "readonly" })
+                    @Html.TextBoxFor(m => Model.shpVac[i].Medicine, new { @readonly = "readonly" })
                 }
                 @{
                     if (Model.shpVac.Count < 1)
@@ -117,7 +112,7 @@
             <div class="input-group">
                 @for (var i = 0; i < Model.shpVac.Count; i++)
                 {
-                    @Html.TextBoxFor(m => Model.shpVac[i].DateOfVaccination)
+                    @Html.TextBoxFor(m => Model.shpVac[i].DateOfVaccination, new { @readonly = "readonly" })
                 }
                 @{
                     if (Model.shpVac.Count < 1)
@@ -135,7 +130,7 @@
                 @for (var i = 0; i < Model.shpVac.Count; i++)
                 {
 
-                    @Html.TextBoxFor(m => Model.shpVac[i].NextVaccinationDate)
+                    @Html.TextBoxFor(m => Model.shpVac[i].NextVaccinationDate, new { @readonly = "readonly" })
                 }
                 @{
                     if (Model.shpVac.Count < 1)
@@ -148,13 +143,13 @@
     </div>
     <div class="form-group">
         <div style="text-align:center" ;>
-            <div>תאריך ההמלטה האחרון</div>
+            <div>תאריך ההזרעה האחרון</div>
             <div class="input-group">
                 <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddHamlata","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
                 <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveHamlata","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
                 @for (var i = 0; i < Model.shpHamlata.Count; i++)
                 {
-                    @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfHamlata)
+                    @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfHamlata, new { @readonly = "readonly" })
                 }
                 @{
                     if (Model.shpHamlata.Count < 1)
@@ -173,7 +168,7 @@
                 {
                     if (Model.shpHamlata[i].DateOfTakser != null)
                     {
-                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser)
+                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser, new { @readonly = "readonly" })
                     }
                 }
                 @{

@@ -59,10 +59,6 @@ namespace DeerManager.Models
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();
 
-            modelBuilder.Entity<Medicine>()
-                .Property(e => e.MedName)
-                .IsFixedLength();
-
             modelBuilder.Entity<Settings>()
                 .Property(e => e.Name)
                 .IsFixedLength();
@@ -79,13 +75,6 @@ namespace DeerManager.Models
                 .Property(e => e.Address)
                 .IsFixedLength();
 
-            modelBuilder.Entity<Vaccinations>()
-                .Property(e => e.DateOfVaccination)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Vaccinations>()
-                .Property(e => e.Medicine)
-                .IsFixedLength();
 
             modelBuilder.Entity<Vaccinations>()
                 .Property(e => e.NextVaccinationDate)

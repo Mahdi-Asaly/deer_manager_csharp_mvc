@@ -12,10 +12,10 @@ namespace DeerManager.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string DateOfHamlata { get; set; }
 
-        [StringLength(10)]
+        [StringLength(50)]
         public string DateOfTakser { get; set; }
 
         public virtual maintable maintable { get; set; }

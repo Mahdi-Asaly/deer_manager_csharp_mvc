@@ -108,10 +108,7 @@
                             <select name="Medicine" id="Medicine">
                             </select>
                         </div>
-                        <div class="form-group" style="direction: rtl;">
-                            <label for="DateOfVaccination">תאריך שבו לקח את החיסון</label>
-                            <input type="date" id="DateOfVaccination" name="DateOfVaccination" value="s">
-                        </div>
+
                         <div class="form-group" style="direction: rtl;">
                             <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
                             <input type="date" id="NextVaccinationDate" name="NextVaccinationDate">
@@ -131,7 +128,6 @@
                             <th>סוג הדם</th>
                             <th>מין</th>
                             <th>קבוצה</th>
-                            <th>תאריך חיסון</th>
                             <th>תאריך חיסון הבא</th>
                             <th>תרופה</th>
                             <th>ימים נשארים עד לחיסון הבא</th>
@@ -147,7 +143,6 @@
                             <th>סוג הדם</th>
                             <th>מין</th>
                             <th>קבוצה</th>
-                            <th>תאריך חיסון</th>
                             <th>תאריך חיסון הבא</th>
                             <th>תרופה</th>
                             <th>ימים נשארים עד לחיסון הבא</th>
@@ -190,7 +185,7 @@
                     }
                     else {
                         document.getElementById("updates").innerHTML =
-                            " בתאריך " + msg._date + " היה חיסון  "+ msg.med +" לקבוצה "+ msg.shpsgroup + " מאז עברו " + msg.max +" ימים ";
+                            " בתאריך " + msg._date + " היה חיסון  "+ msg.med +" לקבוצה "+ msg.shpsgroup + " נשאר " + msg.max +" ימים למועד הבא ";
                         document.getElementById("updates").style.color = "green";
                     }
             }
@@ -266,23 +261,13 @@
     function checkSoonUpdate(id) {
         PopupForm('@Url.Action("VacAlertByGroup", "Home")/' + id)
     }
-    function setCurrentDate() {
-        var date = new Date();
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-        var year = date.getFullYear();
-        if (month < 10) month = "0" + month;
-        if (day < 10) day = "0" + day;
-        var today = year + "-" + month + "-" + day;
-        document.getElementById("DateOfVaccination").value = today;
-    }
+
 
     //this function to check weither each column in specific group vacinated.
     function checkStatus() {
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
             var checked = $('input[type="text"][name="status"]', rowhtml);
-            var checked2 = $('input[type="text"][name="vacdate"]', rowhtml);
             var checked3 = $('input[type="text"][name="med"]', rowhtml);
             var checked4 = $('input[type="text"][name="days"]', rowhtml);
             var checked5 = $('input[type="text"][name="nxtdate"]', rowhtml);
@@ -301,21 +286,7 @@
                     }
             }
             });
-            $.ajax({
-            url: '@Url.Action("getVacDate", "Home")',
-            dataType: "json",
-            data: sendObj,
-            type: "POST",
-                success: function (msg) {
-                    if (msg.emailSent == "Null") {
-                        $(checked2).val("אין תאריך")
-                        $(checked2).attr('style', 'color:red;text-align:center;');
-                    } else {
-                        $(checked2).val(msg.emailSent)
-                        $(checked2).attr('style', 'color:green;text-align:center;');
-                    }
-            }
-            });
+
 
             $.ajax({
             url: '@Url.Action("getMedById", "Home")',
@@ -368,7 +339,6 @@
 
 
     function Display(id) {
-        setCurrentDate()
         //checkSoonUpdate(id) //soon update
         var table = $('#sheeps').DataTable();
         table.destroy();
@@ -404,15 +374,6 @@
                 { "data": "Blood" },
                 { "data": "Gender" },
                 { "data": "Group" },
-                {
-                    "data": "Id", "render": function (data) {
-
-                        return '<input type="text" style="color:red; text-align:center;" name="vacdate" value="אין תאריך" readonly="readonly">';
-                    },
-                    "orderable": false,
-                    "searchable": false,
-                    "width": "150px"
-                },
                 {
                     "data": "Id", "render": function (data) {
 
@@ -583,8 +544,8 @@
         setTimeout(function () { document.getElementById('erroralert').style.display = 'none' }, 10000);
     }
 
-    function updateSheepVac(sheepid, group, med, curdate, nextdate) {
-        var sendObj = { shpid: sheepid, group: group, med: med, curdate: curdate, nextdate: nextdate } //creating json obj
+    function updateSheepVac(sheepid, group, med, nextdate) {
+        var sendObj = { shpid: sheepid, group: group, med: med, nextdate: nextdate } //creating json obj
         $.ajax({
             url: '@Url.Action("AddSpecificVac", "Home")',
             dataType: "json",
@@ -596,22 +557,18 @@
     }
     function AddVacForAllCheckBox() {
         var c = 0; //to count how many sheeps were moved.
-        var group, med, curdate, nextdate;
+        var group, med, nextdate;
         if (document.getElementById("test_redirect").value == 0) {
             return alert('לא נבחרה קבוצה')
         }
         if (document.getElementById("Medicine").value ==0) {
             return alert('לא נבחרה חיסון')
         }
-        if (document.getElementById("DateOfVaccination").value == "") {
-            return alert('נא לבחור תאריך חיסון')
-        }
         if (document.getElementById("NextVaccinationDate").value == "") {
             return alert('נא לבחור תאריך חיסון הבא')
         }
         group = document.getElementById("test_redirect").value;
         med = document.getElementById("Medicine").value;
-        curdate = document.getElementById("DateOfVaccination").value;
         nextdate = document.getElementById("NextVaccinationDate").value;
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
@@ -620,7 +577,7 @@
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
                 c += 1;
-                updateSheepVac(rowhtml.children[1].innerText,group,med,curdate,nextdate);
+                updateSheepVac(rowhtml.children[1].innerText,group,med,nextdate);
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }

@@ -1,0 +1,115 @@
+﻿@model Int32
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+@* Normal *@
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+@*For the add new sheep*@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='delAlert'>
+    <div class="check"></div>    חיסון נמחק בהצלחה עבור הרשומה שבחרת
+</div>
+<div class='alert alert-error' style='display:none;font-style:italic; text-align:center;' id='erralert'>
+    שגיאה בעת מחיקת תרופה
+    <div id="detailsshp"></div>
+</div>
+<div>
+    <h4>היסטורית חיסונים</h4>
+    @{
+        <table id="shp" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+            <thead>
+                <tr>
+                    <th>תעודת זהות</th>
+                    <th>תאריך חיסון</th>
+                    <th>חיסון</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th> פעולות </th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>תעודת זהות</th>
+                    <th>תאריך חיסון</th>
+                    <th>תרופה</th>
+                    <th>תאריך חיסון הבא</th>
+                    <th> פעולות </th>
+                </tr>
+            </tfoot>
+        </table>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        var id=@Model;
+        var table = $('#shp').DataTable();
+        table.destroy();
+                $("#shp").DataTable(
+                {
+                    "ajax": {
+                        "url": "@Url.Action("GetHistoryOfVacs", "Home")",
+                        "type": "GET",
+                        data: { id },
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Id" },
+                        { "data": "DateOfVaccination" },
+                        { "data": "Medicine" },
+                        { "data": "NextVaccinationDate" },
+                        {
+                            "data": "Medicine",
+                            "render": function (data, type, row) {
+                                return "<a class='btn btn-danger btn-sm' id='del' style='margin-left:5px' onclick='Delete(\" " + data +" \")'><i class='fa fa-trash'></i>מחק</a>";
+
+                            },
+                            "orderable": false,
+                            "searchable": false,
+                            "width": "90px"
+                        }
+                    ],
+                    "processing": true,
+                    "language": {
+                        processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
+                        "search": "חיפוש",
+                        "emptyTable": "</b>אין היסטורית חיסונים עבור חיה זאתהוספה חדשה<b>"
+                    }
+                });
+    });
+    function erroralert(c, med) {
+        //window.scrollTo(0, 0);
+        document.getElementById('erralert').style.display = 'block';
+        document.getElementById("detailsshp").innerHTML = " כבשה בעלת זהות" + c + " לא נמצא עבורה תרופה " + med;
+        setTimeout(function () { document.getElementById('erralert').style.display = 'none' }, 10000);
+    }
+    function deleteAlert() {
+        //window.scrollTo(0, 0);
+        document.getElementById('delAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('delAlert').style.display = 'none' }, 8700);
+    }
+
+    function Delete(med) {
+        var id =@Model;
+        var sendObj = { Id: id, Medicine: med }
+        $.ajax({
+            url: '@Url.Action("RemoveVacInHistory", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+                success: function (msg) {
+                    if (msg.result == "ERROR") {
+                        erroralert(id, med)
+                    }
+                    else {
+                        deleteAlert()
+                    }
+        }
+        });
+    }
+</script>

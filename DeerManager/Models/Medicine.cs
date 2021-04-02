@@ -1,4 +1,4 @@
-﻿namespace DeerManager.Models
+namespace DeerManager.Models
 {
     using System;
     using System.Collections.Generic;
@@ -11,7 +11,6 @@
     {
         [Key]
         [StringLength(50)]
-        [Required(ErrorMessage ="שם תרופה חובה",AllowEmptyStrings =false)]
         public string MedName { get; set; }
 
         [StringLength(50)]

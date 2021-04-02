@@ -1,0 +1,284 @@
+﻿@model List<DeerManager.Models.maintable>
+
+@{
+    ViewBag.Title = "MoveGroupPage";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<style>
+    table.dataTable.select tbody tr,
+    table.dataTable thead th:first-child {
+        cursor: pointer;
+    }
+</style>
+
+<h3 style="text-align:center;">קבוצה</h3>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
+<div style="text-align:center;">
+   קבוצה נוכחית<br />
+    <select name="curgroup" id="curgroup">
+        <option value="0">--בחר--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select> <br />
+</div>
+<div style="text-align:center;">
+    בחר לאן תרצה להעביר את הכבשים<br />
+    <select name="test_redirect" id="togroup">
+        <option value="0">--בחר--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select> <br />
+    <button type="button" class="btn btn-warning" onclick="moveNow(getId())">העבר עכשיו</button>
+</div>
+
+<table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+    <thead>
+        <tr>
+            <th><input name="select_all" value="1" type="checkbox"></th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th>תעודת זהות</th>
+            <th>מספר הכבש</th>
+            <th>סוג הדם</th>
+            <th>מין</th>
+            <th>קבוצה</th>
+            <th>תאריך לידה</th>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+    //
+    // Updates "Select all" control in a data table
+    //
+    function updateDataTableSelectAllCtrl(table) {
+        var $table = table.table().node();
+        var $chkbox_all = $('tbody input[type="checkbox"]', $table);
+        var $chkbox_checked = $('tbody input[type="checkbox"]:checked', $table);
+        var chkbox_select_all = $('thead input[name="select_all"]', $table).get(0);
+
+        // If none of the checkboxes are checked
+        if ($chkbox_checked.length === 0) {
+            chkbox_select_all.checked = false;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = false;
+            }
+            // If all of the checkboxes are checked
+        } else if ($chkbox_checked.length === $chkbox_all.length) {
+            chkbox_select_all.checked = true;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = false;
+            }
+            // If some of the checkboxes are checked
+        } else {
+            chkbox_select_all.checked = true;
+            if ('indeterminate' in chkbox_select_all) {
+                chkbox_select_all.indeterminate = true;
+            }
+        }
+    }
+
+    $("#curgroup").change(function () {
+        var table = $('#sheeps').DataTable();
+        table.destroy();
+        // Array holding selected row IDs
+        var rows_selected = [];
+        var currenturl = window.location.href; //getting current url
+        var param = (currenturl.match(/(\d+)/g) || []); //parsing the last argument
+        if (param[1] == null) {
+            param[1] = 999; //nothing choosed.
+        }
+        var table = $('#sheeps').DataTable({
+            'ajax': {
+                "url": '@Url.Action("GetListByGroup", "Home")',
+                "type": "GET",
+                data: { id: $(this).val() },
+                "daModelatype": "json"
+            },
+            "columns": [
+                {
+                    "data": "Id", "render": function (data) {
+
+                        return '<input type="checkbox" name="chkbox">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                { "data": "Id" },
+                { "data": "SheepNum" },
+                { "data": "Blood" },
+                { "data": "Gender" },
+                { "data": "Group" },
+                { "data": "Birthday" }
+            ],
+
+            "processing": true,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">טוען...</span> ',
+                "search": "חיפוש",
+                "emptyTable": "אין כבשים בקבצוה שבחרת"
+            },
+            'order': [[1, 'asc']],
+            'rowCallback': function (row, data, dataIndex) {
+                // Get row ID
+                var rowId = data[0];
+
+                // If row ID is in the list of selected row IDs
+                if ($.inArray(rowId, rows_selected) !== -1) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                    $(row).addClass('selected');
+                }
+            },
+        });
+        // Handle click on checkbox
+        $('#sheeps tbody').on('click', 'input[type="checkbox"]', function (e) {
+            var $row = $(this).closest('tr');
+
+            // Get row data
+            var data = table.row($row).data();
+
+            // Get row ID
+            var rowId = data[0];
+
+            // Determine whether row ID is in the list of selected row IDs
+            var index = $.inArray(rowId, rows_selected);
+
+            // If checkbox is checked and row ID is not in list of selected row IDs
+            if (this.checked && index === -1) {
+                rows_selected.push(rowId);
+
+                // Otherwise, if checkbox is not checked and row ID is in list of selected row IDs
+            } else if (!this.checked && index !== -1) {
+                rows_selected.splice(index, 1);
+            }
+
+            if (this.checked) {
+                $row.addClass('selected');
+            } else {
+                $row.removeClass('selected');
+            }
+
+            // Update state of "Select all" control
+            updateDataTableSelectAllCtrl(table);
+
+            // Prevent click event from propagating to parent
+            e.stopPropagation();
+        });
+
+        // Handle click on table cells with checkboxes
+        $('#sheeps').on('click', 'tbody td, thead th:first-child', function (e) {
+            $(this).parent().find('input[type="checkbox"]').trigger('click');
+        });
+
+        // Handle click on "Select all" control
+        $('thead input[name="select_all"]', table.table().container()).on('click', function (e) {
+            if (this.checked) {
+                $('#sheeps tbody input[type="checkbox"]:not(:checked)').trigger('click');
+            } else {
+                $('#sheeps tbody input[type="checkbox"]:checked').trigger('click');
+            }
+            // Prevent click event from propagating to parent
+            e.stopPropagation();
+        });
+
+        // Handle table draw event
+        table.on('draw', function () {
+            // Update state of "Select all" control
+            updateDataTableSelectAllCtrl(table);
+        });
+
+        // Handle form submission event
+        $('#frm-sheeps').on('submit', function (e) {
+            var form = this;
+            // Iterate over all selected checkboxes
+            $.each(rows_selected, function (index, rowId) {
+                // Create a hidden element
+                $(form).append(
+                    $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'id[]')
+                        .val(rowId)
+                );
+            });
+        });
+    });
+
+    function moveAction(sheepId, togroupId) {
+        var currenturl = window.location.href; //getting current url
+        var fromGroup = (currenturl.match(/(\d+)/g) || []); //parsing the last argument
+        if (fromGroup[1] == null) {
+            fromGroup[1] = 999; //nothing choosed.
+        }
+        var sendObj = { sid: sheepId, group: togroupId, fromgroup:fromGroup[1] } //creating json obj
+        $.ajax({
+            url: '@Url.Action("ToGroup", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+                $("#sheeps").DataTable().ajax.reload();
+            }
+        });
+    }
+
+    function moveNow(toGroup) {
+        var c = 0; //to count how many sheeps were moved.
+        if (toGroup == 0) { return alert('לא נבחרה קבוצה');} //No Group was choosen.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                moveAction(rowhtml.children[1].innerText, toGroup);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c != 0) {
+            alert('הכבשים בעלות ת"ז' + loanApplicationNumbers + 'הועברו בהצלחה ל' + toGroup); //Do whatever you want
+            $("#sheeps").DataTable().ajax.reload();
+        } else { alert('לא נבחרו כבשים מהרשימה');}
+    }
+
+    function getId() {
+       return document.getElementById("togroup").value;
+    }
+
+
+
+
+</script>
