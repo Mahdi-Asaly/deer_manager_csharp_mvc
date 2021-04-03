@@ -178,7 +178,7 @@ namespace DeerManager.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddHamlata(int id)
+        public ActionResult AddHasraa(int id)
         {
             if (ModelState.IsValid)
             {
@@ -215,7 +215,7 @@ namespace DeerManager.Controllers
 
         [HttpPost]
         //this function receives sheep id and date and update hamlata
-        public bool AddSpecificHamlata(int shpid, DateTime date)
+        public bool AddSpecificHasraa(int shpid, DateTime date)
         {
             try
             {
@@ -245,6 +245,50 @@ namespace DeerManager.Controllers
                         hasraa.Id = shpid;
                         hasraa.DateOfHasraa = date.ToString("dd/MM/yyyy");
                         db.Hasroot.Add(hasraa);
+                        db.SaveChanges();
+                        return true;
+                    }
+                }
+                else { return false; }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
+        }
+
+        [HttpPost]
+        //this function receives sheep id and date and update hamlata
+        public bool AddSpecificTakser(int shpid, DateTime date)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (DBModel db = new DBModel())
+                    {
+                        var takser = new TakserTable();
+                        //we check if there are column in database with already date with same sheep id.
+                        var checkAlready = db.TakserTable.FirstOrDefault(x => x.Id == shpid);
+                        //we remove the old date if exists.
+                        if (checkAlready != null)
+                        {
+                            db.TakserTable.Remove(checkAlready);
+                        }
+                        takser.Id = shpid;
+                        takser.DateOfTakser = date.ToString();
+                        db.TakserTable.Add(takser);
                         db.SaveChanges();
                         return true;
                     }
@@ -315,7 +359,7 @@ namespace DeerManager.Controllers
 
 
         [HttpPost]
-        public ActionResult AddHamlata(Hasroot shp)
+        public ActionResult AddHasraa(Hasroot shp)
         {
             if (ModelState.IsValid)
             {
@@ -541,7 +585,7 @@ namespace DeerManager.Controllers
                 for(int i=0; i < dates.Count; i++)
                 {
                     var shpdate= DateTime.Parse(dates[i].DateOfHasraa);
-                    if((curdate - shpdate).Days > maximum && (curdate - shpdate).Days <150 && (curdate-shpdate).Days >130)
+                    if((curdate - shpdate).Days > maximum && (curdate - shpdate).Days >=135 && (curdate-shpdate).Days <=150)
                     {
                         maximum = (curdate - shpdate).Days;
                         group.DateOfHasraa = dates[i].DateOfHasraa;
@@ -564,8 +608,10 @@ namespace DeerManager.Controllers
             {
                 var dates = db.Hasroot.ToList();
                 var group = new Hasroot();
+                group.DateOfHasraa = "";
                 var maximum = 0;
                 var groupOfSheeps = 0;
+                var flag = false;
                 if (dates.Count<1)
                 {
                     return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
@@ -573,12 +619,17 @@ namespace DeerManager.Controllers
                 for (int i = 0; i < dates.Count; i++)
                 {
                     var shpdate = DateTime.Parse(dates[i].DateOfHasraa);
-                    if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days < 130)
+                    if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days > 90 && (curdate - shpdate).Days < 135)
                     {
                         maximum = (curdate - shpdate).Days;
                         group.DateOfHasraa = dates[i].DateOfHasraa;
                         groupOfSheeps = GetGroupById(dates[i].Id);
+                        flag = true;
                     }
+                }
+                if (flag == false)
+                {
+                    return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new { max = maximum, _date = group.DateOfHasraa.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
             }
@@ -593,10 +644,11 @@ namespace DeerManager.Controllers
                 var dates = db.Vaccinations.ToList();
 
                 var group = new Vaccinations();
-                var maximum = 0;
                 var flag = false;
                 var groupOfSheeps = 0;
                 var medicine = "";
+                var tilldays = 0;
+                var soondays = 0;
                 if (dates.Count < 1 || dates == null)
                 {
                     return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
@@ -604,36 +656,38 @@ namespace DeerManager.Controllers
                 for (int i = 0; i < dates.Count; i++)
                 {
                     var shpdate = DateTime.Parse(dates[i].NextVaccinationDate);
-                    if (dates[i].Medicine.Contains("אוקסי"))
+                    tilldays = (shpdate - curdate).Days;
+                    if(dates[i].Medicine.Replace(" ","")=="אוקסי")
                     {
-                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 110 && (shpdate - curdate).Days >= 70)
+                        if (tilldays <= 10 && tilldays>=0)
                         {
-                            maximum = (shpdate - curdate).Days;
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
+                            soondays = tilldays;
                         }
                     }
                     else if (dates[i].Medicine.Replace(" ","").Contains("סימוםמעיים"))
                     {
-                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 120 && (shpdate - curdate).Days >= 110)
+                        if (tilldays <= 10 && tilldays >= 0)
                         {
-                            maximum = (shpdate - curdate).Days;
                             group.NextVaccinationDate = dates[i].NextVaccinationDate;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
+                            soondays = tilldays;
                         }
                     }
                     else
                     {
-                        if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days <= 90 && (shpdate - curdate).Days >= 70)
+                        if (tilldays <= 10 && tilldays >= 0)
                         {
-                            maximum = (shpdate - curdate).Days;
                             group.NextVaccinationDate = dates[i].NextVaccinationDate;
                             groupOfSheeps = GetGroupById(dates[i].Id);
                             flag = true;
                             medicine = dates[i].Medicine;
+                            soondays = tilldays;
                         }
                     }
                 }
@@ -641,7 +695,7 @@ namespace DeerManager.Controllers
                 {
                     return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { max = maximum, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps , med =medicine}, JsonRequestBehavior.AllowGet);
+                return Json(new { days= soondays, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps , med =medicine}, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpGet]
@@ -650,53 +704,100 @@ namespace DeerManager.Controllers
             var curdate = DateTime.Now;
             using (DBModel db = new DBModel())
             {
-                var datesVac = db.Vaccinations.ToList();
+                var dates = db.Vaccinations.ToList();
+
                 var group = new Vaccinations();
-                var maximum = 0;
+                var flag = false;
                 var groupOfSheeps = 0;
-                var med = "";
-                if (datesVac.Count < 1 || datesVac == null)
+                var medicine = "";
+                var tilldays = 0;
+                var latedays = 0;
+                if (dates.Count < 1 || dates == null)
                 {
                     return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
                 }
-                for (int i = 0; i < datesVac.Count; i++)
+                for (int i = 0; i < dates.Count; i++)
                 {
-                    var shpdate = DateTime.Parse(datesVac[i].NextVaccinationDate);
-                    if ((shpdate - curdate).Days > maximum && (shpdate - curdate).Days < 70)
+                    var shpdate = DateTime.Parse(dates[i].NextVaccinationDate);
+                    tilldays = (shpdate - curdate).Days;
+                    if (dates[i].Medicine.Replace(" ", "") == "אוקסי")
                     {
-                        maximum = (shpdate - curdate).Days;
-                        group.NextVaccinationDate = datesVac[i].NextVaccinationDate;
-                        groupOfSheeps = GetGroupById(datesVac[i].Id);
-                        med = datesVac[i].Medicine;
+                        if (tilldays <= 60 && tilldays >= 10)
+                        {
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                            latedays = tilldays;
+                        }
+                    }
+                    else if (dates[i].Medicine.Replace(" ", "").Contains("סימוםמעיים"))
+                    {
+                        if (tilldays <= 60 && tilldays >= 10)
+                        {
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                            latedays = tilldays;
+                        }
+                    }
+                    else
+                    {
+                        if (tilldays <= 60 && tilldays >= 10)
+                        {
+                            group.NextVaccinationDate = dates[i].NextVaccinationDate;
+                            groupOfSheeps = GetGroupById(dates[i].Id);
+                            flag = true;
+                            medicine = dates[i].Medicine;
+                            latedays = tilldays;
+                        }
                     }
                 }
-                return Json(new { max = maximum, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps, medicine= med }, JsonRequestBehavior.AllowGet);
+                if (flag == false)
+                {
+                    return Json(new { _flag = flag }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { days = latedays, _date = group.NextVaccinationDate.ToString(), shpsgroup = groupOfSheeps, med = medicine ,_flag =flag }, JsonRequestBehavior.AllowGet);
             }
         }
 
 
         [HttpGet]
-        public ActionResult RemoveHamlata(int id)
+        public ActionResult RemoveHasraa(int id)
         {
             using (DBModel db = new DBModel())
             {
-                var RemoveHamlata = new Hasroot();
-                RemoveHamlata = db.Hasroot.Where(x => x.Id == id).FirstOrDefault();
-                if (RemoveHamlata == null)
+                var RemoveHasraa = new Hasroot();
+                RemoveHasraa = db.Hasroot.Where(x => x.Id == id).FirstOrDefault();
+                if (RemoveHasraa == null)
                 {
                     return null;
                 }
-                return View(RemoveHamlata);
+                return View(RemoveHasraa);
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveHamlata(Hasroot shp)
+        public ActionResult RemoveHasraa(Hasroot shp)
         {
             using (DBModel db = new DBModel())
             {
                 var SpecificHamlata = db.Hasroot.Where(x => x.Id == shp.Id).FirstOrDefault();
                 db.Hasroot.Remove(SpecificHamlata);
+                db.SaveChanges();
+            }
+            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+        }
+
+
+        [HttpPost]
+        public ActionResult RemoveTakser(Hasroot shp)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var SpecificTakser = db.TakserTable.Where(x => x.Id == shp.Id).FirstOrDefault();
+                db.TakserTable.Remove(SpecificTakser);
                 db.SaveChanges();
             }
             return RedirectToAction("AdvancedDetails", new { id = shp.Id });
@@ -1113,7 +1214,7 @@ namespace DeerManager.Controllers
             }
         }
         [HttpGet]
-        public ActionResult Hamlatot()
+        public ActionResult Hasroot()
         {
             using (DBModel db = new DBModel())
             {

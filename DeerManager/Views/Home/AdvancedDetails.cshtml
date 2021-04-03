@@ -129,8 +129,8 @@
         <div style="text-align:center" ;>
             <div>תאריך ההזרעה האחרון</div>
             <div class="input-group">
-                <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddHamlata","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
-                <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveHamlata","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
+                <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddHasraa","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
+                <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveHasraa","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
                 @for (var i = 0; i < Model.shpHasraa.Count; i++)
                 {
                     @Html.TextBoxFor(m => Model.shpHasraa[i].DateOfHasraa, new { @readonly = "readonly" })

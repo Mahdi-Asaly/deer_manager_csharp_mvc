@@ -253,14 +253,14 @@
     <Content Include="Views\Home\AddHamlata.cshtml" />
     <Content Include="Views\Home\AddVaccine.cshtml" />
     <Content Include="Views\Home\RemoveVaccine.cshtml" />
-    <Content Include="Views\Home\RemoveHamlata.cshtml" />
+    <Content Include="Views\Home\RemoveHasraa.cshtml" />
     <Content Include="Views\Home\VacAlert.cshtml" />
     <Content Include="Views\Settings\EditSettings.cshtml" />
     <Content Include="Views\Home\Vacs.cshtml" />
     <Content Include="Views\Home\AddMedicine.cshtml" />
     <Content Include="Views\Home\RemoveMedicine.cshtml" />
     <Content Include="Views\Home\AddVaccineGroup.cshtml" />
-    <Content Include="Views\Home\Hamlatot.cshtml" />
+    <Content Include="Views\Home\Hasroot.cshtml" />
     <Content Include="Views\Home\VacAlertByGroup.cshtml" />
     <Content Include="Views\Home\AddNewSheepPage.cshtml" />
     <Content Include="Views\Home\HistoryOfVacsById.cshtml" />

@@ -100,13 +100,23 @@
                     <div style="text-align:center" ;>
                         <div class="form-group" style="direction: rtl;">
                             <h4> תאריך הזרעה:</h4>
-                            <input type="date" id="DateOfHamlata" name="DateOfHamlata">
+                            <input type="date" id="DateOfHasraa" name="DateOfHasraa">
                         </div>
                     </div>
-                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="UpdateHamlatot()"><i class="fa icon-plus"></i> הוסף הזרעה לקבוצה </a>
-                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHamlatot()"><i class="fa icon-remove-sign"></i> מחק הזרעה </a>
+                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateHasraoot()"><i class="fa icon-plus"></i> הוסף הזרעה לקבוצה </a>
+                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHasraoot()"><i class="fa icon-remove-sign"></i> מחק הזרעה </a>
                 </div>
 
+                <div style="text-align:center;">
+                    <div style="text-align:center" ;>
+                        <div class="form-group" style="direction: rtl;">
+                            <h4> תאריך שבירת הריון:</h4>
+                            <input type="date" id="DateOfTakser" name="DateOfTakser">
+                        </div>
+                    </div>
+                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateTakser()"><i class="fa icon-plus"></i> הוסף שבירת הריון לקבוצה </a>
+                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveTakser()"><i class="fa icon-remove-sign"></i> מחק שבירת הריון </a>
+                </div>
             </div>
         </div>
         <div class="rightcolumn">
@@ -149,7 +159,7 @@
             dataType: "json",
             type: "GET",
                 success: function (msg) {
-                    if (msg.result == "Null") {
+                    if (msg.flag == false) {
                         document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה ללדת";
                         document.getElementById("laterupdate").style.color = "red";
                     }
@@ -193,7 +203,7 @@
     }
 
     //this function to check weither each column in specific group vacinated.
-    function AddHamlata() {
+    function AddHasraa() {
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
             var checked = $('input[type="text"][name="hamlatadate"]', rowhtml);
@@ -289,7 +299,7 @@
                 }
             },
             "initComplete": function () {
-                AddHamlata() //calling the status function
+                AddHasraa() //calling the status function
             }
         });
         // Handle click on checkbox
@@ -366,7 +376,7 @@
     }
     function showAlerts() {
         window.scrollTo(0, 0);
-        document.getElementById("date").innerHTML = " תאריך "+ document.getElementById("DateOfHamlata").value + " התווסף לרשומות ";
+        document.getElementById("date").innerHTML = " תאריך "+ document.getElementById("DateOfHasraa").value + " התווסף לרשומות ";
         document.getElementById('bootstrap-alert').style.display = 'block';
         setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 2700);
     }
@@ -379,7 +389,7 @@
     function updateSheep(sheepid, date) {
         var sendObj = { shpid: sheepid, date: date} //creating json obj
         $.ajax({
-            url: '@Url.Action("AddSpecificHamlata", "Home")',
+            url: '@Url.Action("AddSpecificHasraa", "Home")',
             dataType: "json",
             data: sendObj,
             type: "POST",
@@ -387,8 +397,8 @@
             }
         });
     }
-    function UpdateHamlatot() {
-        var date = document.getElementById("DateOfHamlata").value;
+    function updateHasraoot() {
+        var date = document.getElementById("DateOfHasraa").value;
         if (date == "") { return alert('לא נבחר תאריך')}
         var c = 0; //to count how many sheeps were moved.
         oTable = $("#sheeps").dataTable(); // Get the datatable,
@@ -411,10 +421,10 @@
         }
     }
 
-    function removeHamlata(sheepid) {
+    function removeHasraa(sheepid) {
         var sendObj = { id: sheepid} //creating json obj
         $.ajax({
-            url: '@Url.Action("RemoveHamlata", "Home")',
+            url: '@Url.Action("RemoveHasraa", "Home")',
             dataType: "json",
             data: sendObj,
             type: "POST",
@@ -422,7 +432,7 @@
             }
         });
     }
-    function RemoveHamlatot() {
+    function RemoveHasraoot() {
         var c = 0; //to count how many sheeps were moved.
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
@@ -431,7 +441,7 @@
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
                 c += 1;
-                removeHamlata(rowhtml.children[1].innerText);
+                removeHasraa(rowhtml.children[1].innerText);
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
@@ -442,6 +452,119 @@
             deleteAlert()
             Display(document.getElementById("groupsselect").value)
         }
+    }
+
+    /////////////////////////Fucntions of Takser/////////////////////////
+    function updateTakser() {
+        var date = document.getElementById("DateOfTakser").value;
+        if (date == "") { return alert('לא נבחר תאריך') }
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                updateTakserShp(rowhtml.children[1].innerText, date);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else {
+            showAlerts()
+            Display(document.getElementById("groupsselect").value)
+        }
+    }
+    function updateTakserShp(sheepid, date) {
+        alert('hi')
+        var sendObj = { shpid: sheepid, date: date} //creating json obj
+        $.ajax({
+            url: '@Url.Action("AddSpecificTakser", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
+    }
+    function removeTakserSpecificSheep() {
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                removeHasraa(rowhtml.children[1].innerText);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else {
+            deleteAlert()
+            Display(document.getElementById("groupsselect").value)
+        }
+    }
+    function RemoveTakser() {
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                removeTakserSpecificSheep(rowhtml.children[1].innerText);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else {
+            deleteAlert()
+            Display(document.getElementById("groupsselect").value)
+        }
+    }
+    //////////Removing Takser/////////////
+    function RemoveTakser() {
+        var c = 0; //to count how many sheeps were moved.
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            //Check the state of the checkbox
+            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
+            if (checked == 1) {
+                c += 1;
+                removeTakser(rowhtml.children[1].innerText);
+                //If the checkbox is checked, then add the inner text of the cell to the array
+                loanApplicationNumbers.push(rowhtml.children[1].innerText);
+            }
+        });
+        if (c == 0) {
+            alert('לא נבחרו כבשים מהרשימה');
+        } else {
+            deleteAlert()
+            Display(document.getElementById("groupsselect").value)
+        }
+    }
+
+    function removeTakser(sheepid) {
+        var sendObj = { id: sheepid} //creating json obj
+        $.ajax({
+            url: '@Url.Action("RemoveTakser", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "POST",
+            success: function () {
+            }
+        });
     }
 
 </script>

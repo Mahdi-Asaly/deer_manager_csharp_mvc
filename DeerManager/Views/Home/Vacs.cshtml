@@ -180,12 +180,12 @@
             type: "GET",
                 success: function (msg) {
                     if (msg.flag == false || msg.result == "Null") {
-                        document.getElementById("updates").innerHTML = "אין קבוצה שאמורה להתחסן בקרוב";
+                        document.getElementById("updates").innerHTML = "אין קבוצה שאמורה להתחסן ב10 ימים הקרובים";
                         document.getElementById("updates").style.color = "red";
                     }
                     else {
                         document.getElementById("updates").innerHTML =
-                            " בתאריך " + msg._date + " היה חיסון  "+ msg.med +" לקבוצה "+ msg.shpsgroup + " נשאר " + msg.max +" ימים למועד הבא ";
+                            " בתאריך " + msg._date + " יש חיסון  " + msg.med + " לקבוצה " + msg.shpsgroup + ",נשאר "+msg.days +" ימים לחיסון";
                         document.getElementById("updates").style.color = "green";
                     }
             }
@@ -196,13 +196,13 @@
             dataType: "json",
             type: "GET",
                 success: function (msg) {
-                    if (msg.result == "Null") {
-                        document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה להתחסן";
+                    if (msg._flag == false || msg._flag == "Null") {
+                        document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה להתחסן בחודשיים הקרובים";
                         document.getElementById("laterupdate").style.color = "red";
                     }
                     else {
                         document.getElementById("laterupdate").innerHTML =
-                            " בתאריך " + msg._date + " היה חיסון  " + msg.medicine +" לקבוצה " + msg.shpsgroup + " ונשאר " + msg.max + " ימים  לחיסון הבא";
+                            " בתאריך " + msg._date + " יש חיסון  " + msg.med + " לקבוצה " + msg.shpsgroup + ",נשאר " + msg.days + " ימים לחיסון";
                         document.getElementById("laterupdate").style.color = "green";
                     }
             }
