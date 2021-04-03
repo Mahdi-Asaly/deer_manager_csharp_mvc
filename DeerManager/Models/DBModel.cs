@@ -15,23 +15,17 @@ namespace DeerManager.Models
 
         public virtual DbSet<Details> Details { get; set; }
         public virtual DbSet<Diseases> Diseases { get; set; }
-        public virtual DbSet<Hamlatot> Hamlatot { get; set; }
+        public virtual DbSet<Hamlata> Hamlata { get; set; }
+        public virtual DbSet<Hasroot> Hasroot { get; set; }
         public virtual DbSet<maintable> maintable { get; set; }
         public virtual DbSet<Medicine> Medicine { get; set; }
         public virtual DbSet<Settings> Settings { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<TakserTable> TakserTable { get; set; }
         public virtual DbSet<Vaccinations> Vaccinations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Hamlatot>()
-                .Property(e => e.DateOfHamlata)
-                .IsFixedLength();
-
-            modelBuilder.Entity<Hamlatot>()
-                .Property(e => e.DateOfTakser)
-                .IsFixedLength();
-
             modelBuilder.Entity<maintable>()
                 .Property(e => e.Blood)
                 .IsFixedLength();
@@ -54,11 +48,6 @@ namespace DeerManager.Models
                 .WithRequired(e => e.maintable)
                 .WillCascadeOnDelete();
 
-            modelBuilder.Entity<maintable>()
-                .HasOptional(e => e.Hamlatot)
-                .WithRequired(e => e.maintable)
-                .WillCascadeOnDelete();
-
             modelBuilder.Entity<Settings>()
                 .Property(e => e.Name)
                 .IsFixedLength();
@@ -73,11 +62,6 @@ namespace DeerManager.Models
 
             modelBuilder.Entity<Settings>()
                 .Property(e => e.Address)
-                .IsFixedLength();
-
-
-            modelBuilder.Entity<Vaccinations>()
-                .Property(e => e.NextVaccinationDate)
                 .IsFixedLength();
         }
     }

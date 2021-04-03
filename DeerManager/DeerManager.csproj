@@ -142,11 +142,13 @@
     <Compile Include="Models\DBModel.cs" />
     <Compile Include="Models\Details.cs" />
     <Compile Include="Models\Diseases.cs" />
-    <Compile Include="Models\Hamlatot.cs" />
+    <Compile Include="Models\Hamlata.cs" />
+    <Compile Include="Models\Hasroot.cs" />
     <Compile Include="Models\maintable.cs" />
     <Compile Include="Models\Medicine.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\sysdiagrams.cs" />
+    <Compile Include="Models\TakserTable.cs" />
     <Compile Include="Models\Vaccinations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />

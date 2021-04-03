@@ -6,15 +6,16 @@ namespace DeerManager.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Hamlatot")]
-    public partial class Hamlatot
+    [Table("TakserTable")]
+    public partial class TakserTable
     {
+        [Key]
+        [Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [StringLength(50)]
-        public string DateOfHamlata { get; set; }
-
+        [Key]
+        [Column(Order = 1)]
         [StringLength(50)]
         public string DateOfTakser { get; set; }
 

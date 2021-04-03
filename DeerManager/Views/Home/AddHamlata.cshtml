@@ -1,4 +1,4 @@
-﻿@model DeerManager.Models.Hamlatot
+﻿@model DeerManager.Models.Hasroot
 
 @*For the add new sheep*@
 
@@ -14,12 +14,8 @@
             @Html.TextBoxFor(model => model.Id, new { disabled = "disabled" })
         </div>
         <div class="form-group" style="direction: rtl; text-align:center;">
-            <label for="DateOfHamlata"> תאריך המלטה:</label>
+            <label for="DateOfHamlata"> תאריך הזרעה:</label>
             <input type="date" id="DateOfHamlata" name="DateOfHamlata">
-        </div>
-        <div class="form-group" style="direction: rtl; text-align:center;">
-            <label for="DateOfTakser"> תאריך שבירת הריון:</label>
-            <input type="date" id="DateOfTakser" name="DateOfTakser">
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

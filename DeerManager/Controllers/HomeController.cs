@@ -25,7 +25,7 @@ namespace DeerManager.Controllers
                     shpDiseases = db.Diseases.FirstOrDefault(x => x.Id == id),
                     maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
                     shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
-                    shpHamlata = db.Hamlatot.Where(x=>x.Id==id).ToList<Hamlatot>(),
+                    shpHasraa = db.Hasroot.Where(x=>x.Id==id).ToList<Hasroot>(),
                     shpVac= db.Vaccinations.Where(x=>x.Id==id).ToList<Vaccinations>()
                 };
                 return View(shpVM);
@@ -182,9 +182,9 @@ namespace DeerManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newHamlata = new Hamlatot();
-                newHamlata.Id = id;
-                return View(newHamlata);
+                var newHasraa = new Hasroot();
+                newHasraa.Id = id;
+                return View(newHasraa);
             }
             else {
                 TempData["error"] = "לא הצלחנו למצוא את רשומה עבור "+ id;
@@ -223,7 +223,7 @@ namespace DeerManager.Controllers
                 {
                     using (DBModel db = new DBModel())
                     {
-                        var hamlata = new Hamlatot();
+                        var hasraa = new Hasroot();
                         var res = true;
                         /////////////////////////////////////
                         res=AddAutoVac(shpid, date, 120, "סימום מעיים");
@@ -236,16 +236,15 @@ namespace DeerManager.Controllers
                         if (res == false) { return false; }
                         /////////////////////////////////////
                         //we check if there are column in database with already date with same sheep id.
-                        var checkAlready = db.Hamlatot.FirstOrDefault(x => x.Id == shpid);
+                        var checkAlready = db.Hasroot.FirstOrDefault(x => x.Id == shpid);
                         //we remove the old date if exists.
                         if (checkAlready != null)
                         {
-                            db.Hamlatot.Remove(checkAlready);
+                            db.Hasroot.Remove(checkAlready);
                         }
-                        hamlata.DateOfTakser = null;
-                        hamlata.Id = shpid;
-                        hamlata.DateOfHamlata = date.ToString("dd/MM/yyyy");
-                        db.Hamlatot.Add(hamlata);
+                        hasraa.Id = shpid;
+                        hasraa.DateOfHasraa = date.ToString("dd/MM/yyyy");
+                        db.Hasroot.Add(hasraa);
                         db.SaveChanges();
                         return true;
                     }
@@ -316,14 +315,14 @@ namespace DeerManager.Controllers
 
 
         [HttpPost]
-        public ActionResult AddHamlata(Hamlatot shp)
+        public ActionResult AddHamlata(Hasroot shp)
         {
             if (ModelState.IsValid)
             {
                 if (shp == null) { return View("ShowMyHome"); }
                 using (DBModel db = new DBModel())
                 {
-                    db.Hamlatot.Add(shp);
+                    db.Hasroot.Add(shp);
                     db.SaveChanges();
                     return RedirectToAction("AdvancedDetails", new { id = shp.Id });
                 }
@@ -467,12 +466,16 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                var SpecificVac = db.Vaccinations.Where(x => x.Id == shp.Id).Where(x => x.Medicine.Contains(shp.Medicine)).FirstOrDefault();
-                if (SpecificVac != null)
+                if (shp.Medicine != null)
                 {
-                    db.Vaccinations.Remove(SpecificVac);
-                    db.SaveChanges();
-                    return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+                    var med = shp.Medicine.Replace(" ", "");
+                    var SpecificVac = db.Vaccinations.Where(x => x.Id == shp.Id).Where(x => x.Medicine.Replace(" ", "") == med).FirstOrDefault();
+                    if (SpecificVac != null)
+                    {
+                        db.Vaccinations.Remove(SpecificVac);
+                        db.SaveChanges();
+                        return Json(new { result = "OK" }, JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
             return Json(new { result = "ERROR" , id = shp.Id }, JsonRequestBehavior.AllowGet);
@@ -526,8 +529,8 @@ namespace DeerManager.Controllers
             var curdate = DateTime.Now;
             using (DBModel db = new DBModel())
             {
-                var dates = db.Hamlatot.ToList();
-                var group = new Hamlatot();
+                var dates = db.Hasroot.ToList();
+                var group = new Hasroot();
                 var maximum = 0;
                 var flag = false;
                 var groupOfSheeps = 0;
@@ -537,11 +540,11 @@ namespace DeerManager.Controllers
                 }
                 for(int i=0; i < dates.Count; i++)
                 {
-                    var shpdate= DateTime.Parse(dates[i].DateOfHamlata);
+                    var shpdate= DateTime.Parse(dates[i].DateOfHasraa);
                     if((curdate - shpdate).Days > maximum && (curdate - shpdate).Days <150 && (curdate-shpdate).Days >130)
                     {
                         maximum = (curdate - shpdate).Days;
-                        group.DateOfHamlata = dates[i].DateOfHamlata;
+                        group.DateOfHasraa = dates[i].DateOfHasraa;
                         groupOfSheeps = GetGroupById(dates[i].Id);
                         flag = true;
                     }
@@ -550,7 +553,7 @@ namespace DeerManager.Controllers
                 {
                   return Json(new { flag=false }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { max = maximum, _date = group.DateOfHamlata.ToString(), shpsgroup= groupOfSheeps , still = 150-maximum }, JsonRequestBehavior.AllowGet);
+                return Json(new { max = maximum, _date = group.DateOfHasraa.ToString(), shpsgroup= groupOfSheeps , still = 150-maximum }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpGet]
@@ -559,8 +562,8 @@ namespace DeerManager.Controllers
             var curdate = DateTime.Now;
             using (DBModel db = new DBModel())
             {
-                var dates = db.Hamlatot.ToList();
-                var group = new Hamlatot();
+                var dates = db.Hasroot.ToList();
+                var group = new Hasroot();
                 var maximum = 0;
                 var groupOfSheeps = 0;
                 if (dates.Count<1)
@@ -569,15 +572,15 @@ namespace DeerManager.Controllers
                 }
                 for (int i = 0; i < dates.Count; i++)
                 {
-                    var shpdate = DateTime.Parse(dates[i].DateOfHamlata);
+                    var shpdate = DateTime.Parse(dates[i].DateOfHasraa);
                     if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days < 130)
                     {
                         maximum = (curdate - shpdate).Days;
-                        group.DateOfHamlata = dates[i].DateOfHamlata;
+                        group.DateOfHasraa = dates[i].DateOfHasraa;
                         groupOfSheeps = GetGroupById(dates[i].Id);
                     }
                 }
-                return Json(new { max = maximum, _date = group.DateOfHamlata.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
+                return Json(new { max = maximum, _date = group.DateOfHasraa.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -677,8 +680,8 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                var RemoveHamlata = new Hamlatot();
-                RemoveHamlata = db.Hamlatot.Where(x => x.Id == id).FirstOrDefault();
+                var RemoveHamlata = new Hasroot();
+                RemoveHamlata = db.Hasroot.Where(x => x.Id == id).FirstOrDefault();
                 if (RemoveHamlata == null)
                 {
                     return null;
@@ -688,12 +691,12 @@ namespace DeerManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveHamlata(Hamlatot shp)
+        public ActionResult RemoveHamlata(Hasroot shp)
         {
             using (DBModel db = new DBModel())
             {
-                var SpecificHamlata = db.Hamlatot.Where(x => x.Id == shp.Id).FirstOrDefault();
-                db.Hamlatot.Remove(SpecificHamlata);
+                var SpecificHamlata = db.Hasroot.Where(x => x.Id == shp.Id).FirstOrDefault();
+                db.Hasroot.Remove(SpecificHamlata);
                 db.SaveChanges();
             }
             return RedirectToAction("AdvancedDetails", new { id = shp.Id });
@@ -795,14 +798,14 @@ namespace DeerManager.Controllers
 
             using (DBModel db = new DBModel())
             {
-                var vacalert = db.Hamlatot.FirstOrDefault(x => x.Id == id);
+                var vacalert = db.Hasroot.FirstOrDefault(x => x.Id == id);
                 if (vacalert == null)
                 {
                     return Json(new { emailSent = "null" }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    var date = vacalert.DateOfHamlata;
+                    var date = vacalert.DateOfHasraa;
                     var dateAndTime = DateTime.Now;
                     var TodayDate = dateAndTime.Date; //current day
                     var HamlataDate = DateTime.Parse(date);
@@ -1114,8 +1117,8 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
-                var Hamlatot = db.Hamlatot.ToList<Hamlatot>();
-                return View(Hamlatot);
+                var Hasroot = db.Hasroot.ToList<Hasroot>();
+                return View(Hasroot);
             }
         }
         [HttpGet]

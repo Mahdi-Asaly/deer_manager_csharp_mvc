@@ -106,23 +106,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <div style="text-align:center" ;>
-            <div>תאריך שבו לקח הכבש את החיסון הנ"ל</div>
-            <div class="input-group">
-                @for (var i = 0; i < Model.shpVac.Count; i++)
-                {
-                    @Html.TextBoxFor(m => Model.shpVac[i].DateOfVaccination, new { @readonly = "readonly" })
-                }
-                @{
-                    if (Model.shpVac.Count < 1)
-                    {
-                        <div style="color:red;">לא לקח שום חיסון בעבר</div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
+
     <div class="form-group">
         <div style="text-align:center" ;>
             <div>תאריך שבו הכבש יקח את החיסון </div>
@@ -147,20 +131,20 @@
             <div class="input-group">
                 <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddHamlata","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
                 <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveHamlata","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
-                @for (var i = 0; i < Model.shpHamlata.Count; i++)
+                @for (var i = 0; i < Model.shpHasraa.Count; i++)
                 {
-                    @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfHamlata, new { @readonly = "readonly" })
+                    @Html.TextBoxFor(m => Model.shpHasraa[i].DateOfHasraa, new { @readonly = "readonly" })
                 }
                 @{
-                    if (Model.shpHamlata.Count < 1)
+                    if (Model.shpHasraa.Count < 1)
                     {
-                        <div style="color:red;">אין היסטורית המלטות בעבר</div>
+                        <div style="color:red;">אין היסטורית הזרעות בעבר</div>
                     }
                 }
             </div>
         </div>
     </div>
-    <div class="form-group">
+    @*<div class="form-group">
         <div style="text-align:center" ;>
             <div>תאריך שבירת הריון </div>
             <div class="input-group">
@@ -186,7 +170,7 @@
                 }
             </div>
         </div>
-    </div>
+    </div>*@
     <div class="form-group">
         <input type="button" title="דף ראשי" value="עבור לדף הראשי" onclick="location.href='@Url.Action("ShowMyHome", "Home")'" class="btn btn-info" />
         <input type="submit" value="עדכן" class="btn btn-warning" />

@@ -12,6 +12,9 @@ namespace DeerManager.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public maintable()
         {
+            Hamlata = new HashSet<Hamlata>();
+            Hasroot = new HashSet<Hasroot>();
+            TakserTable = new HashSet<TakserTable>();
             Vaccinations = new HashSet<Vaccinations>();
         }
 
@@ -37,7 +40,14 @@ namespace DeerManager.Models
 
         public virtual Diseases Diseases { get; set; }
 
-        public virtual Hamlatot Hamlatot { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Hamlata> Hamlata { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Hasroot> Hasroot { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TakserTable> TakserTable { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vaccinations> Vaccinations { get; set; }
