@@ -915,6 +915,32 @@ namespace DeerManager.Controllers
             }
         }
 
+        [HttpGet]
+        [ValidateInput(false)]
+        public ActionResult HamlataDetails(int id)
+        {
+
+            using (DBModel db = new DBModel())
+            {
+                var _sumamount = 0;
+                var vacalert = db.Hamlata.FirstOrDefault(x => x.Id == id);
+                if (vacalert == null)
+                {
+                    return Json(new { emailSent = "null" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    var date = vacalert.dateOfHamlata;
+                    var dateAndTime = DateTime.Now;
+                    var TodayDate = dateAndTime.Date; //current day
+                    var HamlataDate = DateTime.Parse(date);
+                    return Json(new { emailSent = date.ToString(), Days = (TodayDate - HamlataDate).Days ,amount= vacalert.amount, sumamount = _sumamount }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+
+
         public bool getAlertBoolean()
         {
             using (DBModel db = new DBModel())
@@ -1213,6 +1239,16 @@ namespace DeerManager.Controllers
                 return View(vacs);
             }
         }
+
+        [HttpGet]
+        public ActionResult Hamlatot()
+        {
+            using (DBModel db = new DBModel())
+            {
+                var Hamlatot = db.Hamlata.ToList<Hamlata>();
+                return View(Hamlatot);
+            }
+        }
         [HttpGet]
         public ActionResult Hasroot()
         {
@@ -1231,5 +1267,7 @@ namespace DeerManager.Controllers
                 return Json(new { data = shpList }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
     }
 }
