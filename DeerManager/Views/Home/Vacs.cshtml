@@ -70,9 +70,6 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
-
-
-
 <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
@@ -196,7 +193,7 @@
             dataType: "json",
             type: "GET",
                 success: function (msg) {
-                    if (msg._flag == false || msg._flag == "Null") {
+                    if (msg._flag == false || msg.result == "Null") {
                         document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה להתחסן בחודשיים הקרובים";
                         document.getElementById("laterupdate").style.color = "red";
                     }
@@ -207,24 +204,6 @@
                     }
             }
             });
-
-
-            @*$.ajax({
-            url: '@Url.Action("LastActive", "Home")',
-            dataType: "json",
-            type: "GET",
-                success: function (msg) {
-                    if (msg.flag == false || msg.result == "Null") {
-                        document.getElementById("updates").innerHTML = "אין עדכונים בעבר";
-                        document.getElementById("updates").style.color = "red";
-                    }
-                    else {
-                        //document.getElementById("updates").innerHTML =
-                        //    " בתאריך " + msg._date + " היה חיסון לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max +" ימים ";
-                        //document.getElementById("updates").style.color = "green";
-                    }
-            }
-            });*@
     });
 
 
@@ -638,8 +617,8 @@
                     autoOpen: true,
                     resizable: true,
                     title: 'חיסונים',
-                    height: 650,
-                    width: 850,
+                    height: 550,
+                    width: 750,
                     close: function () {
                         Popup.dialog('destroy').remove();
                     }

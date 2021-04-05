@@ -7,7 +7,7 @@
 
 
 
-<style> 
+<style>
     table.dataTable.select tbody tr,
     table.dataTable thead th:first-child {
         cursor: pointer;
@@ -22,8 +22,20 @@
     #bootstrap-alert {
         margin: auto;
         width: 390px;
-        font-size:large;
+        font-size: large;
         box-shadow: 1px 1px 3px black;
+    }
+
+    .display select {
+        border: 5px outset red;
+        background-color: lightblue;
+        text-align: center;
+    }
+
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
     }
 </style>
 
@@ -44,128 +56,131 @@
     התהליך בוצע בהצלחה
     <div id="date"></div>
 </div>
-
+<div class='alert alert-error' style='display:none;font-style:italic; text-align:center;' id='HazraaDltErrorAlert'>
+    שגיאה בעת מחיקת הזרעות
+</div>
+<div class='alert alert-error' style='display:none;font-style:italic; text-align:center;' id='TakserDltErrorAlert'>
+    שגיאה בעת מחיקת שבירת הריון
+</div>
 <div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteAlert'>
     תאריך הזרעה נמחק בהצלחה
+</div>
+<div class='alert alert-success' style='display:none;font-style:italic; text-align:center;' id='deleteTakserAlert'>
+    תאריך שבירת הריון נמחק בהצלחה
 </div>
 
 @using (Html.BeginForm())
 {
-<body>
-    <div class="row">
-        <div class="leftcolumn">
-            <div class="card">
-                <div style="text-align:center;">
-                    <select name="test_redirect" id="groupsselect" onchange="Display(this.options[this.selectedIndex].value)">
-                        <option value="0">--בחר קבוצה--</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                </div>
-                <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
-                    <thead>
-                        <tr>
-                            <th><input name="select_all" value="1" type="checkbox"></th>
-                            <th>תעודת זהות</th>
-                            <th>מספר הכבש</th>
-                            <th>סוג הדם</th>
-                            <th>מין</th>
-                            <th>קבוצה</th>
-                            <th>תאריך הזרעה אחרון</th>
-                            <th> ימים </th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th>תעודת זהות</th>
-                            <th>מספר הכבש</th>
-                            <th>סוג הדם</th>
-                            <th>מין</th>
-                            <th>קבוצה</th>
-                            <th>תאריך הזרעה אחרון</th>
-                            <th> ימים </th>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div style="text-align:center;">
-                    <div style="text-align:center" ;>
-                        <div class="form-group" style="direction: rtl;">
-                            <h4> תאריך הזרעה:</h4>
-                            <input type="date" id="DateOfHasraa" name="DateOfHasraa">
-                        </div>
+    <body>
+        <div class="row">
+            <div class="leftcolumn">
+                <div class="card">
+                    <div style="text-align:center;">
+                        <select name="test_redirect" id="groupsselect" onchange="Display(this.options[this.selectedIndex].value)">
+                            <option value="0">--בחר קבוצה--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
                     </div>
-                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateHasraoot()"><i class="fa icon-plus"></i> הוסף הזרעה לקבוצה </a>
-                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveHasraoot()"><i class="fa icon-remove-sign"></i> מחק הזרעה </a>
-                </div>
-
-                <div style="text-align:center;">
-                    <div style="text-align:center" ;>
-                        <div class="form-group" style="direction: rtl;">
-                            <h4> תאריך שבירת הריון:</h4>
-                            <input type="date" id="DateOfTakser" name="DateOfTakser">
+                    <table id="sheeps" class="display select" cellspacing="0" width="100%" style="text-align:center;">
+                        <thead>
+                            <tr>
+                                <th><input name="select_all" value="1" type="checkbox"></th>
+                                <th>תעודת זהות</th>
+                                <th>מספר הכבש</th>
+                                <th>סוג הדם</th>
+                                <th>מין</th>
+                                <th>קבוצה</th>
+                                <th>תאריך הזרעה אחרון</th>
+                                <th>תאריך שבירת הריון אחרון</th>
+                                <th>ימים מאז ההזרעה</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>תעודת זהות</th>
+                                <th>מספר הכבש</th>
+                                <th>סוג הדם</th>
+                                <th>מין</th>
+                                <th>קבוצה</th>
+                                <th>תאריך הזרעה אחרון</th>
+                                <th>תאריך שבירת הריון אחרון</th>
+                                <th>ימים מאז ההזרעה</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div style="text-align:center;">
+                        <div style="text-align:center" ;>
+                            <div class="form-group" style="direction: rtl;">
+                                <h4> תאריך הזרעה</h4>
+                                <input type="date" id="DateOfHasraa" name="DateOfHasraa">
+                                <h4> תאריך שבירת הריון</h4>
+                                <input type="date" id="DateOfTakser" name="DateOfTakser">
+                            </div>
                         </div>
+                        <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateHasraoot()"><i class="fa icon-plus"></i> הוסף הזרעה לקבוצה </a>
+                        <a class="btn btn-danger" style="margin-bottom:10px" onclick="removeHasraootBtn()"><i class="fa icon-remove-sign"></i> מחק הזרעה </a>
+                        <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateTakser()"><i class="fa icon-plus"></i> הוסף שבירת הריון לקבוצה </a>
+                        <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveTakserBtn()"><i class="fa icon-remove-sign"></i> מחק שבירת הריון </a>
                     </div>
-                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="updateTakser()"><i class="fa icon-plus"></i> הוסף שבירת הריון לקבוצה </a>
-                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveTakser()"><i class="fa icon-remove-sign"></i> מחק שבירת הריון </a>
+                </div>
+            </div>
+            
+            <div class="rightcolumn">
+                <div class="card">
+                    <h3 style="text-align:center;">הזרעות בקרוב</h3>
+                    <div id="updates" style="text-align:center;font-size:18px;direction: rtl;"></div>
+                </div>
+                <div class="card">
+                    <h3 style="text-align:center;">הזרעות מאוחר יותר</h3>
+                    <div id="laterupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
                 </div>
             </div>
         </div>
-        <div class="rightcolumn">
-            <div class="card">
-                <h3 style="text-align:center;">קבוצות היולדות בקרוב</h3>
-                <div id="updates" style="text-align:center;font-size:18px;direction: rtl;"></div>
-            </div>
-            <div class="card">
-                <h3 style="text-align:center;">קבוצות היולדות מאוחר יותר</h3>
-                <div id="laterupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
-            </div>
-        </div>
-    </div>
-
-</body>
+    </body>
 }
 
 <script>
 
     $(document).ready(function () {
             $.ajax({
-            url: '@Url.Action("soonHamlata", "Home")',
+            url: '@Url.Action("soonHazraa", "Home")',
             dataType: "json",
             type: "GET",
                 success: function (msg) {
                     if (msg.flag == false || msg.result == "Null") {
-                        document.getElementById("updates").innerHTML = "אין קבוצה שאמורה ללדת בקרוב";
+                        document.getElementById("updates").innerHTML = "אין הזרעות בקרוב";
                         document.getElementById("updates").style.color = "red";
                     }
                     else {
                         document.getElementById("updates").innerHTML =
-                            " בתאריך " + msg._date + " היה הזרעה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max +" ימים " + " ונשאר "+msg.still +" ימים ";
+                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.days + " ימים יש הזרעה בקרוב ";
                         document.getElementById("updates").style.color = "green";
                     }
             }
             });
 
             $.ajax({
-            url: '@Url.Action("LaterHamlata", "Home")',
+            url: '@Url.Action("LaterHazraa", "Home")',
             dataType: "json",
             type: "GET",
                 success: function (msg) {
-                    if (msg.flag == false) {
-                        document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה ללדת";
+                    if (msg.result == "Null") {
+                        document.getElementById("laterupdate").innerHTML = "אין הזרעות ";
                         document.getElementById("laterupdate").style.color = "red";
                     }
-                    else {
+                    else{
                         document.getElementById("laterupdate").innerHTML =
-                            " בתאריך " + msg._date + " היה הזרעה לקבוצה " + msg.shpsgroup + " מאז עברו " + msg.max + " ימים ";
+                            " בתאריך " + msg._date + " היה המלטה לקבוצה " + msg.shpsgroup + "  מאז עברו  " + msg.days + " ימים ";
                         document.getElementById("laterupdate").style.color = "green";
                     }
             }
@@ -208,8 +223,6 @@
         oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
             var checked = $('input[type="text"][name="hamlatadate"]', rowhtml);
             var checked2 = $('input[type="text"][name="dayshamlata"]', rowhtml);
-
-            //var checked = $('div[id="tst"][class="check"]', rowhtml);
             var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
             $.ajax({
             url: '@Url.Action("getHamlataDetails", "Home")',
@@ -219,6 +232,7 @@
                 success: function (msg) {
                     if (msg.emailSent == "null") {
                         $(checked).val("אין תאריך")
+                        $(checked).attr('style', 'color:red;text-align:center;');
                         $(checked2).val("0")
                         $(checked2).attr('style', 'color:red;text-align:center;');
                     }
@@ -232,7 +246,30 @@
             });
         });
     }
+        function AddTakser() {
+        oTable = $("#sheeps").dataTable(); // Get the datatable,
+        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
+            var checked3 = $('input[type="text"][name="takserdate"]', rowhtml);
+            var sendObj = { id: rowhtml.children[1].innerText } //creating json obj]
+            $.ajax({
+            url: '@Url.Action("getTakserDetails", "Home")',
+            dataType: "json",
+            data: sendObj,
+            type: "GET",
+                success: function (msg) {
+                    if (msg.emailSent == "null" ) {
+                        $(checked3).val("אין תאריך")
+                        $(checked3).attr('style', 'color:red;text-align:center;');
+                    }
+                    else {
+                        $(checked3).val(msg.emailSent)
+                        $(checked3).attr('style', 'color:green;text-align:center;');
+                    }
+            }
+            });
+        });
 
+    }
 
     function Display(id) {
         var table = $('#sheeps').DataTable();
@@ -273,6 +310,15 @@
                 {
                     "data": "Id", "render": function (data) {
 
+                        return '<input type="text" style="color:red; text-align:center;" name="takserdate" readonly="readonly">';
+                    },
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "150px"
+                },
+                {
+                    "data": "Id", "render": function (data) {
+
                         return '<input type="text" style="color:red; text-align:center;" name="dayshamlata" readonly="readonly">';
                     },
                     "orderable": false,
@@ -300,6 +346,7 @@
             },
             "initComplete": function () {
                 AddHasraa() //calling the status function
+                AddTakser()
             }
         });
         // Handle click on checkbox
@@ -380,20 +427,41 @@
         document.getElementById('bootstrap-alert').style.display = 'block';
         setTimeout(function () { document.getElementById('bootstrap-alert').style.display = 'none' }, 2700);
     }
+
+    function HazraaErrorDelete() {
+        window.scrollTo(0, 0);
+        document.getElementById('HazraaDltErrorAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('HazraaDltErrorAlert').style.display = 'none' }, 2700);
+    }
+    function TakserErrorDelete() {
+        window.scrollTo(0, 0);
+        document.getElementById('TakserDltErrorAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('TakserDltErrorAlert').style.display = 'none' }, 2700);
+    }
     function deleteAlert() {
         window.scrollTo(0, 0);
         document.getElementById('deleteAlert').style.display = 'block';
         setTimeout(function () { document.getElementById('deleteAlert').style.display = 'none' }, 2700);
     }
-
+    function TakserDeleteAlert() {
+        window.scrollTo(0, 0);
+        document.getElementById('deleteTakserAlert').style.display = 'block';
+        setTimeout(function () { document.getElementById('deleteTakserAlert').style.display = 'none' }, 2700);
+    }
     function updateSheep(sheepid, date) {
         var sendObj = { shpid: sheepid, date: date} //creating json obj
         $.ajax({
             url: '@Url.Action("AddSpecificHasraa", "Home")',
             dataType: "json",
             data: sendObj,
-            type: "POST",
-            success: function () {
+            type: "GET",
+            success: function (msg) {
+                if (msg.result == true) {
+                    showAlerts()
+                }
+                else {
+                    HazraaErrorDelete()
+                }
             }
         });
     }
@@ -421,18 +489,29 @@
         }
     }
 
-    function removeHasraa(sheepid) {
-        var sendObj = { id: sheepid} //creating json obj
+    function removeHasraa(id,date) {
+        var sendObj = { id:id, date:date} //creating json obj
         $.ajax({
-            url: '@Url.Action("RemoveHasraa", "Home")',
+            url: '@Url.Action("RemoveHasraaInTable", "Home")',
             dataType: "json",
             data: sendObj,
-            type: "POST",
-            success: function () {
+            type: "GET",
+            success: function (msg) {
+                if (msg.result == false) {
+                    alert('לא נמצא תאריך הזרעה עבור' + id + ' , בתאריך' + date)
+                }
+                else if (msg.result == true) {
+                    deleteAlert()
+                }
+                else {
+                    alert('לא נמצא תאריך הזרעה עבור' + id + ' , בתאריך' + date)
+                }
             }
         });
     }
-    function RemoveHasraoot() {
+    function removeHasraootBtn() {
+        var date = document.getElementById("DateOfHasraa").value;
+        if (date == "") { return alert('לא נבחר תאריך') }
         var c = 0; //to count how many sheeps were moved.
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
@@ -441,7 +520,7 @@
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
                 c += 1;
-                removeHasraa(rowhtml.children[1].innerText);
+                removeHasraa(rowhtml.children[1].innerText,date);
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
@@ -449,7 +528,6 @@
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
         } else {
-            deleteAlert()
             Display(document.getElementById("groupsselect").value)
         }
     }
@@ -479,7 +557,6 @@
         }
     }
     function updateTakserShp(sheepid, date) {
-        alert('hi')
         var sendObj = { shpid: sheepid, date: date} //creating json obj
         $.ajax({
             url: '@Url.Action("AddSpecificTakser", "Home")',
@@ -490,50 +567,13 @@
             }
         });
     }
-    function removeTakserSpecificSheep() {
-        var c = 0; //to count how many sheeps were moved.
-        oTable = $("#sheeps").dataTable(); // Get the datatable,
-        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
-        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
-            //Check the state of the checkbox
-            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
-            if (checked == 1) {
-                c += 1;
-                removeHasraa(rowhtml.children[1].innerText);
-                //If the checkbox is checked, then add the inner text of the cell to the array
-                loanApplicationNumbers.push(rowhtml.children[1].innerText);
-            }
-        });
-        if (c == 0) {
-            alert('לא נבחרו כבשים מהרשימה');
-        } else {
-            deleteAlert()
-            Display(document.getElementById("groupsselect").value)
-        }
-    }
-    function RemoveTakser() {
-        var c = 0; //to count how many sheeps were moved.
-        oTable = $("#sheeps").dataTable(); // Get the datatable,
-        var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
-        oTable.$('tr').each(function (index, rowhtml) { //Loop through the table rows
-            //Check the state of the checkbox
-            var checked = $('input[type="checkbox"]:checked', rowhtml).length;
-            if (checked == 1) {
-                c += 1;
-                removeTakserSpecificSheep(rowhtml.children[1].innerText);
-                //If the checkbox is checked, then add the inner text of the cell to the array
-                loanApplicationNumbers.push(rowhtml.children[1].innerText);
-            }
-        });
-        if (c == 0) {
-            alert('לא נבחרו כבשים מהרשימה');
-        } else {
-            deleteAlert()
-            Display(document.getElementById("groupsselect").value)
-        }
-    }
     //////////Removing Takser/////////////
-    function RemoveTakser() {
+
+    function RemoveTakserBtn() {
+        var date = document.getElementById("DateOfTakser").value;
+        if (date == "" || date == null) {
+            return alert('נא לבחור תאריך')
+        }
         var c = 0; //to count how many sheeps were moved.
         oTable = $("#sheeps").dataTable(); // Get the datatable,
         var loanApplicationNumbers = []; // An array that will contain the "loan application numbers"
@@ -542,7 +582,7 @@
             var checked = $('input[type="checkbox"]:checked', rowhtml).length;
             if (checked == 1) {
                 c += 1;
-                removeTakser(rowhtml.children[1].innerText);
+                removeTakser(rowhtml.children[1].innerText,date);
                 //If the checkbox is checked, then add the inner text of the cell to the array
                 loanApplicationNumbers.push(rowhtml.children[1].innerText);
             }
@@ -550,22 +590,52 @@
         if (c == 0) {
             alert('לא נבחרו כבשים מהרשימה');
         } else {
-            deleteAlert()
             Display(document.getElementById("groupsselect").value)
         }
     }
 
-    function removeTakser(sheepid) {
-        var sendObj = { id: sheepid} //creating json obj
+    function removeTakser(id, date) {
+        var sendObj = { id: id,date:date} //creating json obj
         $.ajax({
             url: '@Url.Action("RemoveTakser", "Home")',
             dataType: "json",
             data: sendObj,
-            type: "POST",
-            success: function () {
+            type: "GET",
+            success: function (msg) {
+                if (msg.result == false) {
+                    alert('לא נמצא תאריך המלטה עבור' + id + ' , בתאריך' + date)
+                    TakserErrorDelete()
+                }
+                else if (msg.result == true) {
+                    //alert('לא נמצא תאריך המלטה עבור' + sheepid + ' , בתאריך' + date)
+                    TakserDeleteAlert()
+                }
+                else {
+                    alert('לא נמצא תאריך המלטה עבור' + id + ' , בתאריך' + date)
+                }
             }
         });
     }
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#sheeps tfoot th').each(function () {
+            var title = $('#sheeps thead th').eq($(this).index()).text();
+            $(this).html('<input type="text" placeholder="חפש ' + title + '" />');
+        });
 
+        // DataTable
+        var table = $('#sheeps').DataTable();
+
+        // Apply the search
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                that
+                    .search(this.value)
+                    .draw();
+            });
+        });
+    });
 </script>
 

@@ -197,6 +197,19 @@ namespace DeerManager.Controllers
         {
             using (DBModel db = new DBModel())
             {
+                //first we check if there already vacs in same dates in db
+                var checkAlready = db.Vaccinations.Where(x => x.Id == shpid).ToList();
+                if (checkAlready.Count > 0)
+                {
+                    for(int i = 0; i < checkAlready.Count; i++)
+                    {
+                        var dateInDB = DateTime.Parse(checkAlready[i].NextVaccinationDate);
+                        if(date==dateInDB)
+                        {
+                            return false;
+                        }
+                    }
+                }
                 /////////////////////////////////////
                 var NextVac = new Vaccinations();
                 var NextVacDateSimom = new DateTime(); //סימום מעיים
@@ -205,17 +218,70 @@ namespace DeerManager.Controllers
                 NextVac.Medicine = medicine;
                 NextVac.Id = shpid;
                 NextVac.isEnabled = 0;
-                /////////////////////////////////////
-                ///
                 db.Vaccinations.Add(NextVac);
                 db.SaveChanges();
                 return true;
+                }
+        }
+        [HttpGet]
+        //this function receives sheep id and date and update hamlata
+        public ActionResult AddSpecificHamlata(int shpid, DateTime date, int amount)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (DBModel db = new DBModel())
+                    {
+                        var hamlata = new Hamlata();
+                        /////////////////////////////////////
+                        //we check if there are column in database with already date with same sheep id.
+                        var checkAlready = db.Hamlata.Where(x => x.Id == shpid).ToList();
+
+                        //checking if there are already same id and date of hamlata
+                        if (checkAlready != null)
+                        {
+                            for(int i =0; i < checkAlready.Count; i++)
+                            {
+                                var dbDate = DateTime.Parse(checkAlready[i].dateOfHamlata);
+                                if((dbDate - date).Days ==0)
+                                {
+                                    return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+                        hamlata.Id = shpid;
+                        hamlata.dateOfHamlata = date.ToString("dd/MM/yyyy HH:mm:ss");
+                        hamlata.amount = amount;
+                        db.Hamlata.Add(hamlata);
+                        db.SaveChanges();
+                        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
             }
         }
-
-        [HttpPost]
+        [HttpGet]
         //this function receives sheep id and date and update hamlata
-        public bool AddSpecificHasraa(int shpid, DateTime date)
+        public ActionResult AddSpecificHasraa(int shpid, DateTime date)
         {
             try
             {
@@ -227,13 +293,13 @@ namespace DeerManager.Controllers
                         var res = true;
                         /////////////////////////////////////
                         res=AddAutoVac(shpid, date, 120, "סימום מעיים");
-                        if (res == false) { return false; }
+                        if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         res=AddAutoVac(shpid, date, 70, "אוקסי");
-                        if (res == false) { return false; }
+                        if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         res =AddAutoVac(shpid, date, 90, "אוקסי");
-                        if (res == false) { return false; }
+                        if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         res =AddAutoVac(shpid, date, 110, "אוקסי");
-                        if (res == false) { return false; }
+                        if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         /////////////////////////////////////
                         //we check if there are column in database with already date with same sheep id.
                         var checkAlready = db.Hasroot.FirstOrDefault(x => x.Id == shpid);
@@ -243,13 +309,13 @@ namespace DeerManager.Controllers
                             db.Hasroot.Remove(checkAlready);
                         }
                         hasraa.Id = shpid;
-                        hasraa.DateOfHasraa = date.ToString("dd/MM/yyyy");
+                        hasraa.DateOfHasraa = date.ToString("dd/MM/yyyy HH:mm:ss");
                         db.Hasroot.Add(hasraa);
                         db.SaveChanges();
-                        return true;
+                        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
                     }
                 }
-                else { return false; }
+                else { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
             {
@@ -280,11 +346,17 @@ namespace DeerManager.Controllers
                     {
                         var takser = new TakserTable();
                         //we check if there are column in database with already date with same sheep id.
-                        var checkAlready = db.TakserTable.FirstOrDefault(x => x.Id == shpid);
-                        //we remove the old date if exists.
-                        if (checkAlready != null)
+                        var checkAlready = db.TakserTable.Where(x => x.Id == shpid).ToList();
+                        if (checkAlready.Count > 0)
                         {
-                            db.TakserTable.Remove(checkAlready);
+                            for (int i = 0; i < checkAlready.Count; i++)
+                            {
+                                var dateInDB = DateTime.Parse(checkAlready[i].DateOfTakser);
+                                if (date == dateInDB)
+                                {
+                                    return false;
+                                }
+                            }
                         }
                         takser.Id = shpid;
                         takser.DateOfTakser = date.ToString();
@@ -401,7 +473,6 @@ namespace DeerManager.Controllers
         }
 
 
-        //still bugs
         [HttpGet]
         public ActionResult AddVaccineGroup(int id)
         {
@@ -545,8 +616,22 @@ namespace DeerManager.Controllers
             }
             return Json(new { result = "ERROR", id = Id }, JsonRequestBehavior.AllowGet);
         }
-
-
+        [HttpPost]
+        public ActionResult RemoveHistoryOfVacsById(int Id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var vacsList = db.Vaccinations.Where(x => x.Id == Id).ToList();
+                if (vacsList.Count < 1) { Json(new { result = "ERROR", id = Id }, JsonRequestBehavior.AllowGet); }
+                for(int i=0;i< vacsList.Count; i++)
+                {
+                    db.Vaccinations.Remove(vacsList[i]);
+                    db.SaveChanges();
+                }
+                return Json(new { result = "SUCCESS", id = Id }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        
         [HttpGet]
         public ActionResult HistoryOfVacsById(int id)
         {
@@ -566,6 +651,75 @@ namespace DeerManager.Controllers
                 return Json(new { data = vacs }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public ActionResult soonHazraa()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var dates = db.Hamlata.ToList();
+                var group = new Hamlata();
+                var maximum = 0;
+                var flag = false;
+                var groupOfSheeps = 0;
+                if (dates.Count < 1)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for (int i = 0; i < dates.Count; i++)
+                {
+                    var shpdate = DateTime.Parse(dates[i].dateOfHamlata);
+                    if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days >= 40 && (curdate - shpdate).Days <= 60)
+                    {
+                        maximum = (curdate - shpdate).Days;
+                        group.dateOfHamlata = dates[i].dateOfHamlata;
+                        groupOfSheeps = GetGroupById(dates[i].Id);
+                        flag = true;
+                    }
+                }
+                if (flag == false)
+                {
+                    return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { days = maximum, _date = group.dateOfHamlata.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public ActionResult LaterHazraa()
+        {
+            var curdate = DateTime.Now;
+            using (DBModel db = new DBModel())
+            {
+                var dates = db.Hamlata.ToList();
+                var group = new Hamlata();
+                group.dateOfHamlata = "";
+                var maximum = 0;
+                var groupOfSheeps = 0;
+                var flag = false;
+                if (dates.Count < 1)
+                {
+                    return Json(new { result = "Null" }, JsonRequestBehavior.AllowGet);
+                }
+                for (int i = 0; i < dates.Count; i++)
+                {
+                    var shpdate = DateTime.Parse(dates[i].dateOfHamlata);
+                    if ((curdate - shpdate).Days > maximum && (curdate - shpdate).Days >10 && (curdate - shpdate).Days < 40)
+                    {
+                        maximum = (curdate - shpdate).Days;
+                        group.dateOfHamlata = dates[i].dateOfHamlata;
+                        groupOfSheeps = GetGroupById(dates[i].Id);
+                        flag = true;
+                    }
+                }
+                if (flag == false)
+                {
+                    return Json(new { flag = false }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { days = maximum, _date = group.dateOfHamlata.ToString(), shpsgroup = groupOfSheeps }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         [HttpGet]
         public ActionResult soonHamlata()
@@ -762,6 +916,34 @@ namespace DeerManager.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult RemoveHasraaInTable(int id, string date)
+        {
+            using (DBModel db = new DBModel())
+            {
+                /////////////////////////////////////
+                //we check if there are column in database with already date with same sheep id.
+                var hasraashp = db.Hasroot.Where(x => x.Id == id).ToList();
+                var webdate = DateTime.Parse(date);
+                //checking if there are already same id and date of hasraa
+                if (hasraashp != null)
+                {
+                    for (int i = 0; i < hasraashp.Count; i++)
+                    {
+                        var dbDate = DateTime.Parse(hasraashp[i].DateOfHasraa);
+                        if ((dbDate - webdate).Days == 0)
+                        {
+                            db.Hasroot.Remove(hasraashp[i]);
+                            db.SaveChanges();
+                            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
 
         [HttpGet]
         public ActionResult RemoveHasraa(int id)
@@ -790,17 +972,47 @@ namespace DeerManager.Controllers
             return RedirectToAction("AdvancedDetails", new { id = shp.Id });
         }
 
-
         [HttpPost]
-        public ActionResult RemoveTakser(Hasroot shp)
+        public ActionResult RemoveHamlata(int id, string date)
         {
             using (DBModel db = new DBModel())
             {
-                var SpecificTakser = db.TakserTable.Where(x => x.Id == shp.Id).FirstOrDefault();
-                db.TakserTable.Remove(SpecificTakser);
+                var SpecificHamlata = db.Hamlata.Where(x => x.Id == id && x.dateOfHamlata == date).FirstOrDefault();
+                if(SpecificHamlata == null)
+                {
+                    return Json(new { emailSent = "ERROR" });
+                }
+                db.Hamlata.Remove(SpecificHamlata);
                 db.SaveChanges();
             }
-            return RedirectToAction("AdvancedDetails", new { id = shp.Id });
+            return RedirectToAction("AdvancedDetails", new { id = id });
+        }
+
+        [HttpGet]
+        public ActionResult RemoveTakser(int id, string date)
+        {
+            using (DBModel db = new DBModel())
+            {
+                /////////////////////////////////////
+                //we check if there are column in database with already date with same sheep id.
+                var takserShp = db.TakserTable.Where(x => x.Id == id).ToList();
+                var webdate = DateTime.Parse(date);
+                //checking if there are already same id and date of hamlata
+                if (takserShp != null)
+                {
+                    for (int i = 0; i < takserShp.Count; i++)
+                    {
+                        var dbDate = DateTime.Parse(takserShp[i].DateOfTakser);
+                        if ((dbDate - webdate).Days == 0)
+                        {
+                            db.TakserTable.Remove(takserShp[i]);
+                            db.SaveChanges();
+                            return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpGet]
@@ -891,7 +1103,37 @@ namespace DeerManager.Controllers
                 }
             }
         }
-        
+
+
+        [HttpGet]
+        public ActionResult getTakserDetails(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var last = 99;
+                var lastDate = "";
+                var takser = db.TakserTable.Where(x => x.Id == id).ToList();
+                if (takser.Count >0)
+                {
+                    var dateAndTime = DateTime.Now;
+                    var curDate = dateAndTime.Date; //current day
+                    for (int i = 0; i < takser.Count; i++)
+                    {
+                        var dbDate = DateTime.Parse(takser[i].DateOfTakser);
+                        if ((curDate - dbDate).Days < last)
+                        {
+                            lastDate = dbDate.ToString();
+                            last = (curDate - dbDate).Days;
+                        }
+                    }
+                    return Json(new { emailSent = lastDate }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { emailSent = "null" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
         [HttpGet]
         [ValidateInput(false)]
         public ActionResult getHamlataDetails(int id)
@@ -910,7 +1152,7 @@ namespace DeerManager.Controllers
                     var dateAndTime = DateTime.Now;
                     var TodayDate = dateAndTime.Date; //current day
                     var HamlataDate = DateTime.Parse(date);
-                    return Json(new { emailSent = date.ToString(), Days= (TodayDate-HamlataDate).Days },JsonRequestBehavior.AllowGet);
+                    return Json(new { emailSent = date.ToString(), Days = (TodayDate - HamlataDate).Days }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
@@ -922,7 +1164,17 @@ namespace DeerManager.Controllers
 
             using (DBModel db = new DBModel())
             {
-                var _sumamount = 0;
+                float _sumamount = 0;
+                float shpavghamlata = 0;
+                var hamlataSum = db.Hamlata.Where(x => x.Id == id).ToList();
+                for(int i=0; i < hamlataSum.Count; i++)
+                {
+                    _sumamount = _sumamount + Convert.ToInt32(hamlataSum[i].amount);
+                }
+                if (hamlataSum.Count > 0)
+                {
+                    shpavghamlata = (_sumamount / hamlataSum.Count);
+                }
                 var vacalert = db.Hamlata.FirstOrDefault(x => x.Id == id);
                 if (vacalert == null)
                 {
@@ -934,12 +1186,10 @@ namespace DeerManager.Controllers
                     var dateAndTime = DateTime.Now;
                     var TodayDate = dateAndTime.Date; //current day
                     var HamlataDate = DateTime.Parse(date);
-                    return Json(new { emailSent = date.ToString(), Days = (TodayDate - HamlataDate).Days ,amount= vacalert.amount, sumamount = _sumamount }, JsonRequestBehavior.AllowGet);
+                    return Json(new { emailSent = date.ToString(), Days = (TodayDate - HamlataDate).Days ,amount= vacalert.amount, avg = shpavghamlata }, JsonRequestBehavior.AllowGet);
                 }
             }
         }
-
-
 
         public bool getAlertBoolean()
         {
@@ -1004,7 +1254,7 @@ namespace DeerManager.Controllers
                     //if you want to add more vacs , just use if for another type of vacs.
                         if (vacs[i].NextVaccinationDate != null)
                         {
-                            d = DateTime.ParseExact(vacs[i].NextVaccinationDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            d=  DateTime.Parse(vacs[i].NextVaccinationDate);
                             _id = vacs[i].Id;
                             group = GetGroupById(vacs[i].Id);
                             med = vacs[i].Medicine;
@@ -1054,7 +1304,8 @@ namespace DeerManager.Controllers
                         //if you want to add more vacs , just use if for another type of vacs.
                         if (vacs[i].NextVaccinationDate != null)
                         {
-                            d = DateTime.ParseExact(vacs[i].NextVaccinationDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                            d=DateTime.ParseExact(vacs[i].NextVaccinationDate,
+                            "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
                             id = vacs[i].Id;
                             group = GetGroupById(vacs[i].Id);
                             med = vacs[i].Medicine;

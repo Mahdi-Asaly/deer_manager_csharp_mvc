@@ -14,16 +14,10 @@
         @Html.TextBoxFor(model => model.Id, new { disabled = "disabled" ,required="required"})
     </div>
     <div class="form-group" style="direction: rtl; text-align:center;">
-        <label for="DateOfVaccination">תאריך שבו לקח את החיסון</label>
-        <input type="date" id="DateOfVaccination" name="DateOfVaccination" required>
-    </div>
-
-    <div class="form-group" style="direction: rtl; text-align:center;">
         <label for="Medicine">בחר תרופה</label>
         <select name="Medicine" id="Medicine" required>
         </select>
     </div>
-
     <div class="form-group" style="direction: rtl; text-align:center;">
         <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
         <input type="date" id="NextVaccinationDate" name="NextVaccinationDate" required>

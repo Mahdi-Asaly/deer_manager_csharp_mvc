@@ -10,6 +10,16 @@
     table.dataTable thead th:first-child {
         cursor: pointer;
     }
+    .display {
+        border: 5px outset red;
+        background-color: lightblue;
+        text-align: center;
+    }
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
 </style>
 
 <h3 style="text-align:center;">קבוצה</h3>
@@ -134,7 +144,7 @@
                     },
                     "orderable": false,
                     "searchable": false,
-                    "width": "150px"
+                    "width": "140px"
                 },
                 { "data": "Id" },
                 { "data": "SheepNum" },
@@ -278,7 +288,27 @@
        return document.getElementById("togroup").value;
     }
 
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell
+        $('#sheeps tfoot th').each(function () {
+            var title = $('#sheeps thead th').eq($(this).index()).text();
+            $(this).html('<input type="text" placeholder="חפש ' + title + '" />');
+        });
 
+        // DataTable
+        var table = $('#sheeps').DataTable();
+
+        // Apply the search
+        table.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('keyup change', function () {
+                that
+                    .search(this.value)
+                    .draw();
+            });
+        });
+    });
 
 
 </script>
