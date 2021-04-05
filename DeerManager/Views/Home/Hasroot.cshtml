@@ -459,6 +459,9 @@
                 if (msg.result == true) {
                     showAlerts()
                 }
+                if (msg.result == "Already") {
+                    alert('יש הזרעה לאותו כבשה בתאריך הזה' + sheepid +' התאריך:' +date)
+                }
                 else {
                     HazraaErrorDelete()
                 }

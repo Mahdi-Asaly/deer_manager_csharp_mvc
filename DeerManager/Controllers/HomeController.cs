@@ -14,7 +14,7 @@ namespace DeerManager.Controllers
     public class HomeController : Controller
     {
         public bool toggle = false;
-        DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
+        //DB_AccessLayer.DB dblayer = new DB_AccessLayer.DB();
         public ActionResult AdvancedDetails(int id)
         {
             //here you should import the informations from tables:
@@ -192,6 +192,43 @@ namespace DeerManager.Controllers
             }
         }
 
+        //this function when you remove hasraa , we call this function to remove vacs that related to the same sheep(cuz already removed)
+        public void RemoveAutoVac(int shpid, DateTime date)
+        {
+            using (DBModel db = new DBModel())
+            {
+                //first we check if there already vacs in same dates in db
+                var checkAlready = db.Vaccinations.Where(x => x.Id == shpid).ToList();
+                if (checkAlready.Count > 0)
+                {
+                    for (int i = 0; i < checkAlready.Count; i++)
+                    {
+                        var dateInDB = DateTime.Parse(checkAlready[i].NextVaccinationDate);
+                        if ((date.AddDays(120)==dateInDB && checkAlready[i].Medicine.Replace(" ","").Contains("סימוםמעיים")))
+                        {
+                            db.Vaccinations.Remove(checkAlready[i]);
+                            db.SaveChanges();
+                        }
+                        if ((date.AddDays(70) == dateInDB && checkAlready[i].Medicine.Replace(" ", "").Contains("אוקסי")))
+                        {
+                            db.Vaccinations.Remove(checkAlready[i]);
+                            db.SaveChanges();
+                        }
+                        if ((date.AddDays(90) == dateInDB && checkAlready[i].Medicine.Replace(" ", "").Contains("אוקסי")))
+                        {
+                            db.Vaccinations.Remove(checkAlready[i]);
+                            db.SaveChanges();
+                        }
+                        if ((date.AddDays(110) == dateInDB && checkAlready[i].Medicine.Replace(" ", "").Contains("אוקסי")))
+                        {
+                            db.Vaccinations.Remove(checkAlready[i]);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+        }
+
 
         public bool AddAutoVac(int shpid, DateTime date , int days, string medicine)
         {
@@ -292,7 +329,24 @@ namespace DeerManager.Controllers
                         var hasraa = new Hasroot();
                         var res = true;
                         /////////////////////////////////////
-                        res=AddAutoVac(shpid, date, 120, "סימום מעיים");
+                        /// check if there are same hasraa date
+                        ///
+                        /////////////////////////////////////
+                        var checkAlready = db.Hasroot.Where(x => x.Id == shpid).ToList();
+                        if (checkAlready.Count > 0)
+                        {
+                            for (int i = 0; i < checkAlready.Count; i++)
+                            {
+                                var dateInDB = DateTime.Parse(checkAlready[i].DateOfHasraa);
+                                if (date == dateInDB)
+                                {
+                                    return Json(new { result = "Already" }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                        }
+
+                        /////////////////////////////////////
+                        res =AddAutoVac(shpid, date, 120, "סימום מעיים");
                         if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         res=AddAutoVac(shpid, date, 70, "אוקסי");
                         if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
@@ -301,13 +355,7 @@ namespace DeerManager.Controllers
                         res =AddAutoVac(shpid, date, 110, "אוקסי");
                         if (res == false) { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
                         /////////////////////////////////////
-                        //we check if there are column in database with already date with same sheep id.
-                        var checkAlready = db.Hasroot.FirstOrDefault(x => x.Id == shpid);
-                        //we remove the old date if exists.
-                        if (checkAlready != null)
-                        {
-                            db.Hasroot.Remove(checkAlready);
-                        }
+
                         hasraa.Id = shpid;
                         hasraa.DateOfHasraa = date.ToString("dd/MM/yyyy HH:mm:ss");
                         db.Hasroot.Add(hasraa);
@@ -933,6 +981,7 @@ namespace DeerManager.Controllers
                         var dbDate = DateTime.Parse(hasraashp[i].DateOfHasraa);
                         if ((dbDate - webdate).Days == 0)
                         {
+                            RemoveAutoVac(id, DateTime.Parse(hasraashp[i].DateOfHasraa)); //removing vacs related to this sheep
                             db.Hasroot.Remove(hasraashp[i]);
                             db.SaveChanges();
                             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
@@ -1005,6 +1054,7 @@ namespace DeerManager.Controllers
                         var dbDate = DateTime.Parse(takserShp[i].DateOfTakser);
                         if ((dbDate - webdate).Days == 0)
                         {
+                            //RemoveAutoVac(id, DateTime.Parse(date));
                             db.TakserTable.Remove(takserShp[i]);
                             db.SaveChanges();
                             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
@@ -1415,14 +1465,7 @@ namespace DeerManager.Controllers
                 }
             }
         }
-        public void updateHamlatot(UserViewModel shp)
-        {
 
-        }
-        public void updateVac(UserViewModel shp)
-        {
-            
-        }
 
         [HttpPost]
         public ActionResult AdvancedDetailsUpdate(UserViewModel shp)
