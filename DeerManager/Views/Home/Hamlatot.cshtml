@@ -154,7 +154,7 @@
             dataType: "json",
             type: "GET",
                 success: function (msg) {
-                    if (msg.result == "Null" || msg.result == false) {
+                    if (msg.result == "Null" || msg.flag == false) {
                         document.getElementById("laterupdate").innerHTML = "אין קבוצה שאמורה ללדת";
                         document.getElementById("laterupdate").style.color = "red";
                     }

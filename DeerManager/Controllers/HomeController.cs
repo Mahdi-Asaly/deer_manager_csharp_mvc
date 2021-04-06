@@ -230,6 +230,34 @@ namespace DeerManager.Controllers
         }
 
 
+
+        //buggged
+        //this function get the latest vac of shpid and remove it from db when adding takser to sheep
+        public void RemoveLatestVac(int shpid)
+        {
+            using (DBModel db = new DBModel())
+            {
+                //first we check if there already vacs in same dates in db
+                var lastHamlataDate = db.Hasroot.Where(x => x.Id == shpid).ToList();
+                var curdate = DateTime.Now;
+                var obj="";
+                double min = 99999;
+                if (lastHamlataDate.Count > 0)
+                {
+                    for (int i = 0; i < lastHamlataDate.Count; i++)
+                    {
+                        var dbDate = DateTime.Parse(lastHamlataDate[i].DateOfHasraa);
+                        if ((curdate - dbDate).TotalDays < min)
+                        {
+                            min = (curdate - dbDate).TotalDays;
+                            obj = lastHamlataDate[i].DateOfHasraa;
+                        }
+                    }
+                    RemoveAutoVac(shpid, DateTime.Parse(obj));
+                }
+            }
+        }
+
         public bool AddAutoVac(int shpid, DateTime date , int days, string medicine)
         {
             using (DBModel db = new DBModel())
@@ -274,7 +302,6 @@ namespace DeerManager.Controllers
                         /////////////////////////////////////
                         //we check if there are column in database with already date with same sheep id.
                         var checkAlready = db.Hamlata.Where(x => x.Id == shpid).ToList();
-
                         //checking if there are already same id and date of hamlata
                         if (checkAlready != null)
                         {
@@ -408,6 +435,7 @@ namespace DeerManager.Controllers
                         }
                         takser.Id = shpid;
                         takser.DateOfTakser = date.ToString();
+                        RemoveLatestVac(shpid); //when you add takser to sheep you should remove the upcoming vacs of same sheep.
                         db.TakserTable.Add(takser);
                         db.SaveChanges();
                         return true;
@@ -1054,7 +1082,6 @@ namespace DeerManager.Controllers
                         var dbDate = DateTime.Parse(takserShp[i].DateOfTakser);
                         if ((dbDate - webdate).Days == 0)
                         {
-                            //RemoveAutoVac(id, DateTime.Parse(date));
                             db.TakserTable.Remove(takserShp[i]);
                             db.SaveChanges();
                             return Json(new { result = true }, JsonRequestBehavior.AllowGet);
