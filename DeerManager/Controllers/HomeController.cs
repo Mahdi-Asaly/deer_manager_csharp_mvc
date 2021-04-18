@@ -25,7 +25,9 @@ namespace DeerManager.Controllers
                     shpDiseases = db.Diseases.FirstOrDefault(x => x.Id == id),
                     maintblSheeps = db.maintable.FirstOrDefault(x => x.Id == id),
                     shpDetail = db.Details.FirstOrDefault(x => x.Id == id),
-                    shpHasraa = db.Hasroot.Where(x=>x.Id==id).ToList<Hasroot>(),
+                    shpHasraa = db.Hasroot.Where(x => x.Id == id).ToList<Hasroot>(),
+                    shpHamlata = db.Hamlata.Where(x => x.Id == id).ToList<Hamlata>(),
+                    takserTable = db.TakserTable.Where(x => x.Id == id).ToList<TakserTable>(),
                     shpVac= db.Vaccinations.Where(x=>x.Id==id).ToList<Vaccinations>()
                 };
                 return View(shpVM);
@@ -707,11 +709,32 @@ namespace DeerManager.Controllers
                 return Json(new { result = "SUCCESS", id = Id }, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        public int getSheepNumberByID(int id)
+        {
+            using (DBModel db = new DBModel())
+            {
+                var shpnum = db.maintable.Where(x => x.Id == id).FirstOrDefault();
+                if (shpnum == null)
+                {
+                    return 0;
+
+                }
+                return shpnum.SheepNum;
+            }
+        }
+
+
+
         [HttpGet]
         public ActionResult HistoryOfVacsById(int id)
         {
-            return View(id);
+            int num = 0;
+            num=getSheepNumberByID(id);
+            string[] array = new string[2];
+            array[0] = id.ToString();
+            array[1] = num.ToString();
+            return View(array);
         }
 
         [HttpGet]

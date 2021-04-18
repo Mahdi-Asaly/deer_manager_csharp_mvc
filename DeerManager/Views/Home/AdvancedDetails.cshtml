@@ -6,7 +6,16 @@
     ViewBag.Title = "AdvancedDetails";
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
-
+<style>
+    p{
+        color:red;
+        font-size:18px;
+    }
+    p:hover{
+        color:green;
+        border:dotted;
+    }   
+</style>
 @{
     List<SelectListItem> listItems = new List<SelectListItem>();
     listItems.Add(new SelectListItem
@@ -166,11 +175,62 @@
             @Html.TextAreaFor(m => m.shpDetail.Information, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;dir=rtl;" })
         </div>
     </div>
-
     <div class="form-group">
         <div style="text-align:center" ;>
             <div>מחלות רקע</div>
             @Html.TextAreaFor(m => m.shpDiseases.ShpDisease, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;dir=rtl;" })
+        </div>
+    </div>
+    <p>המידע הבא הוא לקריאה בלבד אם תרצה לשנות מידע נא לפנות לף הרלוונטי</p>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <div> היסטורית הזרעות </div>
+            <select name="HasraaHistory" id="HasraaHistory">
+                @{
+                    for (int i = 0; i < Model.shpHasraa.Count; i++)
+                    {
+                        <option value="@i">@Model.shpHasraa[i].DateOfHasraa</option>
+                    }
+                    if (Model.shpHasraa.Count < 1)
+                    {
+                        <option value="NULL">אין</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <div> היסטורית המלטה </div>
+            <select name="HasraaHistory" id="HasraaHistory">
+                @{
+                    for (int i = 0; i < Model.shpHamlata.Count; i++)
+                    {
+                        <option value="@i">מספר טלאים @Model.shpHamlata[i].amount , @Model.shpHamlata[i].dateOfHamlata </option>
+                    }
+                    if (Model.shpHamlata.Count < 1)
+                    {
+                        <option value="NULL">אין</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div style="text-align:center" ;>
+            <div> היסטורית שבירת הריון </div>
+            <select name="HasraaHistory" id="HasraaHistory">
+                @{
+                    for (int i = 0; i < Model.takserTable.Count; i++)
+                    {
+                        <option value="@i">@Model.takserTable[i].DateOfTakser </option>
+                    }
+                    if (Model.takserTable.Count < 1)
+                    {
+                        <option value="NULL">אין</option>
+                    }
+                }
+            </select>
         </div>
     </div>
     <div class="form-group">

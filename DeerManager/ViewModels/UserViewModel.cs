@@ -11,6 +11,7 @@ namespace DeerManager.ViewModels
         public Diseases shpDiseases { get; set; }
         public IList<Hasroot> shpHasraa { set; get; }
         public IList<Hamlata> shpHamlata { set; get; }
+        public IList<TakserTable> takserTable { set; get; }
 
         public maintable maintblSheeps { set; get; }
         public Details shpDetail { set; get; }
