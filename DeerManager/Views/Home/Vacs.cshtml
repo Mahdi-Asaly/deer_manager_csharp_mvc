@@ -78,78 +78,74 @@
 @using (Html.BeginForm())
 {
 <body>
-    <div class="row">
-        <div class="leftcolumn">
-            <div class="card">
-                <h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
-                <div style="text-align:center;">
-                    <div style="text-align:center;">
-                        <label for="test_redirect">קבוצה</label>
-                        <select name="test_redirect" id="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
-                            <option value="0">-- בחר --</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
-                    </div>
-                    <div>
-                        <div class="form-group" style="direction: rtl;">
-                            <label for="Medicine">בחר תרופה</label>
-                            <select name="Medicine" id="Medicine">
-                            </select>
-                        </div>
+    <h2 style="text-align:center; font-style:italic;">דף חיסונים</h2>
+    <div style="text-align:center;">
+        <div style="text-align:center;">
+            <label for="test_redirect">קבוצה</label>
+            <select name="test_redirect" id="test_redirect" onchange="Display(this.options[this.selectedIndex].value)">
+                <option value="0">-- בחר --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div>
+            <div class="form-group" style="direction: rtl;">
+                <label for="Medicine">בחר תרופה</label>
+                <select name="Medicine" id="Medicine">
+                </select>
+            </div>
 
-                        <div class="form-group" style="direction: rtl;">
-                            <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
-                            <input type="date" id="NextVaccinationDate" name="NextVaccinationDate">
-                        </div>
-                    </div>
-                    <a class="btn btn-primary" style="margin-bottom:10px" onclick="AddVacForAllCheckBox()"><i class="fa fa-plus"></i> הוסף  </a>
-                    <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveVacs()"><i class="icon-remove"></i> מחק חיסון  </a>
-                </div>
-
-
-                <table id="sheeps" class="display select" cellspacing="0" width="150%" style="text-align:center;">
-                    <thead>
-                        <tr>
-                            <th><input name="select_all" value="1" type="checkbox"></th>
-                            <th>תעודת זהות</th>
-                            <th>מספר הכבש</th>
-                            <th>סוג הדם</th>
-                            <th>מין</th>
-                            <th>קבוצה</th>
-                            <th>תאריך חיסון הבא</th>
-                            <th>תרופה</th>
-                            <th>ימים נשארים עד לחיסון הבא</th>
-                            <th>סטטוס חיסון</th>
-                            <th>היסטוריה</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th>תעודת זהות</th>
-                            <th>מספר הכבש</th>
-                            <th>סוג הדם</th>
-                            <th>מין</th>
-                            <th>קבוצה</th>
-                            <th>תאריך חיסון הבא</th>
-                            <th>תרופה</th>
-                            <th>ימים נשארים עד לחיסון הבא</th>
-                            <th>סטטוס חיסון</th>
-                            <th>היסטוריה</th>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="form-group" style="direction: rtl;">
+                <label for="NextVaccinationDate">תאריך שבו יקח שוב את החיסון</label>
+                <input type="date" id="NextVaccinationDate" name="NextVaccinationDate">
             </div>
         </div>
+        <a class="btn btn-primary" style="margin-bottom:10px" onclick="AddVacForAllCheckBox()"><i class="fa fa-plus"></i> הוסף  </a>
+        <a class="btn btn-danger" style="margin-bottom:10px" onclick="RemoveVacs()"><i class="icon-remove"></i> מחק חיסון  </a>
+    </div>
+
+
+    <table id="sheeps" class="display select" cellspacing="0" width="150%" style="text-align:center;">
+        <thead>
+            <tr>
+                <th><input name="select_all" value="1" type="checkbox"></th>
+                <th>תעודת זהות</th>
+                <th>מספר הכבש</th>
+                <th>סוג הדם</th>
+                <th>מין</th>
+                <th>קבוצה</th>
+                <th>תאריך חיסון הבא</th>
+                <th>תרופה</th>
+                <th>ימים נשארים עד לחיסון הבא</th>
+                <th>סטטוס חיסון</th>
+                <th>היסטוריה</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th>תעודת זהות</th>
+                <th>מספר הכבש</th>
+                <th>סוג הדם</th>
+                <th>מין</th>
+                <th>קבוצה</th>
+                <th>תאריך חיסון הבא</th>
+                <th>תרופה</th>
+                <th>ימים נשארים עד לחיסון הבא</th>
+                <th>סטטוס חיסון</th>
+                <th>היסטוריה</th>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="row">
         <div class="rightcolumn">
             <div class="card">
                 <h3 style="text-align:center;"> חיסונים קרובים </h3>
@@ -160,9 +156,9 @@
                 <div id="laterupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
             </div>
             @*<div class="card">
-                <h3 style="text-align:center;"> פעולות אחרונות </h3>
-                <div id="lastupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
-            </div>*@
+                    <h3 style="text-align:center;"> פעולות אחרונות </h3>
+                    <div id="lastupdate" style="text-align:center;font-size:18px;direction: rtl;"></div>
+                </div>*@
         </div>
     </div>
 </body>
