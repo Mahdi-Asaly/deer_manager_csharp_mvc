@@ -265,6 +265,7 @@
     <Content Include="Views\Home\AddNewSheepPage.cshtml" />
     <Content Include="Views\Home\HistoryOfVacsById.cshtml" />
     <Content Include="Views\Home\Hamlatot.cshtml" />
+    <Content Include="Views\Home\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

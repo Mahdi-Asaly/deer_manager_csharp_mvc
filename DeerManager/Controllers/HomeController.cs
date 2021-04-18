@@ -1461,6 +1461,7 @@ namespace DeerManager.Controllers
                 var sheepDetails = db.maintable.FirstOrDefault(e => e.Id == shp.maintblSheeps.Id);
                 sheepDetails.SheepNum = shp.maintblSheeps.SheepNum;
                 sheepDetails.Group = shp.maintblSheeps.Group;
+                sheepDetails.Gender = shp.maintblSheeps.Gender;
                 sheepDetails.Birthday = shp.maintblSheeps.Birthday;
                 sheepDetails.Blood = shp.maintblSheeps.Blood;
                 db.Entry(sheepDetails).State = EntityState.Modified;
@@ -1589,6 +1590,9 @@ namespace DeerManager.Controllers
             }
         }
 
-
+        public ActionResult NotFound()
+        {
+            return View();
+        }
     }
 }

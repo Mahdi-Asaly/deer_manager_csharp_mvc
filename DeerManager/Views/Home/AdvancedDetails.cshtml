@@ -7,6 +7,115 @@
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = Model.maintblSheeps.Blood,
+        Value = Model.maintblSheeps.Blood,
+        Selected = true
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "++",
+        Value = "++"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "B+",
+        Value = "B+"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "BB",
+        Value = "BB"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "אחר",
+        Value = "אחר"
+    });
+
+
+    List<SelectListItem> GroupList = new List<SelectListItem>();
+    GroupList.Add(new SelectListItem
+    {
+        Text = Model.maintblSheeps.Group.ToString(),
+        Value = Model.maintblSheeps.Group.ToString(),
+        Selected = true
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "1",
+        Value = "1"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "2",
+        Value = "2"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "3",
+        Value = "3"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "4",
+        Value = "4"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "5",
+        Value = "5"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "6",
+        Value = "6"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "7",
+        Value = "7"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "8",
+        Value = "8"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "9",
+        Value = "9"
+    });
+    GroupList.Add(new SelectListItem
+    {
+        Text = "10",
+        Value = "10"
+    });
+    List<SelectListItem> GenderList = new List<SelectListItem>();
+    GenderList.Add(new SelectListItem
+    {
+        Text = Model.maintblSheeps.Gender,
+        Value = Model.maintblSheeps.Gender,
+        Selected = true
+    }) ;
+    GenderList.Add(new SelectListItem
+    {
+        Text = "זכר",
+        Value = "זכר"
+    });
+    GenderList.Add(new SelectListItem
+    {
+        Text = "נקבה",
+        Value = "נקבה"
+    });
+
+}
+
+
+
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
 <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
@@ -27,47 +136,27 @@
         @Html.EditorFor(model => model.maintblSheeps.SheepNum, new { htmlAttributes = new { @class = "form-control" } })
         @Html.ValidationMessageFor(model => model.maintblSheeps.SheepNum)
     </div>
+
     <div class="form-group">
-        <h4>סוג הדם</h4>
-        @Html.EditorFor(model => model.maintblSheeps.Blood, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.maintblSheeps.Blood)
-    </div>
-    <div class="form-group">
-        <h4>מין</h4>
-        @Html.EditorFor(model => model.maintblSheeps.Gender, new { htmlAttributes = new { @class = "form-control" } })
+        <div>סוג דם</div>
+        @Html.DropDownListFor(model => model.maintblSheeps.Blood, listItems)
     </div>
 
     <div class="form-group">
-
-            <div class="form-group" style="direction: rtl;">
-                <div>קבוצה</div>
-                @Html.EditorFor(model => model.maintblSheeps.Group, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-    @*<div class="form-group">
-
+        <div> מין</div>
+        @Html.DropDownListFor(model => model.maintblSheeps.Gender, GenderList)
+    </div>
+    <div class="form-group">
         <div class="form-group" style="direction: rtl;">
             <div>קבוצה</div>
-            <select name="Group" id="Group">
-                <option value="@Model.maintblSheeps.Group">@Model.maintblSheeps.Group</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="8">9</option>
-                <option value="8">10</option>
-            </select>
+            @Html.DropDownListFor(model => model.maintblSheeps.Group, GroupList)
         </div>
-    </div>*@
+    </div>
     <div class="form-group">
         <div style="text-align:center" ;>
             <h6>תאריך לידה</h6>
             <div class="input-group">
-                @Html.EditorFor(model => model.maintblSheeps.Birthday, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.maintblSheeps.Birthday, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
             </div>
         </div>
     </div>
@@ -84,102 +173,12 @@
             @Html.TextAreaFor(m => m.shpDiseases.ShpDisease, 10, 120, htmlAttributes: new { style = "width: 60%; max-width: 50%;text-align: right;dir=rtl;" })
         </div>
     </div>
-
-
-    @*<div class="form-group">
-        <div style="text-align:center" ;>
-            <div>חיסון שלקח/ה ככבש/ה</div>
-            <div class="input-group">
-                <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddVaccine","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
-                <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveVaccine","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
-                <br />
-                @for (var i = 0; i < Model.shpVac.Count; i++)
-                {
-                    @Html.TextBoxFor(m => Model.shpVac[i].Medicine, new { @readonly = "readonly" })
-                }
-                @{
-                    if (Model.shpVac.Count < 1)
-                    {
-                        <div style="color:red;">לא לקח שום חיסון בעבר</div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div style="text-align:center" ;>
-            <div>תאריך שבו הכבש יקח את החיסון </div>
-            <div class="input-group">
-                @for (var i = 0; i < Model.shpVac.Count; i++)
-                {
-
-                    @Html.TextBoxFor(m => Model.shpVac[i].NextVaccinationDate, new { @readonly = "readonly" })
-                }
-                @{
-                    if (Model.shpVac.Count < 1)
-                    {
-                        <div style="color:red;">אין תאריך כיוון שאין חיסון</div>
-                    }
-                }
-            </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div style="text-align:center" ;>
-            <div>תאריך ההזרעה האחרון</div>
-            <div class="input-group">
-                <a class="btn btn-primary" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddHasraa","Home")/@Model.maintblSheeps.Id')"><i class="fa fa-plus"></i>הוסף</a>
-                <a class="btn btn-danger" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("RemoveHasraa","Home")/@Model.maintblSheeps.Id')">מחק</a><br />
-                @for (var i = 0; i < Model.shpHasraa.Count; i++)
-                {
-                    @Html.TextBoxFor(m => Model.shpHasraa[i].DateOfHasraa, new { @readonly = "readonly" })
-                }
-                @{
-                    if (Model.shpHasraa.Count < 1)
-                    {
-                        <div style="color:red;">אין היסטורית הזרעות בעבר</div>
-                    }
-                }
-            </div>
-        </div>
-    </div>*@
-    @*<div class="form-group">
-        <div style="text-align:center" ;>
-            <div>תאריך שבירת הריון </div>
-            <div class="input-group">
-                @for (var i = 0; i < Model.shpHamlata.Count; i++)
-                {
-                    if (Model.shpHamlata[i].DateOfTakser != null)
-                    {
-                        @Html.TextBoxFor(m => Model.shpHamlata[i].DateOfTakser, new { @readonly = "readonly" })
-                    }
-                }
-                @{
-                    if (Model.shpHamlata.Count == 1)
-                    {
-                        if (Model.shpHamlata[0].DateOfTakser == null)
-                        {
-                            <div style="color:red;">לא היה שבירת הריון בעבר</div>
-                        }
-                    }
-                    else
-                    {
-                        <div style="color:red;">לא היה שבירת הריון בעבר</div>
-                    }
-                }
-            </div>
-        </div>
-    </div>*@
     <div class="form-group">
         <input type="button" title="דף ראשי" value="עבור לדף הראשי" onclick="location.href='@Url.Action("ShowMyHome", "Home")'" class="btn btn-info" />
         <input type="submit" value="עדכן" class="btn btn-warning" />
         <input type="button" value="מחק" class="btn btn-danger" onclick="Delete(@Model.maintblSheeps.Id)" />
     </div>
-
 </div>
-
-
 }
 <script>
    function Delete(id) {

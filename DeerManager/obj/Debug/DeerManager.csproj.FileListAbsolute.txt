@@ -82,4 +82,3 @@ C:\Users\USER\source\repos\DeerManager\DeerManager\bin\Microsoft.CodeDom.Provide
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Debug\DeerManager.csproj.CopyComplete
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Debug\DeerManager.dll
 C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Debug\DeerManager.pdb
-C:\Users\USER\source\repos\DeerManager\DeerManager\obj\Debug\DeerManager.csprojAssemblyReference.cache
